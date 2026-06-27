@@ -1,0 +1,59 @@
+---
+import { about } from '../data/site';
+---
+
+<section id="origin" class="px-8 md:px-20 lg:px-32 py-32 md:py-40">
+  <div class="max-w-[1200px] mx-auto">
+
+    <!-- Section label -->
+    <p class="about-label text-muted text-xs tracking-[0.2em] uppercase mb-16">
+      Origin
+    </p>
+
+    <!-- Narrative — the IoT equilibrium argument, near-verbatim -->
+    <div class="about-narrative max-w-2xl mb-20 space-y-6">
+      {about.narrative.map((para) => (
+        <p class="text-text text-xl md:text-2xl leading-[1.7] font-body font-light">
+          {para}
+        </p>
+      ))}
+    </div>
+
+    <!-- Education + Samsung callout row -->
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-12 mb-24">
+
+      <p class="about-education text-muted text-base leading-relaxed font-body max-w-xs">
+        {about.education}
+      </p>
+
+      <!-- Samsung stat — visually standalone, not a bullet -->
+      <div class="about-stat flex flex-col items-start md:items-end">
+        <span class="about-stat-number font-display font-light text-text leading-none tracking-[-0.04em] text-[5rem] md:text-[6rem]">
+          0
+        </span>
+        <span class="text-muted text-sm font-body mt-1">{about.samsung.context}</span>
+        <span class="text-muted/60 text-xs tracking-[0.15em] uppercase mt-1">{about.samsung.program}</span>
+      </div>
+
+    </div>
+
+    <!-- Human note — draws, reads, plays; woven not listed -->
+    <p class="about-human text-muted text-lg leading-[1.75] font-body font-light max-w-lg mb-16">
+      {about.human}
+    </p>
+
+    <!-- Volunteering — distinct but understated -->
+    <div class="about-volunteer flex gap-5 items-start max-w-xl">
+      <div class="w-px h-12 bg-accent-alt/40 shrink-0 mt-1"></div>
+      <div>
+        <p class="text-text/80 text-sm font-body leading-relaxed">
+          {about.volunteering.detail}
+        </p>
+        <p class="text-muted/60 text-xs tracking-[0.15em] uppercase mt-2">
+          {about.volunteering.event} — {about.volunteering.org}, {about.volunteering.date}
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>

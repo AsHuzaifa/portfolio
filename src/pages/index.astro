@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import AboutSection from '../components/AboutSection.astro';
 import { hero } from '../data/site';
 ---
 
@@ -36,10 +37,14 @@ import { hero } from '../data/site';
 
     </section>
 
+    <!-- Origin / About -->
+    <AboutSection />
+
   </main>
 </Layout>
 
 <script>
-  import { animateHero } from '../utils/animations';
+  import { animateHero, animateAbout } from '../utils/animations';
   animateHero();
+  animateAbout();
 </script>
