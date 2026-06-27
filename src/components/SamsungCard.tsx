@@ -1,15 +1,19 @@
-// [samsung] Credential card — document feel, not a widget.
-// Desktop: sticky right-column card with terracotta left border.
-// Mobile (variant="inline"): single condensed line in the text flow.
+// [samsung] Credential card — header is the anchor, stat supports it.
+// Per-course accordion expands on click with a smooth height transition.
 // Cursor-proximity glow on the card border (sage green).
 
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
+
+interface Course {
+  title: string;
+  detail: string;
+}
 
 interface SamsungCardProps {
   context: string;
   stat: string;
   subtext: string;
-  courses: string[];
+  courses: Course[];
   variant?: 'card' | 'inline';
 }
 
@@ -23,7 +27,9 @@ export default function SamsungCard({
   variant = 'card',
 }: SamsungCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
+  // Cursor-proximity glow (card variant only)
   useEffect(() => {
     const card = cardRef.current;
     if (!card || variant !== 'card') return;
@@ -65,45 +71,80 @@ export default function SamsungCard({
     );
   }
 
+  function toggle(i: number) {
+    setOpenIndex(openIndex === i ? null : i);
+  }
+
   // Desktop: full document card
   return (
     <div
       ref={cardRef}
       className="bg-bg border-l-2 border-accent border border-accent-alt/10 rounded-sm px-5 py-5"
     >
-      {/* Header in small caps */}
-      <p className="text-muted/50 text-[0.5rem] font-body tracking-[0.3em] uppercase mb-4 leading-tight">
+      {/* Header — dominant anchor of the card */}
+      <p className="text-text/80 text-[0.62rem] font-body tracking-[0.22em] uppercase mb-1 leading-tight font-medium">
         Samsung Innovation Campus
       </p>
 
-      {/* Stat in large Fraunces */}
+      {/* Stat — supporting, not dominant */}
       <p
-        className="font-display font-light text-text leading-none tracking-[-0.04em] mb-1"
-        style={{ fontSize: '2.8rem' }}
+        className="text-muted/60 font-display font-light leading-none tracking-[-0.02em] mb-0.5"
+        style={{ fontSize: '1.15rem' }}
       >
         {stat}
       </p>
 
       {/* Subtext */}
-      <p className="text-muted/50 text-[0.6rem] font-body tracking-[0.18em] uppercase mb-5">
+      <p className="text-muted/40 text-[0.58rem] font-body tracking-[0.16em] uppercase mb-5">
         {subtext}
       </p>
 
       {/* Divider */}
       <hr className="border-muted/12 mb-4" />
 
-      {/* Courses */}
-      <ul className="space-y-2.5">
-        {courses.map((course, i) => (
-          <li key={i} className="flex items-start gap-2">
-            <span className="text-accent-alt/40 text-[0.55rem] mt-0.5 shrink-0" aria-hidden="true">
-              —
-            </span>
-            <span className="text-muted/60 text-[0.62rem] font-body leading-snug">
-              {course}
-            </span>
-          </li>
-        ))}
+      {/* Courses — each with accordion */}
+      <ul>
+        {courses.map((course, i) => {
+          const isOpen = openIndex === i;
+          return (
+            <li key={i} className="border-b border-muted/10 last:border-b-0">
+              <button
+                onClick={() => toggle(i)}
+                className="w-full flex items-start justify-between gap-3 py-3 text-left group"
+                aria-expanded={isOpen}
+              >
+                <span className="text-text/70 text-[0.65rem] font-body leading-snug font-medium
+                                 group-hover:text-text/90 transition-colors duration-150">
+                  {course.title}
+                </span>
+                {/* Chevron rotates on open */}
+                <svg
+                  className="shrink-0 mt-0.5 text-muted/30 group-hover:text-muted/60 transition-colors duration-150"
+                  style={{
+                    transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                    transition: 'transform 0.2s ease, color 0.15s ease',
+                  }}
+                  width="10" height="10" viewBox="0 0 10 10" fill="none"
+                >
+                  <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+
+              {/* Accordion body — CSS max-height for smooth expand */}
+              <div
+                className="overflow-hidden"
+                style={{
+                  maxHeight: isOpen ? '300px' : '0px',
+                  transition: 'max-height 0.28s ease',
+                }}
+              >
+                <p className="text-muted/60 text-[0.62rem] font-body leading-relaxed pb-4 pr-2">
+                  {course.detail}
+                </p>
+              </div>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

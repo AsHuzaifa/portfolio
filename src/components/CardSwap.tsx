@@ -1,6 +1,5 @@
-// [cardswap] GSAP elastic stacked card swap — ReactBits pattern.
-// Cards cycle on a timer; click any card to bring it front; pause on hover.
-// Cursor-proximity glow follows mouse position within each card.
+// [cardswap] GSAP elastic stacked card swap — click any back card to bring it front.
+// No auto-cycling. Cursor-proximity glow follows mouse within each card.
 
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
@@ -16,12 +15,12 @@ interface CardSwapProps {
   cardHeight?: number;
   cardDistance?: number;
   verticalDistance?: number;
-  delay?: number;
-  pauseOnHover?: boolean;
   easing?: string;
 }
 
 const GLOW_REST = '0 0 0 1px rgba(42,74,62,0.10)';
+// Extra padding around the container so box-shadow glow renders without clipping
+const GLOW_PAD = 40;
 
 function computeGlow(x: number, y: number, w: number, h: number): string {
   // Proximity to center — glow intensifies as cursor approaches card center
@@ -39,18 +38,14 @@ function computeGlow(x: number, y: number, w: number, h: number): string {
 
 export default function CardSwap({
   cards,
-  cardWidth = 270,
-  cardHeight = 180,
+  cardWidth = 335,
+  cardHeight = 224,
   cardDistance = 32,
   verticalDistance = 32,
-  delay = 5000,
-  pauseOnHover = true,
   easing = 'elastic.out(0.6, 0.9)',
 }: CardSwapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const orderRef = useRef<HTMLDivElement[]>([]);
-  const pausedRef = useRef(false);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -87,15 +82,6 @@ export default function CardSwap({
       });
     }
 
-    function cycle() {
-      if (pausedRef.current) return;
-      const first = orderRef.current.shift()!;
-      orderRef.current.push(first);
-      placeCards(orderRef.current);
-    }
-
-    timerRef.current = setInterval(cycle, delay);
-
     // Click: bring clicked card to front
     const clickHandlers = new Map<HTMLDivElement, () => void>();
     cardEls.forEach((card) => {
@@ -129,25 +115,12 @@ export default function CardSwap({
       glowHandlers.set(card, { move, leave });
     });
 
-    // Hover pause
-    const enterPause = () => { pausedRef.current = true; };
-    const leavePause = () => { pausedRef.current = false; };
-    if (pauseOnHover) {
-      container.addEventListener('mouseenter', enterPause);
-      container.addEventListener('mouseleave', leavePause);
-    }
-
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
       clickHandlers.forEach((handler, card) => card.removeEventListener('click', handler));
       glowHandlers.forEach(({ move, leave }, card) => {
         card.removeEventListener('mousemove', move);
         card.removeEventListener('mouseleave', leave);
       });
-      if (pauseOnHover) {
-        container.removeEventListener('mouseenter', enterPause);
-        container.removeEventListener('mouseleave', leavePause);
-      }
     };
   }, []);
 
@@ -155,35 +128,43 @@ export default function CardSwap({
   const containerH = cardHeight + (cards.length - 1) * verticalDistance;
 
   return (
-    <div
-      ref={containerRef}
-      className="relative"
-      style={{ width: containerW, height: containerH, perspective: '1000px' }}
-    >
-      {cards.map((card, i) => (
-        <div
-          key={i}
-          className="swap-card absolute cursor-pointer select-none
-                     bg-surface border border-accent-alt/10 rounded-sm"
-          style={{
-            width: cardWidth,
-            height: cardHeight,
-            boxShadow: GLOW_REST,
-          }}
-        >
-          <div className="h-full flex flex-col px-5 py-4">
-            <p className="text-accent text-[0.5rem] font-body tracking-[0.28em] uppercase mb-3">
-              Field work
-            </p>
-            <p className="text-text text-sm font-body font-medium leading-snug mb-2">
-              {card.name}
-            </p>
-            <p className="text-muted text-[0.7rem] font-body leading-relaxed">
-              {card.description}
-            </p>
+    // Outer wrapper provides padding so box-shadow glow is not clipped by parent overflow
+    <div style={{
+      padding: GLOW_PAD,
+      margin: -GLOW_PAD,
+      display: 'inline-block',
+      position: 'relative',
+    }}>
+      <div
+        ref={containerRef}
+        className="relative"
+        style={{ width: containerW, height: containerH, perspective: '1000px' }}
+      >
+        {cards.map((card, i) => (
+          <div
+            key={i}
+            className="swap-card absolute cursor-pointer select-none
+                       bg-surface border border-accent-alt/10 rounded-sm"
+            style={{
+              width: cardWidth,
+              height: cardHeight,
+              boxShadow: GLOW_REST,
+            }}
+          >
+            <div className="h-full flex flex-col px-6 py-5">
+              <p className="text-accent text-[0.5rem] font-body tracking-[0.28em] uppercase mb-3">
+                Field work
+              </p>
+              <p className="text-text text-sm font-body font-medium leading-snug mb-3">
+                {card.name}
+              </p>
+              <p className="text-muted text-[0.72rem] font-body leading-relaxed">
+                {card.description}
+              </p>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

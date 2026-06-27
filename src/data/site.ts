@@ -9,8 +9,14 @@ export const about = {
     stat: '27 / 350',
     subtext: 'selected via open test',
     courses: [
-      'Version Control & Collaborative IoT Software Development',
-      'Fundamentals of IoT & Embedded Circuit Systems',
+      {
+        title: 'Version Control & Collaborative IoT Software Development',
+        detail: 'Covers the full Git lifecycle — installation, branching, conflict resolution, and advanced GitHub collaboration including pull requests, issue tracking, and introductory CI/CD with GitHub Actions.',
+      },
+      {
+        title: 'Fundamentals of IoT & Embedded Circuit Systems',
+        detail: 'Covers Git installation, configuration, and the commit lifecycle. Progresses to branching, merging, and conflict resolution for parallel development. Advanced topics include undoing changes via reset and revert, tagging releases, and GitHub collaboration through forking, pull requests, and code reviews. Closes with CI/CD basics via GitHub Actions, issue tracking, Markdown documentation, and release management.',
+      },
     ],
   },
   human: 'Outside the work, I draw. I read — mostly literary fiction, lately Osamu Dazai. I play basketball when I can find a court.',
