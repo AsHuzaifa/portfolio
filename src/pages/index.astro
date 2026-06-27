@@ -41,6 +41,158 @@ import { hero } from '../data/site';
     <AboutSection />
 
   </main>
+
+  <!-- Flower field — decorative bottom-of-page illustration, no background fill -->
+  <svg
+    viewBox="0 0 1440 220"
+    width="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    preserveAspectRatio="xMidYMax slice"
+    style="height:200px;display:block;pointer-events:none;margin-top:-1px"
+    aria-hidden="true"
+  >
+    <style>
+      @keyframes swy  { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(3deg)}  }
+      @keyframes swyl { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(-3deg)} }
+      .sw  { transform-box:fill-box; transform-origin:bottom center; animation:swy  3.2s ease-in-out infinite }
+      .swl { transform-box:fill-box; transform-origin:bottom center; animation:swyl 3.5s ease-in-out infinite }
+      .swf { transform-box:fill-box; transform-origin:bottom center; animation:swy  2.8s ease-in-out infinite }
+    </style>
+    <defs>
+      <!-- Grass blades — base at (0,0), growing upward -->
+      <path id="g1" d="M0,0C-3,-42 2,-78 0,-102C1,-78 4,-42 2,0Z"    fill="#2A4A3E"/>
+      <path id="g2" d="M0,0C-2,-30 2,-56 1,-76C2,-56 4,-30 2,0Z"     fill="#3D6B5A"/>
+      <path id="g3" d="M0,0C-2,-22 1,-42 0,-58C1,-42 3,-22 2,0Z"     fill="#6B9E86"/>
+      <path id="g4" d="M0,0C-1,-14 1,-28 0,-40C1,-28 2,-14 1,0Z"     fill="#5A8A74"/>
+
+      <!-- Daisy: stem to y=-40, 8 petals + yellow centre -->
+      <g id="dsy">
+        <line x1="1" y1="0" x2="1" y2="-40" stroke="#3D6B5A" stroke-width="1.5"/>
+        <g transform="translate(1,-40)">
+          <ellipse cx="0" cy="-9" rx="2.5" ry="6" fill="#F5F0E8"/>
+          <ellipse cx="0" cy="-9" rx="2.5" ry="6" fill="#F5F0E8" transform="rotate(45)"/>
+          <ellipse cx="0" cy="-9" rx="2.5" ry="6" fill="#F5F0E8" transform="rotate(90)"/>
+          <ellipse cx="0" cy="-9" rx="2.5" ry="6" fill="#F5F0E8" transform="rotate(135)"/>
+          <ellipse cx="0" cy="-9" rx="2.5" ry="6" fill="#F5F0E8" transform="rotate(180)"/>
+          <ellipse cx="0" cy="-9" rx="2.5" ry="6" fill="#F5F0E8" transform="rotate(225)"/>
+          <ellipse cx="0" cy="-9" rx="2.5" ry="6" fill="#F5F0E8" transform="rotate(270)"/>
+          <ellipse cx="0" cy="-9" rx="2.5" ry="6" fill="#F5F0E8" transform="rotate(315)"/>
+          <circle cx="0" cy="0" r="4.5" fill="#E8C547"/>
+        </g>
+      </g>
+
+      <!-- Orange bloom: stem to y=-30, 5 petals + amber centre -->
+      <g id="blo">
+        <line x1="1" y1="0" x2="1" y2="-30" stroke="#3D6B5A" stroke-width="1.2"/>
+        <g transform="translate(1,-30)">
+          <ellipse cx="0" cy="-6" rx="2" ry="5" fill="#C94A2A"/>
+          <ellipse cx="0" cy="-6" rx="2" ry="5" fill="#C94A2A" transform="rotate(72)"/>
+          <ellipse cx="0" cy="-6" rx="2" ry="5" fill="#C94A2A" transform="rotate(144)"/>
+          <ellipse cx="0" cy="-6" rx="2" ry="5" fill="#C94A2A" transform="rotate(216)"/>
+          <ellipse cx="0" cy="-6" rx="2" ry="5" fill="#C94A2A" transform="rotate(288)"/>
+          <circle cx="0" cy="0" r="2.5" fill="#E8A020"/>
+        </g>
+      </g>
+
+      <!-- Yellow bloom: stem to y=-26, 5 petals + pale centre -->
+      <g id="bly">
+        <line x1="1" y1="0" x2="1" y2="-26" stroke="#3D6B5A" stroke-width="1.2"/>
+        <g transform="translate(1,-26)">
+          <ellipse cx="0" cy="-5.5" rx="1.8" ry="4.5" fill="#E8C547"/>
+          <ellipse cx="0" cy="-5.5" rx="1.8" ry="4.5" fill="#E8C547" transform="rotate(72)"/>
+          <ellipse cx="0" cy="-5.5" rx="1.8" ry="4.5" fill="#E8C547" transform="rotate(144)"/>
+          <ellipse cx="0" cy="-5.5" rx="1.8" ry="4.5" fill="#E8C547" transform="rotate(216)"/>
+          <ellipse cx="0" cy="-5.5" rx="1.8" ry="4.5" fill="#E8C547" transform="rotate(288)"/>
+          <circle cx="0" cy="0" r="2" fill="#F0D965"/>
+        </g>
+      </g>
+    </defs>
+
+    <!-- Background sage blades -->
+    <use href="#g3" class="swl" style="animation-delay:0s"    transform="translate(15,220)"/>
+    <use href="#g4" class="sw"  style="animation-delay:0.4s"  transform="translate(38,220)"/>
+    <use href="#g3" class="swl" style="animation-delay:0.8s"  transform="translate(62,220)"/>
+    <use href="#g4" class="sw"  style="animation-delay:1.2s"  transform="translate(88,220)"/>
+    <use href="#g3" class="swl" style="animation-delay:1.6s"  transform="translate(115,220)"/>
+    <use href="#g4" class="sw"  style="animation-delay:2.0s"  transform="translate(148,220)"/>
+    <use href="#g3" class="swl" style="animation-delay:0.3s"  transform="translate(185,220)"/>
+    <use href="#g4" class="sw"  style="animation-delay:0.7s"  transform="translate(228,220)"/>
+    <use href="#g3" class="swl" style="animation-delay:1.1s"  transform="translate(275,220)"/>
+    <use href="#g4" class="sw"  style="animation-delay:1.5s"  transform="translate(330,220)"/>
+    <use href="#g3" class="swl" style="animation-delay:1.9s"  transform="translate(390,220)"/>
+    <use href="#g4" class="sw"  style="animation-delay:0.2s"  transform="translate(455,220)"/>
+    <use href="#g3" class="swl" style="animation-delay:0.6s"  transform="translate(525,220)"/>
+    <use href="#g4" class="sw"  style="animation-delay:1.0s"  transform="translate(600,220)"/>
+    <use href="#g3" class="swl" style="animation-delay:1.4s"  transform="translate(680,220)"/>
+    <use href="#g4" class="sw"  style="animation-delay:1.8s"  transform="translate(765,220)"/>
+    <use href="#g3" class="swl" style="animation-delay:0.1s"  transform="translate(855,220)"/>
+    <use href="#g4" class="sw"  style="animation-delay:0.5s"  transform="translate(950,220)"/>
+    <use href="#g3" class="swl" style="animation-delay:0.9s"  transform="translate(1050,220)"/>
+    <use href="#g4" class="sw"  style="animation-delay:1.3s"  transform="translate(1155,220)"/>
+    <use href="#g3" class="swl" style="animation-delay:1.7s"  transform="translate(1265,220)"/>
+    <use href="#g4" class="sw"  style="animation-delay:2.1s"  transform="translate(1355,220)"/>
+    <use href="#g3" class="swl" style="animation-delay:0.6s"  transform="translate(1405,220)"/>
+    <use href="#g4" class="sw"  style="animation-delay:1.2s"  transform="translate(1430,220)"/>
+
+    <!-- Front grass blades (dark / mid-green) -->
+    <use href="#g2" class="sw"  style="animation-delay:0.2s"  transform="translate(28,220)"/>
+    <use href="#g1" class="swl" style="animation-delay:0.7s"  transform="translate(68,220)"/>
+    <use href="#g2" class="sw"  style="animation-delay:1.3s"  transform="translate(108,220)"/>
+    <use href="#g1" class="swl" style="animation-delay:0.5s"  transform="translate(155,220)"/>
+    <use href="#g2" class="sw"  style="animation-delay:1.0s"  transform="translate(205,220)"/>
+    <use href="#g1" class="swl" style="animation-delay:1.5s"  transform="translate(262,220)"/>
+    <use href="#g2" class="sw"  style="animation-delay:0.8s"  transform="translate(325,220)"/>
+    <use href="#g1" class="swl" style="animation-delay:0.3s"  transform="translate(395,220)"/>
+    <use href="#g2" class="sw"  style="animation-delay:1.1s"  transform="translate(472,220)"/>
+    <use href="#g1" class="swl" style="animation-delay:1.7s"  transform="translate(555,220)"/>
+    <use href="#g2" class="sw"  style="animation-delay:0.6s"  transform="translate(645,220)"/>
+    <use href="#g1" class="swl" style="animation-delay:1.2s"  transform="translate(740,220)"/>
+    <use href="#g2" class="sw"  style="animation-delay:0.4s"  transform="translate(840,220)"/>
+    <use href="#g1" class="swl" style="animation-delay:0.9s"  transform="translate(945,220)"/>
+    <use href="#g2" class="sw"  style="animation-delay:1.6s"  transform="translate(1055,220)"/>
+    <use href="#g1" class="swl" style="animation-delay:0.1s"  transform="translate(1170,220)"/>
+    <use href="#g2" class="sw"  style="animation-delay:0.8s"  transform="translate(1290,220)"/>
+    <use href="#g1" class="swl" style="animation-delay:1.4s"  transform="translate(1390,220)"/>
+
+    <!-- Daisies -->
+    <use href="#dsy" class="swf" style="animation-delay:0.1s"  transform="translate(48,220)"/>
+    <use href="#dsy" class="swf" style="animation-delay:0.6s"  transform="translate(122,220)"/>
+    <use href="#dsy" class="swf" style="animation-delay:1.2s"  transform="translate(215,220)"/>
+    <use href="#dsy" class="swf" style="animation-delay:0.4s"  transform="translate(325,220)"/>
+    <use href="#dsy" class="swf" style="animation-delay:0.9s"  transform="translate(448,220)"/>
+    <use href="#dsy" class="swf" style="animation-delay:1.5s"  transform="translate(578,220)"/>
+    <use href="#dsy" class="swf" style="animation-delay:0.7s"  transform="translate(712,220)"/>
+    <use href="#dsy" class="swf" style="animation-delay:1.3s"  transform="translate(848,220)"/>
+    <use href="#dsy" class="swf" style="animation-delay:0.2s"  transform="translate(988,220)"/>
+    <use href="#dsy" class="swf" style="animation-delay:0.8s"  transform="translate(1128,220)"/>
+    <use href="#dsy" class="swf" style="animation-delay:1.4s"  transform="translate(1268,220)"/>
+    <use href="#dsy" class="swf" style="animation-delay:0.5s"  transform="translate(1385,220)"/>
+
+    <!-- Orange blooms -->
+    <use href="#blo" class="sw"  style="animation-delay:0.3s"  transform="translate(72,220)"/>
+    <use href="#blo" class="swl" style="animation-delay:0.9s"  transform="translate(178,220)"/>
+    <use href="#blo" class="sw"  style="animation-delay:1.5s"  transform="translate(292,220)"/>
+    <use href="#blo" class="swl" style="animation-delay:0.6s"  transform="translate(420,220)"/>
+    <use href="#blo" class="sw"  style="animation-delay:1.1s"  transform="translate(555,220)"/>
+    <use href="#blo" class="swl" style="animation-delay:0.2s"  transform="translate(695,220)"/>
+    <use href="#blo" class="sw"  style="animation-delay:0.8s"  transform="translate(835,220)"/>
+    <use href="#blo" class="swl" style="animation-delay:1.4s"  transform="translate(978,220)"/>
+    <use href="#blo" class="sw"  style="animation-delay:0.5s"  transform="translate(1122,220)"/>
+    <use href="#blo" class="swl" style="animation-delay:1.0s"  transform="translate(1285,220)"/>
+
+    <!-- Yellow blooms -->
+    <use href="#bly" class="swl" style="animation-delay:0.5s"  transform="translate(98,220)"/>
+    <use href="#bly" class="sw"  style="animation-delay:1.1s"  transform="translate(232,220)"/>
+    <use href="#bly" class="swl" style="animation-delay:0.3s"  transform="translate(370,220)"/>
+    <use href="#bly" class="sw"  style="animation-delay:0.8s"  transform="translate(508,220)"/>
+    <use href="#bly" class="swl" style="animation-delay:1.4s"  transform="translate(648,220)"/>
+    <use href="#bly" class="sw"  style="animation-delay:0.6s"  transform="translate(788,220)"/>
+    <use href="#bly" class="swl" style="animation-delay:1.2s"  transform="translate(928,220)"/>
+    <use href="#bly" class="sw"  style="animation-delay:0.4s"  transform="translate(1070,220)"/>
+    <use href="#bly" class="swl" style="animation-delay:0.9s"  transform="translate(1210,220)"/>
+    <use href="#bly" class="sw"  style="animation-delay:1.5s"  transform="translate(1355,220)"/>
+  </svg>
+
 </Layout>
 
 <script>

@@ -25,6 +25,17 @@
     box-sizing: border-box;
   }
 
+  /* Marble watermark — below all content, above html canvas background */
+  .marble-watermark {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.05;
+  }
+
   /* Grain texture overlay — above backgrounds, below all content */
   .grain-overlay {
     position: fixed;
