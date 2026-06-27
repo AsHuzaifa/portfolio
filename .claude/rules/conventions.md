@@ -1,5 +1,5 @@
 # conventions.md — Portfolio Session Log
-Last updated: June 27, 2026
+Last updated: June 27, 2026 (session 3)
 
 Read this before doing anything. It restores full session context.
 
@@ -11,6 +11,7 @@ Read this before doing anything. It restores full session context.
 |---|---|
 | Hero (`#opening`) | Approved, committed, live on Netlify |
 | About (`#origin`) | Complete — React islands integrated, copy approved, committed, live |
+| Decorative layer | Marble watermark + flower field — committed (256b5f2), live |
 
 ---
 
@@ -98,6 +99,41 @@ Filter: `type="fractalNoise" baseFrequency="0.70" numOctaves="3" stitchTiles="st
 Static — no animation. Desaturated via `feColorMatrix saturate=0`.
 SVG re-renders at each zoom level so grain stays fine-grained, not blocky.
 
+### Marble watermark
+Base64 SVG data URI set as `background-image` on `html` in `global.css`.
+`background-size: cover; background-attachment: fixed; background-position: center`.
+SVG uses `feTurbulence type="turbulence" baseFrequency="0.012 0.006" numOctaves="5" seed="7"`
+with `feColorMatrix type="matrix"` producing warm brown tones at `alpha=0.06` (baked into
+last row of the matrix). This composites directly over the `background-color` on the `html`
+element — bypasses all z-index/stacking context issues entirely.
+
+**Why not a fixed div**: `z-index: -1` on a fixed child of body paints behind `html`'s
+background canvas. Background-image on `html` is the only approach with zero DOM overhead
+and no stacking context manipulation.
+
+### Flower field
+Inline SVG at the bottom of `index.astro`, after all sections. Full viewport width,
+`height: 210px`, `viewBox="0 0 1440 220"`, `preserveAspectRatio="xMidYMax slice"`.
+No background fill — sits directly on the cream page.
+
+**Structure**:
+- `<defs>` contains: g1–g6 (grass blade shapes, dark→light→far-background), pA/pB/pC
+  (patch clusters of 6 blades each in ~30px span), `dsy` (daisy), `blo` (orange bloom),
+  `bly` (yellow bloom)
+- 48 background patch groups at y=218, alternating `swBg`/`swBgL`, staggered delays 0–2.2s
+  → 288 effective background blades
+- 25 foreground tall dark blades at y=222, alternating `swFt`/`swFtL`
+- 37 flowers (13 daisies, 11 orange, 13 yellow) at y=220
+
+**Animation**: All `@keyframes` and `.sw*` classes defined in `global.css`, NOT inside an
+SVG `<style>` tag. Vite/PostCSS scopes/renames keyframes in SVG style tags, breaking
+`animation-name` references. All animated elements are `<g class="swX" transform="translate(x,y)"><use href="#def"/></g>` —
+`<g>` has reliable `transform-box: fill-box; transform-origin: bottom center` across browsers;
+bare `<use>` does not.
+
+`animation-direction: alternate` with `from{0deg} to{Ndeg}` keyframes — elements sway
+back and forth continuously. `animation-iteration-count: infinite; animation-fill-mode: none`.
+
 ### Section ID naming convention
 Generic names (Hero, About, Skills, Contact) are banned per `tone.md`.
 - `#opening` — Hero section
@@ -174,6 +210,19 @@ Fix: resolved in a prior session — live content has been deployed since.
 **`git commit` heredoc syntax fails in PowerShell**
 Cause: PowerShell 5.1 does not support bash heredocs (`<<'EOF'`).
 Fix: use Bash tool for git commits, not PowerShell.
+
+**Marble watermark not visible (session 2)**
+Cause: `z-index: -1` on a fixed child paints behind `html`'s background canvas when
+`html` has `background-color`. Child is below root background paint, invisible under
+the cream fill.
+Fix: switched entirely to `background-image` data URI on `html`. No z-index involved.
+
+**Flower field plays once then disappears (session 2)**
+Cause 1: CSS `<style>` inside inline SVG in `.astro` gets processed by Vite — `@keyframes`
+names get scoped/renamed, breaking `animation-name` references.
+Cause 2: Bare `<use>` elements have inconsistent `transform-box: fill-box` support —
+pivot point resolves to SVG origin (0,0) instead of blade base, elements rotate off-screen.
+Fix: moved all keyframes + classes to `global.css`; wrapped all `<use>` in `<g>` elements.
 
 ---
 
