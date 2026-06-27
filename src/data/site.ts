@@ -1,7 +1,6 @@
 export const about = {
   narrative: [
-    "My entry into IoT wasn't self-initiated — the field earned its hold. It sits at a rare equilibrium between the abstract digital and the tangible physical: not hardware-confined like electrical engineering, not software-isolated like machine learning.",
-    "It's a domain where a single person can take an idea from concept to working device without leaving the field. That autonomy is what keeps me here.",
+    "My entry into IoT wasn't self-initiated — the field earned its hold. Third year at Presidency now, and the problems have gotten harder: the interesting kind, where the question takes longer to name than to solve. I'm in the middle of a few of them.",
   ],
   education: 'Third year, B.Tech in Internet of Things — Presidency University, Bangalore',
   samsung: {
