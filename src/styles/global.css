@@ -14,7 +14,12 @@
 
 @layer base {
   html {
+    /* Marble watermark baked into page background — no z-index complexity */
     background-color: var(--color-bg);
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgMTIwMCI+PGRlZnM+PGZpbHRlciBpZD0ibSIgeD0iMCUiIHk9IjAlIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIj48ZmVUdXJidWxlbmNlIHR5cGU9InR1cmJ1bGVuY2UiIGJhc2VGcmVxdWVuY3k9IjAuMDEyIDAuMDA2IiBudW1PY3RhdmVzPSI1IiBzZWVkPSI3IiByZXN1bHQ9Im4iLz48ZmVDb2xvck1hdHJpeCB0eXBlPSJtYXRyaXgiIHZhbHVlcz0iMC44MCAwIDAgMCAwLjE4IDAuNTUgMCAwIDAgMC4xNCAwLjMwIDAgMCAwIDAuMDYgMCAwIDAgMCAwLjA2IiBpbj0ibiIvPjwvZmlsdGVyPjwvZGVmcz48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjEyMDAiIGZpbHRlcj0idXJsKCNtKSIvPjwvc3ZnPg==");
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
     color: var(--color-text);
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
@@ -23,17 +28,6 @@
 
   * {
     box-sizing: border-box;
-  }
-
-  /* Marble watermark — below all content, above html canvas background */
-  .marble-watermark {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: -1;
-    opacity: 0.05;
   }
 
   /* Grain texture overlay — above backgrounds, below all content */
@@ -46,4 +40,26 @@
     z-index: 50;
     opacity: 0.10;
   }
+
+  /* ── Flower field sway animations ───────────────────────────────── */
+  /* Defined here (not inside the SVG <style>) to avoid Vite processing */
+  @keyframes swy   { from { transform: rotate(0deg);    } to { transform: rotate(3deg);    } }
+  @keyframes swyl  { from { transform: rotate(0deg);    } to { transform: rotate(-3deg);   } }
+  @keyframes swyFt { from { transform: rotate(0deg);    } to { transform: rotate(3.5deg);  } }
+  @keyframes swyFl { from { transform: rotate(0deg);    } to { transform: rotate(-3.5deg); } }
+
+  .sw, .swl, .swBg, .swBgL, .swFt, .swFtL {
+    transform-box: fill-box;
+    transform-origin: bottom center;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-fill-mode: none;
+  }
+  .sw    { animation-name: swy;   animation-duration: 3.2s; }
+  .swl   { animation-name: swyl;  animation-duration: 3.5s; }
+  .swBg  { animation-name: swy;   animation-duration: 4.2s; }
+  .swBgL { animation-name: swyl;  animation-duration: 4.0s; }
+  .swFt  { animation-name: swyFt; animation-duration: 2.8s; }
+  .swFtL { animation-name: swyFl; animation-duration: 2.6s; }
 }
