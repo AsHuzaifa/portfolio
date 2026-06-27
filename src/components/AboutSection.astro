@@ -1,11 +1,14 @@
 ---
 import { about } from '../data/site';
+import CardSwap from './CardSwap';
+import Sketchbook from './Sketchbook';
+import SamsungCard from './SamsungCard';
 ---
 
 <section id="origin" class="px-8 md:px-20 lg:px-32 pt-24 pb-0">
   <div class="max-w-[1200px] mx-auto">
 
-    <!-- Section entry: thin rule + label anchors the section visually -->
+    <!-- Section entry: thin rule + label -->
     <div class="mb-16 md:mb-20">
       <hr class="border-t border-muted/20" />
       <div class="flex justify-between items-baseline mt-4">
@@ -14,10 +17,10 @@ import { about } from '../data/site';
       </div>
     </div>
 
-    <!-- 12-column grid: narrative left, Samsung callout right -->
-    <div class="grid grid-cols-12 gap-x-6 lg:gap-x-10 items-start">
+    <!-- Grid: all content left (7 cols) + sticky Samsung card right (4 cols) -->
+    <div class="grid grid-cols-12 gap-x-6 lg:gap-x-10">
 
-      <!-- Left column — narrative, education, personal note -->
+      <!-- LEFT — narrative, education, human note, mobile Samsung, CardSwap, Sketchbook -->
       <div class="col-span-12 md:col-span-7">
 
         <div class="about-narrative space-y-6 mb-10">
@@ -33,116 +36,52 @@ import { about } from '../data/site';
           </p>
         </div>
 
-        <!-- Human note: one sentence, not a list -->
+        <!-- Human note -->
         <p class="about-human text-muted/80 text-base leading-[1.75] font-body font-light">
           {about.human}
         </p>
 
-      </div>
+        <!-- Mobile: Samsung inline (hidden on md+) -->
+        <div class="md:hidden mt-8 mb-2 border-t border-muted/15 pt-6">
+          <SamsungCard
+            client:load
+            variant="inline"
+            context={about.samsung.context}
+            stat={about.samsung.stat}
+            subtext={about.samsung.subtext}
+            courses={about.samsung.courses}
+          />
+        </div>
 
-      <!-- Right column — Samsung compact accordion callout -->
-      <div class="about-samsung col-span-12 md:col-span-4 md:col-start-9 mt-10 md:mt-0 self-start">
+        <!-- Mini Projects — CardSwap -->
+        <div class="about-projects mt-20 md:mt-28 overflow-x-auto">
+          <p class="text-muted text-xs tracking-[0.2em] uppercase font-body mb-8">Field work</p>
+          <CardSwap
+            client:load
+            cards={about.minorProjects}
+          />
+        </div>
 
-        <button
-          class="w-full text-left group"
-          aria-expanded="false"
-          data-accordion-trigger="samsung"
-        >
-          <div class="border border-accent-alt/10 rounded-sm px-4 py-3
-                      shadow-[0_0_0_1px_rgba(42,74,62,0.04)]
-                      hover:shadow-[0_0_18px_2px_rgba(42,74,62,0.10)]
-                      hover:border-accent-alt/20
-                      transition-all duration-300 ease-out">
-            <div class="flex justify-between items-start gap-3">
-              <p class="text-text text-sm font-body leading-snug">{about.samsung.context}</p>
-              <svg
-                class="samsung-chevron shrink-0 mt-0.5 text-muted/40 transition-transform duration-300"
-                width="14" height="14" viewBox="0 0 14 14" fill="none"
-              >
-                <path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </div>
-        </button>
-
-        <div class="overflow-hidden" style="height: 0;" data-accordion-content="samsung">
-          <ul class="pt-3 pb-1 space-y-2">
-            {about.samsung.courses.map((course) => (
-              <li class="flex items-start gap-2 text-muted text-xs leading-snug font-body">
-                <span class="text-accent-alt/50 shrink-0 mt-0.5" aria-hidden="true">·</span>
-                <span>{course}</span>
-              </li>
-            ))}
-          </ul>
+        <!-- Sketchbook -->
+        <div class="about-sketchbook mt-16 md:mt-20">
+          <Sketchbook client:load />
         </div>
 
       </div>
 
-    </div>
-
-    <!-- Mini Projects Carousel -->
-    <div class="about-projects mt-20 md:mt-28">
-
-      <div class="flex justify-between items-center mb-6">
-        <p class="text-muted text-xs tracking-[0.2em] uppercase font-body">Field work</p>
-        <div class="flex items-center gap-4">
-          <button
-            class="carousel-prev text-muted/40 hover:text-muted transition-colors duration-200"
-            aria-label="Previous project"
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M11 4L6 9L11 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <span class="carousel-counter text-muted/40 text-xs font-body tabular-nums">1 / 3</span>
-          <button
-            class="carousel-next text-muted/40 hover:text-muted transition-colors duration-200"
-            aria-label="Next project"
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M7 4L12 9L7 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
+      <!-- RIGHT — sticky Samsung credential card (hidden on mobile) -->
+      <div class="about-samsung hidden md:block col-span-4 col-start-9">
+        <div class="sticky top-8">
+          <SamsungCard
+            client:load
+            context={about.samsung.context}
+            stat={about.samsung.stat}
+            subtext={about.samsung.subtext}
+            courses={about.samsung.courses}
+          />
         </div>
       </div>
 
-      <div class="carousel-track overflow-hidden rounded-sm">
-        <div class="carousel-inner flex will-change-transform">
-          {about.minorProjects.map((project) => (
-            <div class="carousel-card shrink-0 w-full
-                         border border-accent-alt/10
-                         shadow-[0_0_0_1px_rgba(42,74,62,0.04)]
-                         hover:shadow-[0_0_18px_2px_rgba(42,74,62,0.10)]
-                         hover:border-accent-alt/20
-                         transition-all duration-300 ease-out
-                         px-6 py-5 bg-surface">
-              <p class="text-text text-sm font-body font-medium mb-2 leading-snug">{project.name}</p>
-              <p class="text-muted text-xs font-body leading-relaxed">{project.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Sketchbook Gallery — placeholder slots for drawings -->
-    <div class="about-sketchbook mt-16 md:mt-20">
-      <p class="text-muted text-xs tracking-[0.2em] uppercase font-body mb-6">Sketchbook</p>
-      <div class="sketchbook-scroll flex gap-3 overflow-x-auto pb-2">
-        {[1, 2, 3, 4].map((n) => (
-          <div class="sketchbook-slot shrink-0 w-36 h-48 md:w-44 md:h-56
-                       border border-accent-alt/10 rounded-sm
-                       shadow-[0_0_0_1px_rgba(42,74,62,0.04)]
-                       hover:shadow-[0_0_18px_2px_rgba(42,74,62,0.10)]
-                       hover:border-accent-alt/20
-                       transition-all duration-300 ease-out
-                       flex items-center justify-center select-none">
-            <span class="text-muted/20 text-[0.6rem] font-body tracking-[0.2em] uppercase">
-              {n} / 4
-            </span>
-          </div>
-        ))}
-      </div>
     </div>
 
   </div>
@@ -151,13 +90,11 @@ import { about } from '../data/site';
   <div class="about-volunteer -mx-8 md:-mx-20 lg:-mx-32 mt-20 md:mt-28 bg-surface px-8 md:px-20 lg:px-32 py-16 md:py-20">
     <div class="max-w-[1200px] mx-auto">
 
-      <!-- First-person statement replaces the quoted press-release tone -->
       <p class="font-display italic font-light text-accent-alt leading-[1.45] max-w-3xl"
          style="font-size: clamp(1.4rem, 3vw, 2.1rem);">
         {about.volunteering.statement}
       </p>
 
-      <!-- Accordion trigger for additional context -->
       <button
         class="mt-6 flex items-center gap-2 group"
         aria-expanded="false"
@@ -196,14 +133,3 @@ import { about } from '../data/site';
   </div>
 
 </section>
-
-<style>
-  /* Scrollbar hidden on sketchbook row — cannot be done with Tailwind utilities */
-  .sketchbook-scroll {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .sketchbook-scroll::-webkit-scrollbar {
-    display: none;
-  }
-</style>

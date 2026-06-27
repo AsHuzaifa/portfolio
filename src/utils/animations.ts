@@ -29,8 +29,8 @@ export function animateHero() {
   );
 }
 
-// [about] scroll-triggered stagger — narrative arrives in sequence, Samsung callout,
-// projects carousel, sketchbook, and volunteer block follow at a contemplative pace.
+// [about] scroll-triggered stagger — narrative arrives in sequence, Samsung credential,
+// projects carousel, and sketchbook follow. Volunteer block closes the section.
 export function animateAbout() {
   const defaults = { ease: 'power3.out' };
 
@@ -52,7 +52,7 @@ export function animateAbout() {
       scrollTrigger: { trigger: '.about-education', start: 'top 88%' } }
   );
 
-  // Samsung callout — reveal the compact accordion block
+  // Samsung credential card reveal
   gsap.fromTo('.about-samsung',
     { opacity: 0, y: 20 },
     { opacity: 1, y: 0, duration: 0.7, ...defaults,
@@ -65,6 +65,7 @@ export function animateAbout() {
       scrollTrigger: { trigger: '.about-human', start: 'top 88%' } }
   );
 
+  // CardSwap and Sketchbook wrappers reveal on scroll
   gsap.fromTo('.about-projects',
     { opacity: 0, y: 24 },
     { opacity: 1, y: 0, duration: 0.7, ...defaults,
@@ -84,8 +85,9 @@ export function animateAbout() {
   );
 }
 
-// [accordions] smooth height expansion/collapse with chevron rotation.
-// Uses GSAP's height:'auto' support so no manual measurement needed.
+// [accordions] smooth height animation on any [data-accordion-trigger] button.
+// GSAP height:'auto' measures and animates to the content's natural height.
+// Chevron inside the button rotates 180deg open, returns to 0 closed.
 export function initAccordions() {
   const triggers = document.querySelectorAll<HTMLButtonElement>('[data-accordion-trigger]');
 
@@ -104,40 +106,10 @@ export function initAccordions() {
         if (chevron) gsap.to(chevron, { rotation: 0, duration: 0.3, ease: 'power2.inOut' });
         btn.setAttribute('aria-expanded', 'false');
       } else {
-        // height:'auto' — GSAP measures natural height and animates to it
         gsap.to(content, { height: 'auto', duration: 0.35, ease: 'power2.inOut' });
         if (chevron) gsap.to(chevron, { rotation: 180, duration: 0.3, ease: 'power2.inOut' });
         btn.setAttribute('aria-expanded', 'true');
       }
     });
   });
-}
-
-// [carousel] single-card slide with GSAP x-translation. Counter updates on each step.
-// Reads track width on every navigation so resize doesn't break the position.
-export function initCarousel() {
-  const track = document.querySelector<HTMLElement>('.carousel-track');
-  const inner = document.querySelector<HTMLElement>('.carousel-inner');
-  const prevBtn = document.querySelector<HTMLElement>('.carousel-prev');
-  const nextBtn = document.querySelector<HTMLElement>('.carousel-next');
-  const counter = document.querySelector<HTMLElement>('.carousel-counter');
-  const cards = document.querySelectorAll<HTMLElement>('.carousel-card');
-
-  if (!track || !inner || !cards.length) return;
-
-  let current = 0;
-  const total = cards.length;
-
-  function goTo(index: number) {
-    current = ((index % total) + total) % total;
-    const width = track!.offsetWidth;
-    gsap.to(inner, { x: -current * width, duration: 0.5, ease: 'power2.inOut' });
-    if (counter) counter.textContent = `${current + 1} / ${total}`;
-  }
-
-  prevBtn?.addEventListener('click', () => goTo(current - 1));
-  nextBtn?.addEventListener('click', () => goTo(current + 1));
-
-  // Recalculate position on resize so the slide offset stays correct
-  window.addEventListener('resize', () => goTo(current));
 }

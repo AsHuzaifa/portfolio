@@ -6,6 +6,8 @@ export const about = {
   education: 'Third year, B.Tech in Internet of Things — Presidency University, Bangalore',
   samsung: {
     context: 'Selected for Samsung Innovation Campus — 27 of 350 shortlisted',
+    stat: '27 / 350',
+    subtext: 'selected via open test',
     courses: [
       'Version Control & Collaborative IoT Software Development',
       'Fundamentals of IoT & Embedded Circuit Systems',
@@ -23,15 +25,15 @@ export const about = {
   minorProjects: [
     {
       name: 'Temperature & Humidity Monitor',
-      description: 'DHT sensor with display output. First hands-on hardware build using Arduino.',
+      description: 'A DHT sensor paired with a display screen, running on Arduino. The project that started everything — basic in scope, formative in practice.',
     },
     {
       name: 'Ocean Pollution Detection Sensor',
-      description: 'Waterproof sensor array measuring pH, chemical content, and water quality indicators in real time.',
+      description: 'A waterproof sensor array deployed in water, returning real-time readings of pH levels, chemical content, and water quality indicators. Built to make invisible pollution visible.',
     },
     {
       name: 'Smart Attendance Register System',
-      description: 'All-software solution built for Smart India Hackathon. Reached university top 20 out of ~150 teams.',
+      description: 'An all-software attendance solution built for Smart India Hackathon. Reached university top 20 out of ~150 competing teams.',
     },
   ],
 };
