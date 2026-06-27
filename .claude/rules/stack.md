@@ -36,3 +36,7 @@ npm
 - [ ] Tailwind version (confirm after init)
 - [ ] GitHub repo name (confirm when created)
 - [ ] Netlify site URL (confirm after first deploy)
+
+## Live URL
+
+https://ashuzaifa.netlify.app

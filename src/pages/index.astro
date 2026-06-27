@@ -1,17 +1,45 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
+import { hero } from '../data/site';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout>
+  <main>
+
+    <!-- Opening / Hero -->
+    <section
+      id="opening"
+      class="min-h-screen flex flex-col justify-center px-8 md:px-20 lg:px-32 relative"
+    >
+      <div class="max-w-[1200px] mx-auto w-full pt-24 pb-32">
+
+        <p class="hero-label text-muted text-xs tracking-[0.2em] uppercase mb-10">
+          {hero.label}
+        </p>
+
+        <h1 class="hero-name font-display font-light text-text leading-[0.88] tracking-[-0.03em] mb-14"
+            style="font-size: clamp(4.5rem, 13vw, 11rem);">
+          {hero.name}
+        </h1>
+
+        <p class="hero-bio text-muted text-lg md:text-xl leading-[1.7] max-w-lg font-body font-light">
+          {hero.bio}
+        </p>
+
+      </div>
+
+      <!-- Scroll indicator -->
+      <div class="hero-scroll absolute bottom-10 left-8 md:left-20 lg:left-32 flex items-end gap-4">
+        <div class="w-px h-14 bg-muted/30"></div>
+        <span class="text-muted/60 text-[0.65rem] tracking-[0.25em] uppercase pb-1">Scroll</span>
+      </div>
+
+    </section>
+
+  </main>
+</Layout>
+
+<script>
+  import { animateHero } from '../utils/animations';
+  animateHero();
+</script>
