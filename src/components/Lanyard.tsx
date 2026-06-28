@@ -15,7 +15,7 @@ import * as THREE from 'three';
 
 // Place card.glb and lanyard.png alongside this file in src/components/
 import cardGLB from './card.glb';
-import lanyardPNG from './lanyard.jpg';
+import lanyardPNG from './lanyard.png';
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 
