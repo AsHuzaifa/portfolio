@@ -1,3 +1,12 @@
+export const nav = {
+  items: [
+    { label: 'Opening', link: '#opening', ariaLabel: 'Go to opening section' },
+    { label: 'Origin',  link: '#origin',  ariaLabel: 'Go to about section' },
+    { label: 'Signal',  link: '#signal',  ariaLabel: 'Go to skills section' },
+    { label: 'Reach',   link: '#reach',   ariaLabel: 'Go to contact section' },
+  ],
+};
+
 export const about = {
   narrative: [
     "My entry into IoT wasn't self-initiated — the field earned its hold. Third year at Presidency now, and the problems have gotten harder: the interesting kind, where the question takes longer to name than to solve. I'm in the middle of a few of them.",

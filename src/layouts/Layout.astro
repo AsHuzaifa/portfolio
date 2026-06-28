@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import StaggeredMenu from '../components/StaggeredMenu';
+import { nav } from '../data/site';
 
 interface Props {
   title?: string;
@@ -29,6 +31,7 @@ const {
     />
   </head>
   <body class="text-text font-body overflow-x-hidden">
+    <StaggeredMenu client:load items={nav.items} isFixed={true} position="right" />
     <slot />
   </body>
 </html>
