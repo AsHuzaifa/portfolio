@@ -1,5 +1,5 @@
 # conventions.md — Portfolio Session Log
-Last updated: June 28, 2026 (session 5)
+Last updated: June 28, 2026 (session 6)
 
 Read this before doing anything. It restores full session context.
 
@@ -11,13 +11,15 @@ Read this before doing anything. It restores full session context.
 |---|---|
 | Hero (`#opening`) | Complete — copy approved, committed, live |
 | About (`#origin`) | Complete — React islands integrated, copy approved, committed, live |
-| Skills (`#signal`) | Complete — 4 groups, confident/learning distinction, scroll-triggered stagger |
+| Skills (`#skills`) | Complete — 4 groups, confident/learning distinction, scroll-triggered stagger, translucent bg, bolder border |
+| Field Work | Complete — CardSwap extracted from Origin into its own `FieldWork.astro` section |
 | Contact (`#reach`) | Complete — 5 links (GitHub, Email, Instructables, LinkedIn, ORCID), scroll-triggered stagger |
+| Navigation (StaggeredMenu) | Complete — `StaggeredMenu.tsx` mounted in `Layout.astro`; slides in from right, 4 nav items |
+| GitHub Pages deployment | Complete — `astro.config.mjs` configured, Actions workflow at `.github/workflows/deploy.yml` |
 | Marble background | Live — real JPEG at `public/assets/marble-bg.jpg`, cream overlay at 0.82 |
 | Sketchbook | **Removed** — component deleted, import/usage stripped, scroll trigger removed |
 | Grain overlay | **Removed** — SVG feTurbulence div and all .grain-overlay CSS gone |
 | Flower field | **Removed** — SVG and all @keyframes/.sw* CSS gone |
-| StaggeredMenu | **Attempted, removed** — integration started, reverted at user request |
 
 ---
 
@@ -26,12 +28,15 @@ Read this before doing anything. It restores full session context.
 ```
 d:\portfolio\
 ├── CLAUDE.md                        ← project-level Claude instructions
-├── astro.config.mjs                 ← Tailwind v4 via @tailwindcss/vite + @astrojs/react
+├── astro.config.mjs                 ← Tailwind v4 via @tailwindcss/vite + @astrojs/react; site + base set for GitHub Pages
 ├── tsconfig.json                    ← strict: true, jsx: react-jsx
 ├── package.json
 ├── public/
 │   └── assets/
 │       └── marble-bg.jpg            ← marble background JPEG (user-provided)
+├── .github/
+│   └── workflows/
+│       └── deploy.yml               ← builds on push to main, deploys dist/ to gh-pages branch
 ├── .claude/rules/
 │   ├── personal.md                  ← Huzaifa's bio, projects, interests
 │   ├── stack.md                     ← tech stack decisions
@@ -41,17 +46,19 @@ d:\portfolio\
 │   └── conventions.md               ← this file
 └── src/
     ├── components/
-    │   ├── AboutSection.astro       ← Origin section, imports CardSwap + SamsungCard
-    │   ├── SkillsSection.astro      ← Signal section, driven by skills export in site.ts
+    │   ├── AboutSection.astro       ← Origin section; narrative, education, human, Samsung, volunteering
+    │   ├── SkillsSection.astro      ← Skills section (id="skills"), driven by skills export in site.ts
+    │   ├── FieldWork.astro          ← Field Work section; wraps CardSwap, driven by about.minorProjects
     │   ├── ContactSection.astro     ← Reach section, driven by contact export in site.ts
+    │   ├── StaggeredMenu.tsx        ← React island — slide-in nav, mounted fixed in Layout.astro
     │   ├── CardSwap.tsx             ← React island — click-to-swap stacked project cards
     │   └── SamsungCard.tsx          ← React island — credential card with per-course accordion
     ├── data/
-    │   └── site.ts                  ← all page content (contact, skills, about, hero exports)
+    │   └── site.ts                  ← all page content (nav, contact, skills, about, hero exports)
     ├── layouts/
-    │   └── Layout.astro             ← base HTML shell, fonts, no bg-bg on body
+    │   └── Layout.astro             ← base HTML shell, fonts, mounts StaggeredMenu client:load
     ├── pages/
-    │   └── index.astro              ← single-page entry; calls animateHero, animateAbout, animateSkills, animateContact, initAccordions
+    │   └── index.astro              ← single-page entry; order: Opening → Origin → Skills → Field Work → Reach
     ├── styles/
     │   └── global.css               ← @theme tokens, base layer, marble background on html
     └── utils/
@@ -125,14 +132,18 @@ is reliable there.
 ```
 
 ### Section ID naming convention
-Generic names (Hero, About, Skills, Contact) are banned per `tone.md`.
+Generic names (Hero, About, Contact) are banned per `tone.md`. Skills is an
+exception — the originally planned `#signal` was renamed to `#skills` at user
+request for clarity.
 - `#opening` — Hero section
 - `#origin`  — About section
-- `#signal`  — Skills section (IoT/transmission theme)
+- `#skills`  — Skills section (renamed from `#signal` in session 6)
 - `#reach`   — Contact section
 
-Convention: section `id` is thematic, not functional. Visible label in the
-section header matches the ID (e.g. id="signal" → label "Signal").
+Field Work has no `id` — it is a visual block, not a nav target.
+
+Convention: section `id` is thematic where possible, functional if clearer.
+Visible label in the section header matches the ID.
 
 ### Layout system
 Tailwind's 12-column grid (`grid-cols-12`). About section: left `col-span-7`
@@ -141,8 +152,9 @@ structural gutter between them.
 
 ### Content architecture
 No hardcoded strings in components. All copy lives in `src/data/site.ts`.
-Current exports (in file order): `contact`, `skills`, `about`, `hero`.
+Current exports (in file order): `nav`, `about`, `contact`, `skills`, `hero`.
 
+- `nav` — `items[]`, each with `label`, `link`, `ariaLabel`. Used by StaggeredMenu in Layout.astro.
 - `hero` — label, name, bio
 - `about` — narrative, education, samsung (context/stat/subtext/courses), human, volunteering, minorProjects
 - `skills` — `groups[]`, each with `label`, `number`, `rows[]`. Each row: `category?`, `items: string[]`, `learning?: boolean`, `note?: string`
@@ -177,13 +189,46 @@ learning distinction is communicated by:
 - Learning: `text-muted/55` (softened) + a small `border border-muted/20` badge
   with text "learning" in `text-[0.5rem] tracking-[0.15em] uppercase`
 
-Group containers: `border border-muted/10` with hover
+Group containers: `bg-surface/30` translucent fill, `border border-muted/25` (session 6:
+bumped from `/10` for stronger definition), hover
 `shadow-[0_0_28px_rgba(42,74,62,0.09)]` (sage green glow, `transition-shadow duration-500`).
+
+Skill item words are title-cased consistently. Category labels are title-cased too.
 
 ### Contact section design
 Five links in a stacked list. Each row: small-caps label left, handle + `↗` right.
 On hover: handle and arrow shift to `accent-alt` (#2A4A3E), separator darkens, label
 lifts opacity. All via CSS transitions. Email uses `mailto:`, all others open `_blank`.
+
+### Navigation — StaggeredMenu
+`src/components/StaggeredMenu.tsx` — adapted from React Bits source (session 6).
+- Mounted `client:load` in `Layout.astro` before `<slot />`, so it overlays all pages
+- `isFixed={true}` — creates its own `fixed top-0 left-0 z-50` stacking context; `pointer-events-none` on wrapper, `pointer-events-auto` on toggle + panel
+- Toggle button: top-right, `px-8 md:px-20 lg:px-32 py-8`, colour `#8C7E6E` at rest, shifts to `#EDE7D9` when open (via GSAP tween)
+- Pre-layers: two divs sliding in before the panel — colours `#C94A2A` then `#2A4A3E`
+- Panel: `#EDE7D9` background, `clamp(280px, 40vw, 460px)` wide; full-width on mobile
+- Items: Fraunces font, `text-[3.5rem] md:text-[4.5rem]`, colour `#1A1714`, hover → `#C94A2A`
+- Clicking a nav item calls `closeMenu()` then follows the anchor link
+- Click-away (outside panel + toggle) also calls `closeMenu()`
+- Text cycles "Menu ↔ Close" with a GSAP `yPercent` stagger on open/close
+- Items driven by `nav` export in `site.ts`; 4 items: Opening, Origin, Skills, Reach
+
+### Field Work section
+`src/components/FieldWork.astro` — extracted from `AboutSection.astro` in session 6.
+Wraps `CardSwap` with its "Field work" label. Keeps `about-projects` class so
+`animateAbout()` ScrollTrigger continues to work unchanged. Padding matches other
+sections (`px-8 md:px-20 lg:px-32`). Page order: Opening → Origin → Skills → Field Work → Reach.
+
+### Deployment — GitHub Pages
+Migrated from Netlify in session 6. `astro.config.mjs` sets:
+- `site: 'https://ashuzaifa.github.io'`
+- `base: '/portfolio'`
+
+No Astro adapter needed — static output is the default.
+Workflow at `.github/workflows/deploy.yml` triggers on push to `main`:
+installs deps → `npm run build` → deploys `dist/` to `gh-pages` branch via
+`peaceiris/actions-gh-pages@v4`. GitHub Pages source must be set to the
+`gh-pages` branch in repo Settings → Pages.
 
 ---
 
@@ -268,10 +313,7 @@ Commits push to `main`. Netlify auto-deploys.
 
 ## What's Next (in order)
 
-1. **Navigation** — No nav yet. StaggeredMenu from React Bits was attempted and
-   reverted (session 5) — the component loaded but was not visible on screen; debugging
-   not pursued. A navigation solution is still needed. Options open.
-2. **Projects section** — NeuroSync and Posture Detection (in progress); smaller
+1. **Projects section** — NeuroSync and Posture Detection (in progress); smaller
    projects (Smart Attendance, Ocean Sensor, Temp/Humidity) already have copy in `site.ts`.
    Hold until asset placeholders below are resolved.
 
@@ -281,7 +323,6 @@ Commits push to `main`. Netlify auto-deploys.
 
 | Item | Status |
 |---|---|
-| Navigation solution | Needed — StaggeredMenu attempted + reverted; approach TBD |
 | NeuroSync: component list, repo link, demo | Missing — add to `personal.md` and `site.ts` when ready |
 | Posture Detection: Edge Impulse project link | Missing — add when ready |
 | Smart Attendance: stack details, screenshots from teammates | Missing |
