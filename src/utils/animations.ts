@@ -65,17 +65,10 @@ export function animateAbout() {
       scrollTrigger: { trigger: '.about-human', start: 'top 88%' } }
   );
 
-  // CardSwap and Sketchbook wrappers reveal on scroll
   gsap.fromTo('.about-projects',
     { opacity: 0, y: 24 },
     { opacity: 1, y: 0, duration: 0.7, ...defaults,
       scrollTrigger: { trigger: '.about-projects', start: 'top 85%' } }
-  );
-
-  gsap.fromTo('.about-sketchbook',
-    { opacity: 0, y: 20 },
-    { opacity: 1, y: 0, duration: 0.6, ...defaults,
-      scrollTrigger: { trigger: '.about-sketchbook', start: 'top 88%' } }
   );
 
   gsap.fromTo('.about-volunteer',
