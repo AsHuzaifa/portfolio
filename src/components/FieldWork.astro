@@ -1,0 +1,13 @@
+---
+import { about } from '../data/site';
+import CardSwap from './CardSwap';
+---
+
+<section class="px-8 md:px-20 lg:px-32 pt-16 pb-24">
+  <div class="max-w-[1200px] mx-auto">
+    <div class="about-projects">
+      <p class="text-muted text-xs tracking-[0.2em] uppercase font-body mb-8">Field work</p>
+      <CardSwap client:load cards={about.minorProjects} />
+    </div>
+  </div>
+</section>
