@@ -1,5 +1,5 @@
 # conventions.md — Portfolio Session Log
-Last updated: June 28, 2026 (session 7)
+Last updated: June 28, 2026 (session 8)
 
 Read this before doing anything. It restores full session context.
 
@@ -18,6 +18,7 @@ Read this before doing anything. It restores full session context.
 | GitHub Pages deployment | Complete — `astro.config.mjs` configured, Actions workflow at `.github/workflows/deploy.yml` |
 | Marble background | Live — real JPEG at `public/assets/marble-bg.jpg`, cream overlay at 0.82 |
 | Sketchbook | **Removed** — component deleted, import/usage stripped, scroll trigger removed |
+| Lanyard / ID Card | Complete — `LanyardCard.tsx` + `Lanyard.tsx` mounted in hero; physics rope hangs from top-right; card face drawn via Canvas 2D API |
 | Grain overlay | **Removed** — SVG feTurbulence div and all .grain-overlay CSS gone |
 | Flower field | **Removed** — SVG and all @keyframes/.sw* CSS gone |
 
@@ -52,7 +53,11 @@ d:\portfolio\
     │   ├── ContactSection.astro     ← Reach section, driven by contact export in site.ts
     │   ├── StaggeredMenu.tsx        ← React island — slide-in nav, mounted fixed in Layout.astro
     │   ├── CardSwap.tsx             ← React island — click-to-swap stacked project cards
-    │   └── SamsungCard.tsx          ← React island — credential card with per-course accordion
+    │   ├── SamsungCard.tsx          ← React island — credential card with per-course accordion
+    │   ├── LanyardCard.tsx          ← React island — wrapper; generates Canvas 2D card face, passes to Lanyard
+    │   ├── Lanyard.tsx              ← React island — Three.js physics lanyard (R3F + Rapier + meshline)
+    │   ├── card.glb                 ← Card 3D model (imported with ?url to bypass Astro image transform)
+    │   └── lanyard.png              ← Lanyard texture (imported with ?url)
     ├── data/
     │   └── site.ts                  ← all page content (nav, contact, skills, about, hero exports)
     ├── layouts/
@@ -217,6 +222,50 @@ lifts opacity. All via CSS transitions. Email uses `mailto:`, all others open `_
   No React state updates — avoids DOM/GSAP race condition where `setTextLines()` re-render conflicted with in-flight tweens.
 - Items driven by `nav` export in `site.ts`; 4 items: Opening, Origin, Skills, Reach
 
+### Lanyard / ID Card — hero right column
+`src/components/LanyardCard.tsx` + `src/components/Lanyard.tsx` — React island pair mounted `client:load` in `index.astro`.
+
+**Architecture:**
+- `LanyardCard.tsx` — generates a `512×756` canvas card face (via Canvas 2D API), waits for `document.fonts.ready` so Google Fonts (Fraunces, DM Sans) are loaded before drawing, then passes the data URL as `frontImage` to `Lanyard`.
+- `Lanyard.tsx` — full Three.js/R3F scene: physics rope (Rapier `useRopeJoint`/`useSphericalJoint`), card GLB model, draggable interaction, `meshline` rope rendering.
+
+**Card face content (current, committed):**
+- Top strip: `#C94A2A` (accent), 84px tall, strip label "IOT  ENGINEERING   ·   PORTFOLIO"
+- Monogram circle: `#2A4A3E` (green), 42px radius, "H" in Fraunces 300 38px
+- Name: "Mohammed Huzaifa" — Fraunces 300 44px
+- Title: "IoT Engineering Student" — DM Sans 400 17px
+- Skills row (single line): `['ESP32', 'TinyML', 'Arduino', 'Edge ML']` — DM Sans 400 14px, 30px tall pills, 16px h-padding, 8px gap, centered
+- University footer: "Presidency University, Bangalore" — DM Sans 400 12px
+
+**Props used from `LanyardCard`:**
+```tsx
+<Lanyard
+  frontImage={frontImage}
+  height="100%"
+  transparent={true}
+  gravity={[0, -40, 0]}
+  fov={20}
+  lanyardWidth={0.9}
+/>
+```
+
+**Rope anchor at top of canvas:** `<group position={[0, 5.5, 0]}>` — with fov=20, camera z=30, top visible edge ≈ `tan(10°)×30 ≈ 5.29` world units; y=5.5 places the anchor just above the visible frame so the rope appears to emerge from the top edge.
+
+**Asset imports use `?url` suffix:**
+```ts
+import cardGLB from './card.glb?url';
+import lanyardPNG from './lanyard.png?url';
+```
+Without `?url`, Astro's image metadata transform returns `{ src, width, height, format }` instead of a URL string — Three.js's `useTexture` would then try to fetch `width`, `height`, and `format` as URLs (404s).
+
+**Hero layout for lanyard:** Text column gets `lg:pr-[420px] xl:pr-[480px]` right padding. Lanyard sits in `absolute right-0 top-0 bottom-0 w-[420px] xl:w-[480px]` (full section height, hidden on mobile/tablet). Hero name reduced from `clamp(4.5rem, 13vw, 11rem)` to `clamp(4.5rem, 10vw, 9rem)` for the two-column layout.
+
+**Known issue — rope/card clips at canvas right edge:** Three.js always clips rendering at the canvas element boundaries. The 420px column doesn't give the rope room to swing fully right without clipping. This is a fundamental limitation; accepted for now.
+
+**`astro.config.mjs` addition:** `assetsInclude: ['**/*.glb']` so Vite treats GLB imports as URL assets rather than processing them as modules.
+
+**TypeScript module augmentation** in `Lanyard.tsx` for custom R3F elements `meshLineGeometry` and `meshLineMaterial`.
+
 ### Field Work section
 `src/components/FieldWork.astro` — extracted from `AboutSection.astro` in session 6.
 Two-column flex layout: CardSwap on the left (`shrink-0`), "Attended" seminars list on the right (`flex-1`).
@@ -319,6 +368,18 @@ the span list mid-animation, so GSAP ran against stale DOM and the visible text 
 Fix: removed state entirely. `TEXT_ITEMS = ['Menu', 'Close'] as const` is always rendered static.
 `animateText(true)` → `gsap.to(inner, { yPercent: -50 })` (shows Close); `animateText(false)` → `yPercent: 0` (shows Menu).
 
+**Astro image metadata transform causes 404s in Three.js (session 8)**
+Cause: PNG/image imports from `src/` are processed by Astro's image pipeline and return `{ src, width, height, format }` objects. Three.js's `useTexture` received the object and tried to load `width` (e.g. 1025), `height` (250), and `"png"` as URL strings — all 404.
+Fix: append `?url` to all asset imports consumed by Three.js (`import cardGLB from './card.glb?url'`, `import lanyardPNG from './lanyard.png?url'`). The `?url` suffix bypasses Astro's transform and returns a plain URL string.
+
+**GLB import not treated as URL asset (session 8)**
+Cause: Vite didn't know how to handle `.glb` binary imports by default.
+Fix: `assetsInclude: ['**/*.glb']` in `astro.config.mjs` `vite` block.
+
+**Rope anchor appears mid-screen (session 8)**
+Cause: original group position `[0, 4, 0]` was below the top of the visible canvas with fov=20, camera z=30 (top edge ≈ 5.29 world units).
+Fix: moved to `[0, 5.5, 0]` and set lanyard column to `absolute right-0 top-0 bottom-0` (full section height).
+
 **`git commit` heredoc syntax fails in PowerShell**
 Cause: PowerShell 5.1 does not support bash heredocs (`<<'EOF'`).
 Fix: use Bash tool for git commits, not PowerShell.
@@ -331,7 +392,8 @@ Commits push to `main`. Netlify auto-deploys.
 
 ## What's Next (in order)
 
-1. **Projects section** — NeuroSync and Posture Detection (in progress); smaller
+1. **Card face editing** — deferred by user at end of session 8. Size, layout, and further styling left for a future session.
+2. **Projects section** — NeuroSync and Posture Detection (in progress); smaller
    projects (Smart Attendance, Ocean Sensor, Temp/Humidity) already have copy in `site.ts`.
    Hold until asset placeholders below are resolved.
 
@@ -356,11 +418,16 @@ Commits push to `main`. Netlify auto-deploys.
 ## Package Versions
 
 ```
-astro:          ^7.0.3
-@astrojs/react: installed (exact version in package.json)
-react:          19 (peer dep via @astrojs/react)
-tailwindcss:    ^4.3.1   (via @tailwindcss/vite, NOT the Astro integration)
-gsap:           ^3.15.0
+astro:               ^7.0.3
+@astrojs/react:      ^6.0.0
+react:               ^19.2.7
+tailwindcss:         ^4.3.1   (via @tailwindcss/vite, NOT the Astro integration)
+gsap:                ^3.15.0
+three:               ^0.185.0
+@react-three/fiber:  ^9.6.1
+@react-three/drei:   ^10.7.7
+@react-three/rapier: ^2.2.0
+meshline:            ^3.3.1
 ```
 
 ---
