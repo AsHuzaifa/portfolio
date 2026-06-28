@@ -13,9 +13,9 @@ import {
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
 import * as THREE from 'three';
 
-// Place card.glb and lanyard.png alongside this file in src/components/
-import cardGLB from './card.glb';
-import lanyardPNG from './lanyard.png';
+// ?url forces Vite to return a URL string, bypassing Astro's image metadata transform
+import cardGLB from './card.glb?url';
+import lanyardPNG from './lanyard.png?url';
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 
@@ -158,7 +158,7 @@ function Band({
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { nodes, materials } = useGLTF(cardGLB as string) as any;
+  const { nodes, materials } = useGLTF(cardGLB) as any;
   const texture  = useTexture((lanyardImage || lanyardPNG) as string);
   const frontTex = useTexture((frontImage  || BLANK_PIXEL));
   const backTex  = useTexture((backImage   || BLANK_PIXEL));
