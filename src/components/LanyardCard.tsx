@@ -66,10 +66,10 @@ async function generateCardTexture(): Promise<string> {
   const NAME_Y = MONO_CY + MONO_R + 56;
   ctx.save();
   ctx.fillStyle = C.text;
-  ctx.font = '300 54px "Fraunces"';
+  ctx.font = '300 44px "Fraunces"';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'alphabetic';
-  ctx.fillText('Huzaifa', CARD_W / 2, NAME_Y);
+  ctx.fillText('Mohammed Huzaifa', CARD_W / 2, NAME_Y);
   ctx.restore();
 
   // ── Title ───────────────────────────────────────────────────────────────────
@@ -102,15 +102,15 @@ async function generateCardTexture(): Promise<string> {
   ctx.restore();
 
   // ── Skill pills ─────────────────────────────────────────────────────────────
-  const PILL_H    = 26;
-  const PILL_PAD  = 14;
+  const PILL_H    = 30;
+  const PILL_PAD  = 16;
   const PILL_GAP  = 8;
   const PILL_Y    = SKILLS_LABEL_Y + 14;
   const PILL_R    = PILL_H / 2;
   const skills    = ['ESP32', 'TinyML', 'Arduino', 'Edge ML'];
 
   ctx.save();
-  ctx.font = '400 12px "DM Sans"';
+  ctx.font = '400 14px "DM Sans"';
 
   // Measure widths to centre the row
   const pillWidths = skills.map(s => ctx.measureText(s).width + PILL_PAD * 2);
@@ -133,6 +133,7 @@ async function generateCardTexture(): Promise<string> {
 
     // Pill text
     ctx.fillStyle = C.text;
+    ctx.font = '400 14px "DM Sans"';
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
     ctx.fillText(skill, px + pw / 2, PILL_Y + PILL_H / 2);
