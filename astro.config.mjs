@@ -11,7 +11,8 @@ export default defineConfig({
   base: '/portfolio',
 
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    assetsInclude: ['**/*.glb'],
   },
 
   integrations: [react()]

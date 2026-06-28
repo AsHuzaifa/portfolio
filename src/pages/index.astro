@@ -4,6 +4,7 @@ import AboutSection from '../components/AboutSection.astro';
 import SkillsSection from '../components/SkillsSection.astro';
 import FieldWork from '../components/FieldWork.astro';
 import ContactSection from '../components/ContactSection.astro';
+import LanyardCard from '../components/LanyardCard';
 import { hero } from '../data/site';
 ---
 
@@ -15,20 +16,28 @@ import { hero } from '../data/site';
       id="opening"
       class="min-h-screen flex flex-col justify-center px-8 md:px-20 lg:px-32 relative"
     >
-      <div class="max-w-[1200px] mx-auto w-full pt-24 pb-32">
+      <div class="max-w-[1200px] mx-auto w-full pt-24 pb-32 flex flex-col lg:flex-row lg:items-center lg:gap-8">
 
-        <p class="hero-label text-muted text-xs tracking-[0.2em] uppercase mb-10">
-          {hero.label}
-        </p>
+        <!-- Text column -->
+        <div class="flex-1 min-w-0">
+          <p class="hero-label text-muted text-xs tracking-[0.2em] uppercase mb-10">
+            {hero.label}
+          </p>
 
-        <h1 class="hero-name font-display font-light text-text leading-[0.88] tracking-[-0.03em] mb-14"
-            style="font-size: clamp(4.5rem, 13vw, 11rem);">
-          {hero.name}
-        </h1>
+          <h1 class="hero-name font-display font-light text-text leading-[0.88] tracking-[-0.03em] mb-14"
+              style="font-size: clamp(4.5rem, 10vw, 9rem);">
+            {hero.name}
+          </h1>
 
-        <p class="hero-bio text-muted text-lg md:text-xl leading-[1.7] max-w-lg font-body font-light">
-          {hero.bio}
-        </p>
+          <p class="hero-bio text-muted text-lg md:text-xl leading-[1.7] max-w-lg font-body font-light">
+            {hero.bio}
+          </p>
+        </div>
+
+        <!-- Lanyard column — hidden on mobile (too narrow), visible from lg up -->
+        <div class="hidden lg:block flex-shrink-0 w-[380px] xl:w-[440px]" style="height: 580px;">
+          <LanyardCard client:load />
+        </div>
 
       </div>
 
