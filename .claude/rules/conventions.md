@@ -1,5 +1,5 @@
 # conventions.md — Portfolio Session Log
-Last updated: June 28, 2026 (session 4)
+Last updated: June 28, 2026 (session 5)
 
 Read this before doing anything. It restores full session context.
 
@@ -11,10 +11,13 @@ Read this before doing anything. It restores full session context.
 |---|---|
 | Hero (`#opening`) | Complete — copy approved, committed, live |
 | About (`#origin`) | Complete — React islands integrated, copy approved, committed, live |
+| Skills (`#signal`) | Complete — 4 groups, confident/learning distinction, scroll-triggered stagger |
+| Contact (`#reach`) | Complete — 5 links (GitHub, Email, Instructables, LinkedIn, ORCID), scroll-triggered stagger |
 | Marble background | Live — real JPEG at `public/assets/marble-bg.jpg`, cream overlay at 0.82 |
 | Sketchbook | **Removed** — component deleted, import/usage stripped, scroll trigger removed |
 | Grain overlay | **Removed** — SVG feTurbulence div and all .grain-overlay CSS gone |
 | Flower field | **Removed** — SVG and all @keyframes/.sw* CSS gone |
+| StaggeredMenu | **Attempted, removed** — integration started, reverted at user request |
 
 ---
 
@@ -39,18 +42,20 @@ d:\portfolio\
 └── src/
     ├── components/
     │   ├── AboutSection.astro       ← Origin section, imports CardSwap + SamsungCard
+    │   ├── SkillsSection.astro      ← Signal section, driven by skills export in site.ts
+    │   ├── ContactSection.astro     ← Reach section, driven by contact export in site.ts
     │   ├── CardSwap.tsx             ← React island — click-to-swap stacked project cards
     │   └── SamsungCard.tsx          ← React island — credential card with per-course accordion
     ├── data/
-    │   └── site.ts                  ← all page content (hero, about exports)
+    │   └── site.ts                  ← all page content (contact, skills, about, hero exports)
     ├── layouts/
     │   └── Layout.astro             ← base HTML shell, fonts, no bg-bg on body
     ├── pages/
-    │   └── index.astro              ← single-page entry; calls animateHero, animateAbout, initAccordions
+    │   └── index.astro              ← single-page entry; calls animateHero, animateAbout, animateSkills, animateContact, initAccordions
     ├── styles/
     │   └── global.css               ← @theme tokens, base layer, marble background on html
     └── utils/
-        └── animations.ts            ← animateHero, animateAbout, initAccordions
+        └── animations.ts            ← animateHero, animateAbout, animateSkills, animateContact, initAccordions
 ```
 
 ---
@@ -123,9 +128,11 @@ is reliable there.
 Generic names (Hero, About, Skills, Contact) are banned per `tone.md`.
 - `#opening` — Hero section
 - `#origin`  — About section
-- Remaining sections to be named at build time (see Open Decisions below)
+- `#signal`  — Skills section (IoT/transmission theme)
+- `#reach`   — Contact section
 
-Convention: section `id` is thematic, not functional.
+Convention: section `id` is thematic, not functional. Visible label in the
+section header matches the ID (e.g. id="signal" → label "Signal").
 
 ### Layout system
 Tailwind's 12-column grid (`grid-cols-12`). About section: left `col-span-7`
@@ -134,10 +141,15 @@ structural gutter between them.
 
 ### Content architecture
 No hardcoded strings in components. All copy lives in `src/data/site.ts`.
-Current exports: `hero`, `about`. `about.samsung.courses` is an array of
-`{ title: string; detail: string }` objects to support the per-course accordion
-in SamsungCard. `about.minorProjects` is `{ name: string; description: string }[]`
-consumed by CardSwap.
+Current exports (in file order): `contact`, `skills`, `about`, `hero`.
+
+- `hero` — label, name, bio
+- `about` — narrative, education, samsung (context/stat/subtext/courses), human, volunteering, minorProjects
+- `skills` — `groups[]`, each with `label`, `number`, `rows[]`. Each row: `category?`, `items: string[]`, `learning?: boolean`, `note?: string`
+- `contact` — `links[]`, each with `label`, `handle`, `url`
+
+`about.samsung.courses` is `{ title: string; detail: string }[]` — per-course accordion in SamsungCard.
+`about.minorProjects` is `{ name: string; description: string }[]` — consumed by CardSwap.
 
 ### Cursor-proximity glow
 Pattern used on CardSwap cards and SamsungCard:
@@ -157,6 +169,21 @@ Two separate accordion systems:
    expand/collapse, chevron `rotation: 180`. Triggered by `[data-accordion-trigger]`.
 2. **SamsungCard courses** — React `useState`, CSS `max-height` transition. Fully
    self-contained inside the React component.
+
+### Skills section design
+No skill bars or percentage meters — these are arbitrary and banned. Confident vs
+learning distinction is communicated by:
+- Confident: `text-text` (full opacity)
+- Learning: `text-muted/55` (softened) + a small `border border-muted/20` badge
+  with text "learning" in `text-[0.5rem] tracking-[0.15em] uppercase`
+
+Group containers: `border border-muted/10` with hover
+`shadow-[0_0_28px_rgba(42,74,62,0.09)]` (sage green glow, `transition-shadow duration-500`).
+
+### Contact section design
+Five links in a stacked list. Each row: small-caps label left, handle + `↗` right.
+On hover: handle and arrow shift to `accent-alt` (#2A4A3E), separator darkens, label
+lifts opacity. All via CSS transitions. Email uses `mailto:`, all others open `_blank`.
 
 ---
 
@@ -241,10 +268,10 @@ Commits push to `main`. Netlify auto-deploys.
 
 ## What's Next (in order)
 
-1. **Skills section** — Edge computing, TinyML, Digital Twins, IoT security.
-   Avoid skills-bar clichés. Format TBD. Section ID to be decided (thematic, per convention).
-2. **Contact section** — tone.md suggests `Signal` as a possible ID. Keep short.
-3. **Projects section** — NeuroSync and Posture Detection (in progress); smaller
+1. **Navigation** — No nav yet. StaggeredMenu from React Bits was attempted and
+   reverted (session 5) — the component loaded but was not visible on screen; debugging
+   not pursued. A navigation solution is still needed. Options open.
+2. **Projects section** — NeuroSync and Posture Detection (in progress); smaller
    projects (Smart Attendance, Ocean Sensor, Temp/Humidity) already have copy in `site.ts`.
    Hold until asset placeholders below are resolved.
 
@@ -254,7 +281,7 @@ Commits push to `main`. Netlify auto-deploys.
 
 | Item | Status |
 |---|---|
-| Section names for Skills, Contact, Projects | Not decided — named at build time |
+| Navigation solution | Needed — StaggeredMenu attempted + reverted; approach TBD |
 | NeuroSync: component list, repo link, demo | Missing — add to `personal.md` and `site.ts` when ready |
 | Posture Detection: Edge Impulse project link | Missing — add when ready |
 | Smart Attendance: stack details, screenshots from teammates | Missing |
