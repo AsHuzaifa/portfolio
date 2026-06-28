@@ -22,6 +22,7 @@ export const StaggeredMenu: React.FC<Props> = ({
   const openRef = useRef(false);
 
   const panelRef = useRef<HTMLElement>(null);
+
   const preLayersRef = useRef<HTMLDivElement>(null);
   const preLayerElsRef = useRef<HTMLElement[]>([]);
 
@@ -30,17 +31,18 @@ export const StaggeredMenu: React.FC<Props> = ({
   const iconRef = useRef<HTMLSpanElement>(null);
 
   const textInnerRef = useRef<HTMLSpanElement>(null);
-  const [textLines, setTextLines] = useState(['Menu', 'Close']);
 
   const openTlRef = useRef<gsap.core.Timeline | null>(null);
   const closeTweenRef = useRef<gsap.core.Tween | null>(null);
   const spinTweenRef = useRef<gsap.core.Timeline | null>(null);
-  const textCycleAnimRef = useRef<gsap.core.Tween | null>(null);
+  const textAnimRef = useRef<gsap.core.Tween | null>(null);
   const colorTweenRef = useRef<gsap.core.Tween | null>(null);
 
   const toggleBtnRef = useRef<HTMLButtonElement>(null);
   const busyRef = useRef(false);
   const itemEntranceTweenRef = useRef<gsap.core.Tween | null>(null);
+
+  const TEXT_ITEMS = ['Menu', 'Close'] as const;
 
   // Portfolio palette constants
   const MUTED      = '#8C7E6E';
@@ -184,31 +186,16 @@ export const StaggeredMenu: React.FC<Props> = ({
     });
   }, []);
 
+  // Two static items — yPercent: 0 shows "Menu", yPercent: -50 shows "Close".
+  // Avoids React state-update race conditions that broke the previous cycling approach.
   const animateText = useCallback((opening: boolean) => {
     const inner = textInnerRef.current;
     if (!inner) return;
-    textCycleAnimRef.current?.kill();
-
-    const currentLabel = opening ? 'Menu' : 'Close';
-    const targetLabel = opening ? 'Close' : 'Menu';
-    const cycles = 3;
-    const seq = [currentLabel];
-    let last = currentLabel;
-    for (let i = 0; i < cycles; i++) {
-      last = last === 'Menu' ? 'Close' : 'Menu';
-      seq.push(last);
-    }
-    if (last !== targetLabel) seq.push(targetLabel);
-    seq.push(targetLabel);
-
-    setTextLines(seq);
-    gsap.set(inner, { yPercent: 0 });
-
-    const finalShift = ((seq.length - 1) / seq.length) * 100;
-    textCycleAnimRef.current = gsap.to(inner, {
-      yPercent: -finalShift,
-      duration: 0.5 + seq.length * 0.07,
-      ease: 'power4.out',
+    textAnimRef.current?.kill();
+    textAnimRef.current = gsap.to(inner, {
+      yPercent: opening ? -50 : 0,
+      duration: opening ? 0.4 : 0.3,
+      ease: opening ? 'power3.out' : 'power3.inOut',
     });
   }, []);
 
@@ -274,7 +261,7 @@ export const StaggeredMenu: React.FC<Props> = ({
           >
             <span className="sm-toggle-textWrap relative inline-block h-[1em] overflow-hidden whitespace-nowrap">
               <span ref={textInnerRef} className="sm-toggle-textInner flex flex-col leading-none">
-                {textLines.map((l, i) => (
+                {TEXT_ITEMS.map((l, i) => (
                   <span className="block h-[1em] leading-none" key={i}>{l}</span>
                 ))}
               </span>
