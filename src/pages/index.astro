@@ -3,26 +3,10 @@ import Layout from '../layouts/Layout.astro';
 import AboutSection from '../components/AboutSection.astro';
 import SkillsSection from '../components/SkillsSection.astro';
 import ContactSection from '../components/ContactSection.astro';
-import StaggeredMenu from '../components/StaggeredMenu';
-import { hero, nav } from '../data/site';
+import { hero } from '../data/site';
 ---
 
 <Layout>
-  <StaggeredMenu
-    client:load
-    isFixed={true}
-    position="right"
-    items={nav.items}
-    socialItems={nav.socials}
-    displaySocials={true}
-    displayItemNumbering={true}
-    colors={['#8C7E6E', '#2A4A3E']}
-    accentColor="#C94A2A"
-    menuButtonColor="#8C7E6E"
-    openMenuButtonColor="#1A1714"
-    changeMenuColorOnOpen={true}
-    closeOnClickAway={true}
-  />
   <main>
 
     <!-- Opening / Hero -->

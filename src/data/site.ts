@@ -43,20 +43,6 @@ export const about = {
   ],
 };
 
-export const nav = {
-  items: [
-    { label: 'Opening', ariaLabel: 'Intro',    link: '#opening' },
-    { label: 'Origin',  ariaLabel: 'About',    link: '#origin'  },
-    { label: 'Signal',  ariaLabel: 'Skills',   link: '#signal'  },
-    { label: 'Reach',   ariaLabel: 'Contact',  link: '#reach'   },
-  ],
-  socials: [
-    { label: 'GitHub',        link: 'https://github.com/ashuzaifa' },
-    { label: 'LinkedIn',      link: 'https://www.linkedin.com/in/mohammed-huzaifa-887773304/' },
-    { label: 'ORCID',         link: 'https://orcid.org/0009-0006-6229-3699' },
-  ],
-};
-
 export const contact = {
   links: [
     { label: 'GitHub',        handle: 'ashuzaifa',                          url: 'https://github.com/ashuzaifa' },
