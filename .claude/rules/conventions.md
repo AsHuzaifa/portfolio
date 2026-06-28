@@ -1,5 +1,5 @@
 # conventions.md — Portfolio Session Log
-Last updated: June 28, 2026 (session 6)
+Last updated: June 28, 2026 (session 7)
 
 Read this before doing anything. It restores full session context.
 
@@ -12,7 +12,7 @@ Read this before doing anything. It restores full session context.
 | Hero (`#opening`) | Complete — copy approved, committed, live |
 | About (`#origin`) | Complete — React islands integrated, copy approved, committed, live |
 | Skills (`#skills`) | Complete — 4 groups, confident/learning distinction, scroll-triggered stagger, translucent bg, bolder border |
-| Field Work | Complete — CardSwap extracted from Origin into its own `FieldWork.astro` section |
+| Field Work | Complete — CardSwap left, "Attended" seminars list right; flex layout, responsive |
 | Contact (`#reach`) | Complete — 5 links (GitHub, Email, Instructables, LinkedIn, ORCID), scroll-triggered stagger |
 | Navigation (StaggeredMenu) | Complete — `StaggeredMenu.tsx` mounted in `Layout.astro`; slides in from right, 4 nav items |
 | GitHub Pages deployment | Complete — `astro.config.mjs` configured, Actions workflow at `.github/workflows/deploy.yml` |
@@ -156,12 +156,14 @@ Current exports (in file order): `nav`, `about`, `contact`, `skills`, `hero`.
 
 - `nav` — `items[]`, each with `label`, `link`, `ariaLabel`. Used by StaggeredMenu in Layout.astro.
 - `hero` — label, name, bio
-- `about` — narrative, education, samsung (context/stat/subtext/courses), human, volunteering, minorProjects
+- `about` — narrative, education, samsung (context/stat/subtext/courses), human, volunteering, minorProjects, seminars
 - `skills` — `groups[]`, each with `label`, `number`, `rows[]`. Each row: `category?`, `items: string[]`, `learning?: boolean`, `note?: string`
 - `contact` — `links[]`, each with `label`, `handle`, `url`
 
 `about.samsung.courses` is `{ title: string; detail: string }[]` — per-course accordion in SamsungCard.
 `about.minorProjects` is `{ name: string; description: string }[]` — consumed by CardSwap.
+`about.seminars` is `{ title: string; source: string; detail: string }[]` — consumed by FieldWork.astro.
+Three entries: Principles of Game Design (Macquarie Uni), BOHRAI/NVIDIA inauguration, AI & IoT in Precision Agriculture.
 
 ### Cursor-proximity glow
 Pattern used on CardSwap cards and SamsungCard:
@@ -210,14 +212,23 @@ lifts opacity. All via CSS transitions. Email uses `mailto:`, all others open `_
 - Items: Fraunces font, `text-[3.5rem] md:text-[4.5rem]`, colour `#1A1714`, hover → `#C94A2A`
 - Clicking a nav item calls `closeMenu()` then follows the anchor link
 - Click-away (outside panel + toggle) also calls `closeMenu()`
-- Text cycles "Menu ↔ Close" with a GSAP `yPercent` stagger on open/close
+- Text toggle "Menu ↔ Close": two static spans always in DOM (`TEXT_ITEMS = ['Menu', 'Close'] as const`);
+  `animateText(true)` tweens `yPercent: -50` (shows Close), `animateText(false)` tweens back to 0 (shows Menu).
+  No React state updates — avoids DOM/GSAP race condition where `setTextLines()` re-render conflicted with in-flight tweens.
 - Items driven by `nav` export in `site.ts`; 4 items: Opening, Origin, Skills, Reach
 
 ### Field Work section
 `src/components/FieldWork.astro` — extracted from `AboutSection.astro` in session 6.
-Wraps `CardSwap` with its "Field work" label. Keeps `about-projects` class so
-`animateAbout()` ScrollTrigger continues to work unchanged. Padding matches other
-sections (`px-8 md:px-20 lg:px-32`). Page order: Opening → Origin → Skills → Field Work → Reach.
+Two-column flex layout: CardSwap on the left (`shrink-0`), "Attended" seminars list on the right (`flex-1`).
+Responsive: `flex-col` on mobile, `flex-row md:gap-20 lg:gap-28` on desktop.
+
+Left column keeps `about-projects` class so `animateAbout()` ScrollTrigger works unchanged.
+Right column: `<ul>` of seminar items, each with title (`text-text/75 text-[0.72rem]`), source
+(`text-muted/60 text-[0.62rem]`), and detail (`text-muted/45 text-[0.62rem]`). Rows separated
+by `border-t border-muted/10`, first row has no top border.
+
+Section label convention: "Field work" left, "Attended" right — both `text-muted text-xs tracking-[0.2em] uppercase`.
+Padding matches other sections (`px-8 md:px-20 lg:px-32`). Page order: Opening → Origin → Skills → Field Work → Reach.
 
 ### Deployment — GitHub Pages
 Migrated from Netlify in session 6. `astro.config.mjs` sets:
@@ -300,6 +311,13 @@ Cause 1: CSS `<style>` inside inline SVG in `.astro` gets processed by Vite —
 Cause 2: Bare `<use>` elements have inconsistent `transform-box: fill-box` support.
 Fix: moved all keyframes + classes to `global.css`; wrapped all `<use>` in `<g>`.
 (Component subsequently removed entirely.)
+
+**StaggeredMenu "Menu" not transitioning to "Close" (session 7)**
+Cause: original `animateText` called `setTextLines(seq)` (React state update, async re-render) then
+immediately ran `gsap.set` + `gsap.to` on the same element's children. React reconciliation rebuilt
+the span list mid-animation, so GSAP ran against stale DOM and the visible text never moved.
+Fix: removed state entirely. `TEXT_ITEMS = ['Menu', 'Close'] as const` is always rendered static.
+`animateText(true)` → `gsap.to(inner, { yPercent: -50 })` (shows Close); `animateText(false)` → `yPercent: 0` (shows Menu).
 
 **`git commit` heredoc syntax fails in PowerShell**
 Cause: PowerShell 5.1 does not support bash heredocs (`<<'EOF'`).
