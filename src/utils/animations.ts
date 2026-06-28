@@ -78,6 +78,23 @@ export function animateAbout() {
   );
 }
 
+// [contact] scroll-triggered reveal — label first, then each link row staggers in.
+export function animateContact() {
+  const defaults = { ease: 'power3.out' };
+
+  gsap.fromTo('.contact-label',
+    { opacity: 0, y: 12 },
+    { opacity: 1, y: 0, duration: 0.6, ...defaults,
+      scrollTrigger: { trigger: '.contact-label', start: 'top 88%' } }
+  );
+
+  gsap.fromTo('.contact-link',
+    { opacity: 0, y: 14 },
+    { opacity: 1, y: 0, duration: 0.45, stagger: 0.07, ...defaults,
+      scrollTrigger: { trigger: '.contact-links', start: 'top 84%' } }
+  );
+}
+
 // [skills] scroll-triggered stagger — section label arrives first, then each group
 // card fades up in sequence as the grid enters the viewport.
 export function animateSkills() {

@@ -43,6 +43,16 @@ export const about = {
   ],
 };
 
+export const contact = {
+  links: [
+    { label: 'GitHub',        handle: 'ashuzaifa',                          url: 'https://github.com/ashuzaifa' },
+    { label: 'Email',         handle: 'mohammedhuzaifa464@gmail.com',        url: 'mailto:mohammedhuzaifa464@gmail.com' },
+    { label: 'Instructables', handle: 'ashuzaifa',                          url: 'https://www.instructables.com/member/ashuzaifa/' },
+    { label: 'LinkedIn',      handle: 'Mohammed Huzaifa',                   url: 'https://www.linkedin.com/in/mohammed-huzaifa-887773304/' },
+    { label: 'ORCID',         handle: '0009-0006-6229-3699',                url: 'https://orcid.org/0009-0006-6229-3699' },
+  ],
+};
+
 export const skills = {
   groups: [
     {

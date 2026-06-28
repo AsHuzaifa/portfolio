@@ -1,0 +1,45 @@
+---
+import { contact } from '../data/site';
+---
+
+<section id="reach" class="px-8 md:px-20 lg:px-32 pt-24 pb-40">
+  <div class="max-w-[1200px] mx-auto">
+
+    <!-- Section entry: thin rule + label -->
+    <div class="mb-16 md:mb-20">
+      <hr class="border-t border-muted/20" />
+      <div class="flex justify-between items-baseline mt-4">
+        <p class="contact-label text-muted text-xs tracking-[0.2em] uppercase">Reach</p>
+        <span class="text-muted/25 text-xs tracking-[0.2em] font-body">03</span>
+      </div>
+    </div>
+
+    <!-- Links -->
+    <div class="contact-links">
+      {contact.links.map((link) => (
+        <a
+          href={link.url}
+          target={link.url.startsWith('mailto') ? undefined : '_blank'}
+          rel={link.url.startsWith('mailto') ? undefined : 'noopener noreferrer'}
+          class="contact-link group flex items-baseline justify-between py-5 border-b border-muted/10
+                 hover:border-muted/25 transition-colors duration-300"
+        >
+          <span class="text-[0.58rem] tracking-[0.22em] uppercase text-muted/50 font-body
+                       group-hover:text-muted/75 transition-colors duration-300">
+            {link.label}
+          </span>
+          <span class="flex items-baseline gap-3">
+            <span class="text-text text-sm font-body font-light
+                         group-hover:text-accent-alt transition-colors duration-300">
+              {link.handle}
+            </span>
+            <span class="text-muted/25 text-xs group-hover:text-accent-alt/50 transition-colors duration-300">
+              ↗
+            </span>
+          </span>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</section>

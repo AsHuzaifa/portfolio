@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import AboutSection from '../components/AboutSection.astro';
 import SkillsSection from '../components/SkillsSection.astro';
+import ContactSection from '../components/ContactSection.astro';
 import { hero } from '../data/site';
 ---
 
@@ -44,13 +45,17 @@ import { hero } from '../data/site';
     <!-- Signal / Skills -->
     <SkillsSection />
 
+    <!-- Reach / Contact -->
+    <ContactSection />
+
   </main>
 </Layout>
 
 <script>
-  import { animateHero, animateAbout, animateSkills, initAccordions } from '../utils/animations';
+  import { animateHero, animateAbout, animateSkills, animateContact, initAccordions } from '../utils/animations';
   animateHero();
   animateAbout();
   animateSkills();
+  animateContact();
   initAccordions();
 </script>
