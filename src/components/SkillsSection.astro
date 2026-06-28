@@ -1,0 +1,69 @@
+---
+import { skills } from '../data/site';
+---
+
+<section id="signal" class="px-8 md:px-20 lg:px-32 pt-24 pb-32">
+  <div class="max-w-[1200px] mx-auto">
+
+    <!-- Section entry: thin rule + label -->
+    <div class="mb-16 md:mb-20">
+      <hr class="border-t border-muted/20" />
+      <div class="flex justify-between items-baseline mt-4">
+        <p class="skills-label text-muted text-xs tracking-[0.2em] uppercase">Signal</p>
+        <span class="text-muted/25 text-xs tracking-[0.2em] font-body">02</span>
+      </div>
+    </div>
+
+    <!-- Skill groups grid -->
+    <div class="skills-grid grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+      {skills.groups.map((group) => (
+        <div class="skills-group border border-muted/10 px-7 py-8 lg:px-9 lg:py-10
+                    hover:shadow-[0_0_28px_rgba(42,74,62,0.09)] transition-shadow duration-500">
+
+          <!-- Group label + number -->
+          <div class="flex items-baseline justify-between mb-8">
+            <p class="text-[0.58rem] tracking-[0.25em] uppercase text-muted/65 font-body">
+              {group.label}
+            </p>
+            <span class="text-muted/20 text-[0.65rem] font-body">{group.number}</span>
+          </div>
+
+          <!-- Rows -->
+          <div class="space-y-5">
+            {group.rows.map((row) => (
+              <div>
+                {row.category && (
+                  <p class="text-[0.58rem] tracking-[0.18em] uppercase text-muted/40 mb-1.5 font-body">
+                    {row.category}
+                  </p>
+                )}
+                <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                  <span class={
+                    row.learning
+                      ? 'text-sm font-body font-light text-muted/55'
+                      : 'text-sm font-body font-light text-text'
+                  }>
+                    {row.items.join(', ')}
+                  </span>
+                  {row.learning && (
+                    <span class="text-[0.5rem] tracking-[0.15em] uppercase text-muted/40
+                                 border border-muted/20 px-1.5 py-0.5 leading-none font-body">
+                      learning
+                    </span>
+                  )}
+                  {row.note && (
+                    <span class="text-[0.68rem] text-muted/40 font-body font-light">
+                      — {row.note}
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

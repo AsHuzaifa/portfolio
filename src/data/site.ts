@@ -43,6 +43,46 @@ export const about = {
   ],
 };
 
+export const skills = {
+  groups: [
+    {
+      label: 'Hardware & Embedded Systems',
+      number: '01',
+      rows: [
+        { category: 'Microcontrollers & processors', items: ['Arduino', 'ESP32', 'GPIO', 'PWM', 'interrupts', 'timers'] },
+        { category: 'Embedded hardware design', items: ['schematics', 'PCB basics', 'power management', 'low-power modes', 'battery systems'] },
+        { category: 'Peripherals & interfaces', items: ['I2C', 'SPI', 'UART', 'USB'] },
+      ],
+    },
+    {
+      label: 'Programming',
+      number: '02',
+      rows: [
+        { items: ['Python'], note: 'primary language' },
+        { items: ['C/C++'], note: 'actively improving', learning: true },
+        { items: ['Java'], note: 'actively improving', learning: true },
+      ],
+    },
+    {
+      label: 'Wireless & Networking',
+      number: '03',
+      rows: [
+        { category: 'Wireless', items: ['WiFi', 'Bluetooth', 'BLE', 'LoRa', 'LoRaWAN', 'NB-IoT'] },
+        { category: 'Protocols', items: ['MQTT', 'CoAP', 'TCP/IP (IPv4, IPv6)'] },
+        { items: ['Matter', 'Digital Twins'], learning: true },
+      ],
+    },
+    {
+      label: 'Platforms & Tools',
+      number: '04',
+      rows: [
+        { items: ['Edge Impulse', 'Git', 'GitHub', 'PlatformIO', 'Arduino IDE', 'VS Code'] },
+        { category: 'Cloud — surface level', items: ['AWS IoT', 'Azure IoT Hub'], learning: true },
+      ],
+    },
+  ],
+};
+
 export const hero = {
   label: 'IoT Engineering — Presidency University, Bangalore',
   name: 'Huzaifa.',

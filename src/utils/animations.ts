@@ -78,6 +78,24 @@ export function animateAbout() {
   );
 }
 
+// [skills] scroll-triggered stagger — section label arrives first, then each group
+// card fades up in sequence as the grid enters the viewport.
+export function animateSkills() {
+  const defaults = { ease: 'power3.out' };
+
+  gsap.fromTo('.skills-label',
+    { opacity: 0, y: 12 },
+    { opacity: 1, y: 0, duration: 0.6, ...defaults,
+      scrollTrigger: { trigger: '.skills-label', start: 'top 88%' } }
+  );
+
+  gsap.fromTo('.skills-group',
+    { opacity: 0, y: 32 },
+    { opacity: 1, y: 0, duration: 0.7, stagger: 0.11, ...defaults,
+      scrollTrigger: { trigger: '.skills-grid', start: 'top 80%' } }
+  );
+}
+
 // [accordions] smooth height animation on any [data-accordion-trigger] button.
 // GSAP height:'auto' measures and animates to the content's natural height.
 // Chevron inside the button rotates 180deg open, returns to 0 closed.
