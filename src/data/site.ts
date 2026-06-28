@@ -50,6 +50,23 @@ export const about = {
       description: 'An all-software attendance solution built for Smart India Hackathon. Reached university top 20 out of ~150 competing teams.',
     },
   ],
+  seminars: [
+    {
+      title: 'Principles of Game Design',
+      source: 'Dr. Mitchell McEwan — Senior Lecturer, Macquarie University',
+      detail: '',
+    },
+    {
+      title: 'BOHRAI Launch & AI Centre of Excellence Inauguration',
+      source: 'Presidency University × NVIDIA',
+      detail: 'Chief guests: Dr. Mohan Kankanhalli (NUS), Dr. K Sivan (Former Chairman, ISRO), Mr. Harry Radhak (CCTS Group)',
+    },
+    {
+      title: 'AI & IoT in Precision Agriculture',
+      source: '',
+      detail: 'On bridging IoT sensor networks with AI inference for precision farming — soil monitoring, yield prediction, and autonomous irrigation as the layer between field data and farm decisions.',
+    },
+  ],
 };
 
 export const contact = {

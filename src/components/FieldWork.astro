@@ -5,9 +5,38 @@ import CardSwap from './CardSwap';
 
 <section class="px-8 md:px-20 lg:px-32 pt-16 pb-24">
   <div class="max-w-[1200px] mx-auto">
-    <div class="about-projects">
-      <p class="text-muted text-xs tracking-[0.2em] uppercase font-body mb-8">Field work</p>
-      <CardSwap client:load cards={about.minorProjects} />
+    <div class="flex flex-col md:flex-row items-start gap-16 md:gap-20 lg:gap-28">
+
+      <!-- Left: stacked project cards -->
+      <div class="about-projects shrink-0">
+        <p class="text-muted text-xs tracking-[0.2em] uppercase font-body mb-8">Field work</p>
+        <CardSwap client:load cards={about.minorProjects} />
+      </div>
+
+      <!-- Right: seminars & events — hidden on mobile, stacked below on small screens -->
+      <div class="w-full md:flex-1 md:pt-px">
+        <p class="text-muted text-xs tracking-[0.2em] uppercase font-body mb-8">Attended</p>
+        <ul class="space-y-0">
+          {about.seminars.map((s, i) => (
+            <li class={`py-5 ${i > 0 ? 'border-t border-muted/10' : ''}`}>
+              <p class="text-text/75 text-[0.72rem] font-body font-medium leading-snug mb-1">
+                {s.title}
+              </p>
+              {s.source && (
+                <p class="text-muted/60 text-[0.62rem] font-body leading-relaxed mb-1">
+                  {s.source}
+                </p>
+              )}
+              {s.detail && (
+                <p class="text-muted/45 text-[0.62rem] font-body leading-relaxed">
+                  {s.detail}
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+
     </div>
   </div>
 </section>
