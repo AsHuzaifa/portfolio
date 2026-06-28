@@ -2,14 +2,14 @@
 import { skills } from '../data/site';
 ---
 
-<section id="signal" class="px-8 md:px-20 lg:px-32 pt-24 pb-32">
+<section id="skills" class="px-8 md:px-20 lg:px-32 pt-24 pb-32">
   <div class="max-w-[1200px] mx-auto">
 
     <!-- Section entry: thin rule + label -->
     <div class="mb-16 md:mb-20">
       <hr class="border-t border-muted/20" />
       <div class="flex justify-between items-baseline mt-4">
-        <p class="skills-label text-muted text-xs tracking-[0.2em] uppercase">Signal</p>
+        <p class="skills-label text-muted text-xs tracking-[0.2em] uppercase">Skills</p>
         <span class="text-muted/25 text-xs tracking-[0.2em] font-body">02</span>
       </div>
     </div>
@@ -17,7 +17,7 @@ import { skills } from '../data/site';
     <!-- Skill groups grid -->
     <div class="skills-grid grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
       {skills.groups.map((group) => (
-        <div class="skills-group border border-muted/10 px-7 py-8 lg:px-9 lg:py-10
+        <div class="skills-group bg-surface/30 border border-muted/25 px-7 py-8 lg:px-9 lg:py-10
                     hover:shadow-[0_0_28px_rgba(42,74,62,0.09)] transition-shadow duration-500">
 
           <!-- Group label + number -->

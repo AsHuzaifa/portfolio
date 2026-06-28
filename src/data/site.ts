@@ -2,7 +2,7 @@ export const nav = {
   items: [
     { label: 'Opening', link: '#opening', ariaLabel: 'Go to opening section' },
     { label: 'Origin',  link: '#origin',  ariaLabel: 'Go to about section' },
-    { label: 'Signal',  link: '#signal',  ariaLabel: 'Go to skills section' },
+    { label: 'Skills',  link: '#skills',  ariaLabel: 'Go to skills section' },
     { label: 'Reach',   link: '#reach',   ariaLabel: 'Go to contact section' },
   ],
 };
@@ -68,9 +68,9 @@ export const skills = {
       label: 'Hardware & Embedded Systems',
       number: '01',
       rows: [
-        { category: 'Microcontrollers & processors', items: ['Arduino', 'ESP32', 'GPIO', 'PWM', 'interrupts', 'timers'] },
-        { category: 'Embedded hardware design', items: ['schematics', 'PCB basics', 'power management', 'low-power modes', 'battery systems'] },
-        { category: 'Peripherals & interfaces', items: ['I2C', 'SPI', 'UART', 'USB'] },
+        { category: 'Microcontrollers & Processors', items: ['Arduino', 'ESP32', 'GPIO', 'PWM', 'Interrupts', 'Timers'] },
+        { category: 'Embedded Hardware Design', items: ['Schematics', 'PCB Basics', 'Power Management', 'Low-Power Modes', 'Battery Systems'] },
+        { category: 'Peripherals & Interfaces', items: ['I2C', 'SPI', 'UART', 'USB'] },
       ],
     },
     {
