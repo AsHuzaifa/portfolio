@@ -15,16 +15,6 @@ const C = {
   green:   '#2A4A3E',
 };
 
-function generateBackTexture(): string {
-  const canvas = document.createElement('canvas');
-  canvas.width  = CARD_W;
-  canvas.height = CARD_H;
-  const ctx = canvas.getContext('2d')!;
-  ctx.fillStyle = C.bg;
-  ctx.fillRect(0, 0, CARD_W, CARD_H);
-  return canvas.toDataURL('image/png');
-}
-
 async function generateCardTexture(): Promise<string> {
   // Wait for Fraunces + DM Sans (loaded in Layout.astro via Google Fonts)
   await document.fonts.ready;
@@ -170,6 +160,16 @@ async function generateCardTexture(): Promise<string> {
   ctx.fillText('Presidency University, Bangalore', CARD_W / 2, CARD_H - 36);
   ctx.restore();
 
+  return canvas.toDataURL('image/png');
+}
+
+function generateBackTexture(): string {
+  const canvas = document.createElement('canvas');
+  canvas.width  = CARD_W;
+  canvas.height = CARD_H;
+  const ctx = canvas.getContext('2d')!;
+  ctx.fillStyle = C.bg;
+  ctx.fillRect(0, 0, CARD_W, CARD_H);
   return canvas.toDataURL('image/png');
 }
 
