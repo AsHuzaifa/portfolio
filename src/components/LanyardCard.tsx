@@ -163,29 +163,16 @@ async function generateCardTexture(): Promise<string> {
   return canvas.toDataURL('image/png');
 }
 
-function generateBackTexture(): string {
-  const canvas = document.createElement('canvas');
-  canvas.width  = CARD_W;
-  canvas.height = CARD_H;
-  const ctx = canvas.getContext('2d')!;
-  ctx.fillStyle = C.bg;
-  ctx.fillRect(0, 0, CARD_W, CARD_H);
-  return canvas.toDataURL('image/png');
-}
-
 export default function LanyardCard() {
   const [frontImage, setFrontImage] = useState<string | null>(null);
-  const [backImage, setBackImage]   = useState<string | null>(null);
 
   useEffect(() => {
-    setBackImage(generateBackTexture());
     generateCardTexture().then(setFrontImage);
   }, []);
 
   return (
     <Lanyard
       frontImage={frontImage}
-      backImage={backImage}
       height="100%"
       transparent={true}
       gravity={[0, -40, 0]}
