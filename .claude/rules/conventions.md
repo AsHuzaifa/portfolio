@@ -1,5 +1,5 @@
 # conventions.md — Portfolio Session Log
-Last updated: June 28, 2026 (session 8)
+Last updated: June 29, 2026 (session 9)
 
 Read this before doing anything. It restores full session context.
 
@@ -380,6 +380,16 @@ Fix: `assetsInclude: ['**/*.glb']` in `astro.config.mjs` `vite` block.
 Cause: original group position `[0, 4, 0]` was below the top of the visible canvas with fov=20, camera z=30 (top edge ≈ 5.29 world units).
 Fix: moved to `[0, 5.5, 0]` and set lanyard column to `absolute right-0 top-0 bottom-0` (full section height).
 
+**Lanyard card breaks on any scale or back face change (session 9)**
+Cause: unknown — both `scale` increase (2.25→2.85, collider untouched) and back face
+canvas injection each independently caused card misposition/misshaping on the deployed site.
+Local dev was not tested before pushing; root cause not yet diagnosed.
+Status: all session 9 changes fully reverted. Card is back to its session 8 committed state
+(`scale=2.25`, no `backImage`). Investigate before attempting again:
+- Check whether `useMemo` on `cardMap` re-runs correctly when `backImage` changes
+- Check whether any scale value other than the original causes physics joint misalignment
+- Consider testing on local dev server before committing
+
 **`git commit` heredoc syntax fails in PowerShell**
 Cause: PowerShell 5.1 does not support bash heredocs (`<<'EOF'`).
 Fix: use Bash tool for git commits, not PowerShell.
@@ -392,7 +402,7 @@ Commits push to `main`. Netlify auto-deploys.
 
 ## What's Next (in order)
 
-1. **Card face editing** — deferred by user at end of session 8. Size, layout, and further styling left for a future session.
+1. **Card face editing** — front face content is final; size increase and back face styling both attempted and reverted in session 9 (broke card). Investigate root cause before retrying. Test on local dev first.
 2. **Projects section** — NeuroSync and Posture Detection (in progress); smaller
    projects (Smart Attendance, Ocean Sensor, Temp/Humidity) already have copy in `site.ts`.
    Hold until asset placeholders below are resolved.
