@@ -175,9 +175,10 @@ async function generateCardTexture(): Promise<string> {
 
 export default function LanyardCard() {
   const [frontImage, setFrontImage] = useState<string | null>(null);
-  const [backImage]  = useState<string>(() => generateBackTexture());
+  const [backImage, setBackImage]   = useState<string | null>(null);
 
   useEffect(() => {
+    setBackImage(generateBackTexture());
     generateCardTexture().then(setFrontImage);
   }, []);
 
