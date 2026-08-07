@@ -46,7 +46,7 @@ export const StaggeredMenu: React.FC<Props> = ({
 
   // Portfolio palette constants
   const MUTED      = '#8C7E6E';
-  const MUTED_OPEN = '#EDE7D9';
+  const MUTED_OPEN = '#1A1714'; // text color — MUTED_OPEN previously matched sm-panel bg (#EDE7D9), making the toggle invisible once the panel slid in behind it
   const LAYERS     = ['#C94A2A', '#2A4A3E'];
 
   useLayoutEffect(() => {
