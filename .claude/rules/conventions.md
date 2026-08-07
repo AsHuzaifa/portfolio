@@ -1,5 +1,5 @@
 # conventions.md — Portfolio Session Log
-Last updated: June 29, 2026 (session 9)
+Last updated: August 7, 2026 (session 10)
 
 Read this before doing anything. It restores full session context.
 
@@ -18,7 +18,7 @@ Read this before doing anything. It restores full session context.
 | GitHub Pages deployment | Complete — `astro.config.mjs` configured, Actions workflow at `.github/workflows/deploy.yml` |
 | Marble background | Live — real JPEG at `public/assets/marble-bg.jpg`, cream overlay at 0.82 |
 | Sketchbook | **Removed** — component deleted, import/usage stripped, scroll trigger removed |
-| Lanyard / ID Card | Complete — `LanyardCard.tsx` + `Lanyard.tsx` mounted in hero; physics rope hangs from top-right; card face drawn via Canvas 2D API |
+| Lanyard / ID Card | Complete — `LanyardCard.tsx` + `Lanyard.tsx` mounted in hero; physics rope hangs from top-right; card face drawn via Canvas 2D API; blank cream back face added session 10 |
 | Grain overlay | **Removed** — SVG feTurbulence div and all .grain-overlay CSS gone |
 | Flower field | **Removed** — SVG and all @keyframes/.sw* CSS gone |
 
@@ -202,6 +202,13 @@ bumped from `/10` for stronger definition), hover
 
 Skill item words are title-cased consistently. Category labels are title-cased too.
 
+**Font sizes bumped ~7% (session 10)** — text felt too small at the original sizes:
+- Group label `0.58rem` → `0.62rem`, group number `0.65rem` → `0.7rem`
+- Category label `0.58rem` → `0.62rem`
+- Skill items `text-sm` (0.875rem) → `text-[0.94rem]`
+- "learning" badge `0.5rem` → `0.54rem`
+- Note text `0.68rem` → `0.73rem`
+
 ### Contact section design
 Five links in a stacked list. Each row: small-caps label left, handle + `↗` right.
 On hover: handle and arrow shift to `accent-alt` (#2A4A3E), separator darkens, label
@@ -211,7 +218,7 @@ lifts opacity. All via CSS transitions. Email uses `mailto:`, all others open `_
 `src/components/StaggeredMenu.tsx` — adapted from React Bits source (session 6).
 - Mounted `client:load` in `Layout.astro` before `<slot />`, so it overlays all pages
 - `isFixed={true}` — creates its own `fixed top-0 left-0 z-50` stacking context; `pointer-events-none` on wrapper, `pointer-events-auto` on toggle + panel
-- Toggle button: top-right, `px-8 md:px-20 lg:px-32 py-8`, colour `#8C7E6E` at rest, shifts to `#EDE7D9` when open (via GSAP tween)
+- Toggle button: top-right, `px-8 md:px-20 lg:px-32 py-8`, colour `#8C7E6E` at rest, shifts to `#1A1714` when open (via GSAP tween; was `#EDE7D9` until session 10 — see Bugs Hit and Resolved)
 - Pre-layers: two divs sliding in before the panel — colours `#C94A2A` then `#2A4A3E`
 - Panel: `#EDE7D9` background, `clamp(280px, 40vw, 460px)` wide; full-width on mobile
 - Items: Fraunces font, `text-[3.5rem] md:text-[4.5rem]`, colour `#1A1714`, hover → `#C94A2A`
@@ -237,10 +244,18 @@ lifts opacity. All via CSS transitions. Email uses `mailto:`, all others open `_
 - Skills row (single line): `['ESP32', 'TinyML', 'Arduino', 'Edge ML']` — DM Sans 400 14px, 30px tall pills, 16px h-padding, 8px gap, centered
 - University footer: "Presidency University, Bangalore" — DM Sans 400 12px
 
+**Back face (added session 10):** `LanyardCard.tsx` now also generates a `backImage` —
+a plain `512×756` canvas filled solid `#F5F0E8` (cream, no text/graphics), via a
+`generateBackTexture()` helper called in the same `useEffect` as the front face.
+Passed to `Lanyard` as `backImage`; `Band`'s `cardMap` composite (in `Lanyard.tsx`)
+draws it into `BACK_UV_RECT` same as the front. This was changed in isolation this
+time (no scale/collider change alongside it) — see Bugs Hit and Resolved below.
+
 **Props used from `LanyardCard`:**
 ```tsx
 <Lanyard
   frontImage={frontImage}
+  backImage={backImage}
   height="100%"
   transparent={true}
   gravity={[0, -40, 0]}
@@ -272,12 +287,17 @@ Two-column flex layout: CardSwap on the left (`shrink-0`), "Attended" seminars l
 Responsive: `flex-col` on mobile, `flex-row md:gap-20 lg:gap-28` on desktop.
 
 Left column keeps `about-projects` class so `animateAbout()` ScrollTrigger works unchanged.
-Right column: `<ul>` of seminar items, each with title (`text-text/75 text-[0.72rem]`), source
-(`text-muted/60 text-[0.62rem]`), and detail (`text-muted/45 text-[0.62rem]`). Rows separated
-by `border-t border-muted/10`, first row has no top border.
+Right column: `<ul>` of seminar items, each with title (`text-text/75 text-[0.77rem]`), source
+(`text-muted/60 text-[0.66rem]`), and detail (`text-muted/45 text-[0.66rem]`). Rows separated
+by `border-t border-muted/10`, first row has no top border. (Session 10: bumped from
+`0.72rem`/`0.62rem` — see font size note below.)
 
 Section label convention: "Field work" left, "Attended" right — both `text-muted text-xs tracking-[0.2em] uppercase`.
 Padding matches other sections (`px-8 md:px-20 lg:px-32`). Page order: Opening → Origin → Skills → Field Work → Reach.
+
+**Font sizes bumped ~7% (session 10)**, same reasoning as Skills — applied to seminar
+list text above and to the `CardSwap` cards it wraps: "Field work" label `0.5rem` →
+`0.54rem`, card name `text-sm` → `text-[0.94rem]`, card description `0.72rem` → `0.77rem`.
 
 ### Deployment — GitHub Pages
 Migrated from Netlify in session 6. `astro.config.mjs` sets:
@@ -315,9 +335,19 @@ Base64 data URI SVG using `feTurbulence type="turbulence"` — generated as a
 programmatic marble pattern. Removed in favour of the real JPEG provided by the
 user, which has far more naturalistic depth and tone.
 
+### Hero scroll indicator (session 10)
+`.hero-scroll` div (vertical rule + "Scroll" label, bottom-left of hero) removed
+from `index.astro`. Its `animateHero()` tween in `animations.ts` removed too.
+Purely a visual simplification call — no bug involved.
+
 ---
 
 ## Copy State
+
+### Hero label (session 10)
+Changed from "IoT Engineering — Presidency University, Bangalore" to just
+"IoT Engineer" — shorter, less redundant with the bio directly below it.
+Lives in `hero.label` in `site.ts`.
 
 ### Hero bio (final, approved)
 > "IoT sits at a rare intersection — not purely hardware, not purely software.
@@ -385,10 +415,21 @@ Cause: unknown — both `scale` increase (2.25→2.85, collider untouched) and b
 canvas injection each independently caused card misposition/misshaping on the deployed site.
 Local dev was not tested before pushing; root cause not yet diagnosed.
 Status: all session 9 changes fully reverted. Card is back to its session 8 committed state
-(`scale=2.25`, no `backImage`). Investigate before attempting again:
-- Check whether `useMemo` on `cardMap` re-runs correctly when `backImage` changes
-- Check whether any scale value other than the original causes physics joint misalignment
-- Consider testing on local dev server before committing
+(`scale=2.25`, no `backImage`).
+
+**Resolved (session 10):** re-added just the back face (plain cream `#F5F0E8`,
+no scale/collider change alongside it, unlike session 9's bundled attempt) and
+it deployed cleanly. This suggests the session 9 breakage was actually caused
+by the `scale` change (2.25→2.85 with an untouched collider, likely a physics/
+visual mismatch), not the back face texture itself. Scale is still untouched at
+`2.25` — has not been retested since.
+
+**StaggeredMenu toggle button invisible once panel fully opens (session 10)**
+Cause: `MUTED_OPEN` (the toggle's open-state text/icon color) was `#EDE7D9` —
+the exact same hex as the slide-in panel's own background (`.sm-panel`). Once the
+panel finished sliding in behind the header, the "Close" text and icon blended
+invisibly into it (both header z-20 and panel are on top of each other, same color).
+Fix: changed `MUTED_OPEN` to `#1A1714` (site text color) in `StaggeredMenu.tsx`.
 
 **`git commit` heredoc syntax fails in PowerShell**
 Cause: PowerShell 5.1 does not support bash heredocs (`<<'EOF'`).
@@ -402,7 +443,9 @@ Commits push to `main`. Netlify auto-deploys.
 
 ## What's Next (in order)
 
-1. **Card face editing** — front face content is final; size increase and back face styling both attempted and reverted in session 9 (broke card). Investigate root cause before retrying. Test on local dev first.
+1. **Card face editing** — front face content is final; blank cream back face added
+   and deployed successfully in session 10. Scale increase (2.25→2.85) still unresolved/
+   untested since session 9 — likely culprit for that session's breakage, not the back face.
 2. **Projects section** — NeuroSync and Posture Detection (in progress); smaller
    projects (Smart Attendance, Ocean Sensor, Temp/Humidity) already have copy in `site.ts`.
    Hold until asset placeholders below are resolved.
@@ -452,3 +495,9 @@ meshline:            ^3.3.1
 - Git identity: `ashuzaifa` / `mutahar.mo@northeastern.edu` (repo-scoped)
 - GitHub remote: `https://github.com/AsHuzaifa/portfolio.git` — push to `main`
 - Netlify: https://ashuzaifa.netlify.app — auto-deploys on push to `main`
+
+### Testing workflow (changed session 10)
+Local dev server (`astro dev`) is unreliable for verification in this environment —
+localhost connections from tooling don't reliably reach it. **Don't attempt local dev
+testing/screenshots before pushing.** Commit and push directly; the user tests on the
+live deployed site themselves and reports back if something's wrong.
