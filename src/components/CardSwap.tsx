@@ -152,13 +152,13 @@ export default function CardSwap({
             }}
           >
             <div className="h-full flex flex-col px-6 py-5">
-              <p className="text-accent text-[0.5rem] font-body tracking-[0.28em] uppercase mb-3">
+              <p className="text-accent text-[0.54rem] font-body tracking-[0.28em] uppercase mb-3">
                 Field work
               </p>
-              <p className="text-text text-sm font-body font-medium leading-snug mb-3">
+              <p className="text-text text-[0.94rem] font-body font-medium leading-snug mb-3">
                 {card.name}
               </p>
-              <p className="text-muted text-[0.72rem] font-body leading-relaxed">
+              <p className="text-muted text-[0.77rem] font-body leading-relaxed">
                 {card.description}
               </p>
             </div>

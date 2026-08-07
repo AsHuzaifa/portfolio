@@ -19,16 +19,16 @@ import CardSwap from './CardSwap';
         <ul class="space-y-0">
           {about.seminars.map((s, i) => (
             <li class={`py-5 ${i > 0 ? 'border-t border-muted/10' : ''}`}>
-              <p class="text-text/75 text-[0.72rem] font-body font-medium leading-snug mb-1">
+              <p class="text-text/75 text-[0.77rem] font-body font-medium leading-snug mb-1">
                 {s.title}
               </p>
               {s.source && (
-                <p class="text-muted/60 text-[0.62rem] font-body leading-relaxed mb-1">
+                <p class="text-muted/60 text-[0.66rem] font-body leading-relaxed mb-1">
                   {s.source}
                 </p>
               )}
               {s.detail && (
-                <p class="text-muted/45 text-[0.62rem] font-body leading-relaxed">
+                <p class="text-muted/45 text-[0.66rem] font-body leading-relaxed">
                   {s.detail}
                 </p>
               )}
