@@ -1,5 +1,5 @@
 w# conventions.md — Portfolio Session Log
-Last updated: August 21, 2026 (session 11)
+Last updated: August 21, 2026 (session 12)
 
 Read this before doing anything. It restores full session context.
 
@@ -95,14 +95,26 @@ Two interactive About components, both React with `client:load`:
   itself unchanged since session 10 — only its placement moved (see session 11
   note below).
 
-### Samsung card relocation (session 11)
-`SamsungCard` moved out of the Origin section's 12-col grid (was `sticky top-8`
-in a `col-span-4 col-start-9` right column, with a separate `variant="inline"`
-render for mobile). Origin's left content is now a single `max-w-3xl` column
-(narrative → education → human note), and `SamsungCard` (always `variant="card"`,
-no more mobile-only inline variant) renders as its own full-width block directly
-below, wrapped in `max-w-xl` — larger than its old ~4/12-col width. No changes to
-`SamsungCard.tsx` itself; the accordion/glow logic was untouched.
+### Samsung card relocation (session 11, revised session 12)
+Session 11 pulled `SamsungCard` out of Origin's 12-col grid into a standalone
+`max-w-xl` block below the narrative — this left a large dead-space gap to the
+right of both the narrative (capped `max-w-3xl`) and the card (capped `max-w-xl`)
+on wide viewports. Session 12 restored a 12-col grid (`gap-x-10 lg:gap-x-16
+items-start`): narrative `col-span-12 lg:col-span-7` left, `SamsungCard` in
+`.about-samsung col-span-12 lg:col-span-5` right (`lg:sticky lg:top-24`), so both
+columns fill the section's full width with no leftover gap. Stacks full-width on
+mobile/tablet (`lg:` breakpoint, not `md:`, so it doesn't stack too early).
+
+### Samsung course selector redesign (session 12)
+The per-course accordion (chevron + `max-height` expand under each title) left a
+lot of empty space beside the collapsed rows once the card widened. Replaced with
+an indexed pill selector: `courses.map` renders rounded-full buttons (`0{i+1}` +
+title) in a `flex flex-wrap` row; the active pill gets `bg-accent-alt/8
+border-accent-alt/35`, inactive pills are muted with a hover border. A single
+detail panel below cross-fades (`opacity` transition, stacked via `absolute
+inset-0` on inactive panels) to show the selected course's text — no dropdown,
+no per-item height animation. State is a single `activeIndex` (default `0`)
+instead of the old `openIndex | null`.
 
 ### Marble background
 Real JPEG (`public/assets/marble-bg.jpg`) set on `html` in `global.css` as a
