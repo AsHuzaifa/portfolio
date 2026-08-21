@@ -1,4 +1,4 @@
-# conventions.md — Portfolio Session Log
+w# conventions.md — Portfolio Session Log
 Last updated: August 7, 2026 (session 10)
 
 Read this before doing anything. It restores full session context.
