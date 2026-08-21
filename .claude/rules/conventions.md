@@ -1,5 +1,5 @@
 w# conventions.md — Portfolio Session Log
-Last updated: August 7, 2026 (session 10)
+Last updated: August 21, 2026 (session 11)
 
 Read this before doing anything. It restores full session context.
 
@@ -12,8 +12,8 @@ Read this before doing anything. It restores full session context.
 | Hero (`#opening`) | Complete — copy approved, committed, live |
 | About (`#origin`) | Complete — React islands integrated, copy approved, committed, live |
 | Skills (`#skills`) | Complete — 4 groups, confident/learning distinction, scroll-triggered stagger, translucent bg, bolder border |
-| Field Work | Complete — CardSwap left, "Attended" seminars list right; flex layout, responsive |
-| Contact (`#reach`) | Complete — 5 links (GitHub, Email, Instructables, LinkedIn, ORCID), scroll-triggered stagger |
+| Field Work | Complete — CardSwap left, "Attended" seminars list right; flex layout, responsive. Green Bengaluru volunteering block now closes this section (moved from Origin, session 11) |
+| Contact (`#reach`) | Complete — 4 links (GitHub, Email, Instructables, ORCID — LinkedIn removed session 11), scroll-triggered stagger |
 | Navigation (StaggeredMenu) | Complete — `StaggeredMenu.tsx` mounted in `Layout.astro`; slides in from right, 4 nav items |
 | GitHub Pages deployment | Complete — `astro.config.mjs` configured, Actions workflow at `.github/workflows/deploy.yml` |
 | Marble background | Live — real JPEG at `public/assets/marble-bg.jpg`, cream overlay at 0.82 |
@@ -91,8 +91,18 @@ Two interactive About components, both React with `client:load`:
   box-shadow glow isn't clipped by parent overflow.
 - **SamsungCard** — "Samsung Innovation Campus" header is the visual anchor.
   "27 / 350" at `1.15rem` supports rather than dominates. Per-course accordion
-  via React `useState`, CSS `max-height` transition (`0.28s ease`). Desktop:
-  `sticky top-8` in the right grid column. Mobile: `variant="inline"` single line.
+  via React `useState`, CSS `max-height` transition (`0.28s ease`). Component
+  itself unchanged since session 10 — only its placement moved (see session 11
+  note below).
+
+### Samsung card relocation (session 11)
+`SamsungCard` moved out of the Origin section's 12-col grid (was `sticky top-8`
+in a `col-span-4 col-start-9` right column, with a separate `variant="inline"`
+render for mobile). Origin's left content is now a single `max-w-3xl` column
+(narrative → education → human note), and `SamsungCard` (always `variant="card"`,
+no more mobile-only inline variant) renders as its own full-width block directly
+below, wrapped in `max-w-xl` — larger than its old ~4/12-col width. No changes to
+`SamsungCard.tsx` itself; the accordion/glow logic was untouched.
 
 ### Marble background
 Real JPEG (`public/assets/marble-bg.jpg`) set on `html` in `global.css` as a
@@ -210,9 +220,10 @@ Skill item words are title-cased consistently. Category labels are title-cased t
 - Note text `0.68rem` → `0.73rem`
 
 ### Contact section design
-Five links in a stacked list. Each row: small-caps label left, handle + `↗` right.
-On hover: handle and arrow shift to `accent-alt` (#2A4A3E), separator darkens, label
-lifts opacity. All via CSS transitions. Email uses `mailto:`, all others open `_blank`.
+Four links in a stacked list (was five — LinkedIn removed session 11, user request).
+Each row: small-caps label left, handle + `↗` right. On hover: handle and arrow shift
+to `accent-alt` (#2A4A3E), separator darkens, label lifts opacity. All via CSS
+transitions. Email uses `mailto:`, all others open `_blank`.
 
 ### Navigation — StaggeredMenu
 `src/components/StaggeredMenu.tsx` — adapted from React Bits source (session 6).
@@ -287,6 +298,14 @@ Two-column flex layout: CardSwap on the left (`shrink-0`), "Attended" seminars l
 Responsive: `flex-col` on mobile, `flex-row md:gap-20 lg:gap-28` on desktop.
 
 Left column keeps `about-projects` class so `animateAbout()` ScrollTrigger works unchanged.
+
+**Volunteering block relocated here (session 11):** the Green Bengaluru full-bleed
+statement + accordion (`about.volunteering`) moved from the bottom of `AboutSection.astro`
+to the bottom of `FieldWork.astro`, directly below the two-column flex. Markup and
+classes (`about-volunteer`, `data-accordion-trigger="volunteering"`) are unchanged —
+only the file it lives in moved. `animateAbout()` in `animations.ts` still targets
+`.about-volunteer` by class, so no animation code changes were needed; the comment
+above it in `animations.ts` was updated to note the block now lives in Field Work.
 Right column: `<ul>` of seminar items, each with title (`text-text/75 text-[0.77rem]`), source
 (`text-muted/60 text-[0.66rem]`), and detail (`text-muted/45 text-[0.66rem]`). Rows separated
 by `border-t border-muted/10`, first row has no top border. (Session 10: bumped from
@@ -354,11 +373,18 @@ Lives in `hero.label` in `site.ts`.
 > It's the domain where a single person can take an idea from concept to working
 > device. That's what drew me in."
 
-### About opening (final, approved)
-> "My entry into IoT wasn't self-initiated — the field earned its hold. Third
-> year at Presidency now, and the problems have gotten harder: the interesting
-> kind, where the question takes longer to name than to solve. I'm in the middle
-> of a few of them."
+### About opening (rewritten session 11, approved)
+> "My path into IoT wasn't something I chose from the start — but the field
+> pulled me in through the balance it strikes between the abstract and the
+> physical. It sits in a rare middle ground: not confined to hardware like
+> electrical engineering, not walled off in software like machine learning.
+> That balance brings real autonomy — the ability to take a complex device
+> from idea to working reality inside a single, connected discipline."
+
+Replaces the session-6 "My entry into IoT wasn't self-initiated..." paragraph.
+User supplied a more formal/academic version of this copy directly; the version
+above is a slightly plainer rewrite that keeps the same meaning and structure
+(three claims: unchosen origin → disciplinary middle ground → autonomy).
 
 All other About copy (education line, human note, Green Bengaluru statement,
 Samsung card content, minor project card descriptions) live in `src/data/site.ts`
