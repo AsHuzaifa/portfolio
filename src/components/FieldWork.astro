@@ -39,4 +39,50 @@ import CardSwap from './CardSwap';
 
     </div>
   </div>
+
+  <!-- Volunteering — full-bleed, first-person, with accordion detail -->
+  <div class="about-volunteer -mx-8 md:-mx-20 lg:-mx-32 mt-20 md:mt-28 bg-surface px-8 md:px-20 lg:px-32 py-16 md:py-20">
+    <div class="max-w-[1200px] mx-auto">
+
+      <p class="font-display italic font-light text-accent-alt leading-[1.45] max-w-3xl"
+         style="font-size: clamp(1.4rem, 3vw, 2.1rem);">
+        {about.volunteering.statement}
+      </p>
+
+      <button
+        class="mt-6 flex items-center gap-2 group"
+        aria-expanded="false"
+        data-accordion-trigger="volunteering"
+      >
+        <span class="text-muted/50 text-[0.65rem] tracking-[0.2em] uppercase font-body
+                     group-hover:text-muted/80 transition-colors duration-200">
+          Details
+        </span>
+        <svg
+          class="volunteering-chevron text-muted/30 group-hover:text-muted/60 transition-all duration-300"
+          width="12" height="12" viewBox="0 0 12 12" fill="none"
+        >
+          <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="overflow-hidden" style="height: 0;" data-accordion-content="volunteering">
+        <div class="pt-5 space-y-3">
+          {[
+            ['Organised by', about.volunteering.organizer],
+            ['Date',         about.volunteering.date],
+            ['Goal',         about.volunteering.goal],
+            ['Record',       about.volunteering.record],
+            ['Role',         about.volunteering.role],
+          ].map(([label, value]) => (
+            <p class="text-muted/60 text-xs font-body leading-relaxed">
+              <span class="text-muted/35 tracking-[0.15em] uppercase mr-3">{label}</span>
+              {value}
+            </p>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  </div>
 </section>

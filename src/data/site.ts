@@ -9,7 +9,7 @@ export const nav = {
 
 export const about = {
   narrative: [
-    "My entry into IoT wasn't self-initiated — the field earned its hold. Third year at Presidency now, and the problems have gotten harder: the interesting kind, where the question takes longer to name than to solve. I'm in the middle of a few of them.",
+    "My path into IoT wasn't something I chose from the start — but the field pulled me in through the balance it strikes between the abstract and the physical. It sits in a rare middle ground: not confined to hardware like electrical engineering, not walled off in software like machine learning. That balance brings real autonomy — the ability to take a complex device from idea to working reality inside a single, connected discipline.",
   ],
   education: 'Third year, B.Tech in Internet of Things — Presidency University, Bangalore',
   samsung: {
@@ -74,7 +74,6 @@ export const contact = {
     { label: 'GitHub',        handle: 'ashuzaifa',                          url: 'https://github.com/ashuzaifa' },
     { label: 'Email',         handle: 'mohammedhuzaifa464@gmail.com',        url: 'mailto:mohammedhuzaifa464@gmail.com' },
     { label: 'Instructables', handle: 'ashuzaifa',                          url: 'https://www.instructables.com/member/ashuzaifa/' },
-    { label: 'LinkedIn',      handle: 'Mohammed Huzaifa',                   url: 'https://www.linkedin.com/in/mohammed-huzaifa-887773304/' },
     { label: 'ORCID',         handle: '0009-0006-6229-3699',                url: 'https://orcid.org/0009-0006-6229-3699' },
   ],
 };

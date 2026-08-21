@@ -24,8 +24,9 @@ export function animateHero() {
   );
 }
 
-// [about] scroll-triggered stagger — narrative arrives in sequence, Samsung credential,
-// projects carousel, and sketchbook follow. Volunteer block closes the section.
+// [about] scroll-triggered stagger — narrative arrives in sequence, followed by
+// the Samsung credential card. Volunteer block (rendered in FieldWork) reuses the
+// .about-volunteer selector below and closes that section instead.
 export function animateAbout() {
   const defaults = { ease: 'power3.out' };
 
