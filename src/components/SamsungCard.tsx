@@ -1,5 +1,6 @@
 // [samsung] Credential card — header is the anchor, stat supports it.
-// Per-course accordion expands on click with a smooth height transition.
+// Courses are switched via an indexed pill selector (not a dropdown) that
+// cross-fades a single detail panel, filling the card's full width.
 // Cursor-proximity glow on the card border (sage green).
 
 import { useState, useEffect, useRef } from 'react';
@@ -27,7 +28,7 @@ export default function SamsungCard({
   variant = 'card',
 }: SamsungCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   // Cursor-proximity glow (card variant only)
   useEffect(() => {
@@ -71,15 +72,11 @@ export default function SamsungCard({
     );
   }
 
-  function toggle(i: number) {
-    setOpenIndex(openIndex === i ? null : i);
-  }
-
   // Desktop: full document card
   return (
     <div
       ref={cardRef}
-      className="bg-bg border-l-2 border-accent border border-accent-alt/10 rounded-sm px-5 py-5"
+      className="bg-bg border-l-2 border-accent border border-accent-alt/10 rounded-sm px-6 py-6"
     >
       {/* Header — dominant anchor of the card */}
       <p className="text-text/80 text-[0.62rem] font-body tracking-[0.22em] uppercase mb-1 leading-tight font-medium">
@@ -95,57 +92,55 @@ export default function SamsungCard({
       </p>
 
       {/* Subtext */}
-      <p className="text-muted/40 text-[0.58rem] font-body tracking-[0.16em] uppercase mb-5">
+      <p className="text-muted/40 text-[0.58rem] font-body tracking-[0.16em] uppercase mb-6">
         {subtext}
       </p>
 
       {/* Divider */}
-      <hr className="border-muted/12 mb-4" />
+      <hr className="border-muted/12 mb-5" />
 
-      {/* Courses — each with accordion */}
-      <ul>
+      {/* Courses — indexed selector row switches the detail panel below, no dropdown */}
+      <p className="text-muted/35 text-[0.56rem] font-body tracking-[0.2em] uppercase mb-3">
+        Coursework
+      </p>
+      <div className="flex flex-wrap gap-2 mb-5">
         {courses.map((course, i) => {
-          const isOpen = openIndex === i;
+          const isActive = activeIndex === i;
           return (
-            <li key={i} className="border-b border-muted/10 last:border-b-0">
-              <button
-                onClick={() => toggle(i)}
-                className="w-full flex items-start justify-between gap-3 py-3 text-left group"
-                aria-expanded={isOpen}
-              >
-                <span className="text-text/70 text-[0.65rem] font-body leading-snug font-medium
-                                 group-hover:text-text/90 transition-colors duration-150">
-                  {course.title}
-                </span>
-                {/* Chevron rotates on open */}
-                <svg
-                  className="shrink-0 mt-0.5 text-muted/30 group-hover:text-muted/60 transition-colors duration-150"
-                  style={{
-                    transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                    transition: 'transform 0.2s ease, color 0.15s ease',
-                  }}
-                  width="10" height="10" viewBox="0 0 10 10" fill="none"
-                >
-                  <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-
-              {/* Accordion body — CSS max-height for smooth expand */}
-              <div
-                className="overflow-hidden"
-                style={{
-                  maxHeight: isOpen ? '300px' : '0px',
-                  transition: 'max-height 0.28s ease',
-                }}
-              >
-                <p className="text-muted/60 text-[0.62rem] font-body leading-relaxed pb-4 pr-2">
-                  {course.detail}
-                </p>
-              </div>
-            </li>
+            <button
+              key={i}
+              onClick={() => setActiveIndex(i)}
+              aria-pressed={isActive}
+              className={`flex items-baseline gap-2 rounded-full px-3.5 py-2 text-left transition-all duration-200 border
+                         ${isActive
+                            ? 'bg-accent-alt/8 border-accent-alt/35'
+                            : 'border-muted/15 hover:border-muted/30'}`}
+            >
+              <span className={`text-[0.56rem] font-body tracking-[0.05em] transition-colors duration-200
+                                ${isActive ? 'text-accent-alt/70' : 'text-muted/35'}`}>
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span className={`text-[0.65rem] font-body leading-snug font-medium transition-colors duration-200
+                                ${isActive ? 'text-text/85' : 'text-muted/55'}`}>
+                {course.title}
+              </span>
+            </button>
           );
         })}
-      </ul>
+      </div>
+
+      {/* Detail panel — cross-fades between the active course, fills the full card width */}
+      <div className="relative min-h-[4.5rem]">
+        {courses.map((course, i) => (
+          <p
+            key={i}
+            className={`text-muted/60 text-[0.68rem] font-body leading-relaxed transition-opacity duration-300
+                       ${activeIndex === i ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}
+          >
+            {course.detail}
+          </p>
+        ))}
+      </div>
     </div>
   );
 }

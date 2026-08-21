@@ -3,7 +3,7 @@ import { about } from '../data/site';
 import SamsungCard from './SamsungCard';
 ---
 
-<section id="origin" class="px-8 md:px-20 lg:px-32 pt-24 pb-0">
+<section id="origin" class="px-8 md:px-20 lg:px-32 pt-24 pb-24 md:pb-28">
   <div class="max-w-[1200px] mx-auto">
 
     <!-- Section entry: thin rule + label -->
@@ -15,38 +15,45 @@ import SamsungCard from './SamsungCard';
       </div>
     </div>
 
-    <!-- Narrative, education, human note -->
-    <div class="max-w-3xl">
+    <!-- Grid: narrative left (7 cols), Samsung credential right (5 cols) — fills the full width -->
+    <div class="grid grid-cols-12 gap-x-10 lg:gap-x-16 items-start">
 
-      <div class="about-narrative space-y-6 mb-10">
-        {about.narrative.map((para) => (
-          <p class="text-text text-xl md:text-2xl leading-[1.72] font-body font-light">{para}</p>
-        ))}
-      </div>
+      <!-- LEFT — narrative, education, human note -->
+      <div class="col-span-12 lg:col-span-7">
 
-      <!-- Education: thin rule separates credential from argument -->
-      <div class="border-t border-muted/15 pt-8 mb-8">
-        <p class="about-education text-muted text-sm leading-relaxed font-body tracking-[0.01em]">
-          {about.education}
+        <div class="about-narrative space-y-6 mb-10">
+          {about.narrative.map((para) => (
+            <p class="text-text text-xl md:text-2xl leading-[1.72] font-body font-light">{para}</p>
+          ))}
+        </div>
+
+        <!-- Education: thin rule separates credential from argument -->
+        <div class="border-t border-muted/15 pt-8 mb-8">
+          <p class="about-education text-muted text-sm leading-relaxed font-body tracking-[0.01em]">
+            {about.education}
+          </p>
+        </div>
+
+        <!-- Human note -->
+        <p class="about-human text-muted/80 text-base leading-[1.75] font-body font-light">
+          {about.human}
         </p>
+
       </div>
 
-      <!-- Human note -->
-      <p class="about-human text-muted/80 text-base leading-[1.75] font-body font-light">
-        {about.human}
-      </p>
+      <!-- RIGHT — Samsung credential card, fills its column -->
+      <div class="about-samsung col-span-12 lg:col-span-5 mt-14 lg:mt-0">
+        <div class="lg:sticky lg:top-24">
+          <SamsungCard
+            client:load
+            context={about.samsung.context}
+            stat={about.samsung.stat}
+            subtext={about.samsung.subtext}
+            courses={about.samsung.courses}
+          />
+        </div>
+      </div>
 
-    </div>
-
-    <!-- Samsung Innovation Campus credential card — full document width below the narrative -->
-    <div class="about-samsung mt-14 md:mt-16 pb-24 md:pb-28 max-w-xl">
-      <SamsungCard
-        client:load
-        context={about.samsung.context}
-        stat={about.samsung.stat}
-        subtext={about.samsung.subtext}
-        courses={about.samsung.courses}
-      />
     </div>
 
   </div>
