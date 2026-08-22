@@ -11,7 +11,6 @@ export const about = {
   narrative: [
     "My trajectory into the Internet of Things was not self-initiated; however, the field proved captivating due to its equilibrium between the abstract digital and tangible physical worlds. IoT functions as a multidisciplinary sweet spot, contrasting with the hardware-centric nature of electrical engineering and the software-confined paradigm of machine learning. It affords a unique operational autonomy, allowing one to manifest complex devices entirely within the purview of a single, integrated domain.",
   ],
-  education: 'Third year, B.Tech in Internet of Things — Presidency University, Bangalore',
   samsung: {
     context: 'Selected for Samsung Innovation Campus — 27 of 350 shortlisted',
     stat: '27 / 350',
