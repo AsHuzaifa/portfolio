@@ -9,7 +9,7 @@ export const nav = {
 
 export const about = {
   narrative: [
-    "My path into IoT wasn't something I chose from the start — but the field pulled me in through the balance it strikes between the abstract and the physical. It sits in a rare middle ground: not confined to hardware like electrical engineering, not walled off in software like machine learning. That balance brings real autonomy — the ability to take a complex device from idea to working reality inside a single, connected discipline.",
+    "My trajectory into the Internet of Things was not self-initiated; however, the field proved captivating due to its equilibrium between the abstract digital and tangible physical worlds. IoT functions as a multidisciplinary sweet spot, contrasting with the hardware-centric nature of electrical engineering and the software-confined paradigm of machine learning. It affords a unique operational autonomy, allowing one to manifest complex devices entirely within the purview of a single, integrated domain.",
   ],
   education: 'Third year, B.Tech in Internet of Things — Presidency University, Bangalore',
   samsung: {

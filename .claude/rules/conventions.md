@@ -1,5 +1,5 @@
 w# conventions.md — Portfolio Session Log
-Last updated: August 21, 2026 (session 12)
+Last updated: August 22, 2026 (session 13)
 
 Read this before doing anything. It restores full session context.
 
@@ -385,18 +385,19 @@ Lives in `hero.label` in `site.ts`.
 > It's the domain where a single person can take an idea from concept to working
 > device. That's what drew me in."
 
-### About opening (rewritten session 11, approved)
-> "My path into IoT wasn't something I chose from the start — but the field
-> pulled me in through the balance it strikes between the abstract and the
-> physical. It sits in a rare middle ground: not confined to hardware like
-> electrical engineering, not walled off in software like machine learning.
-> That balance brings real autonomy — the ability to take a complex device
-> from idea to working reality inside a single, connected discipline."
+### About opening (session 13, approved — formal register)
+> "My trajectory into the Internet of Things was not self-initiated; however,
+> the field proved captivating due to its equilibrium between the abstract
+> digital and tangible physical worlds. IoT functions as a multidisciplinary
+> sweet spot, contrasting with the hardware-centric nature of electrical
+> engineering and the software-confined paradigm of machine learning. It
+> affords a unique operational autonomy, allowing one to manifest complex
+> devices entirely within the purview of a single, integrated domain."
 
-Replaces the session-6 "My entry into IoT wasn't self-initiated..." paragraph.
-User supplied a more formal/academic version of this copy directly; the version
-above is a slightly plainer rewrite that keeps the same meaning and structure
-(three claims: unchosen origin → disciplinary middle ground → autonomy).
+Session 11 had rewritten this into plainer language (three claims: unchosen
+origin → disciplinary middle ground → autonomy). Session 13 reverted to the
+user's original formal/academic phrasing verbatim — the plainer rewrite is no
+longer used.
 
 All other About copy (education line, human note, Green Bengaluru statement,
 Samsung card content, minor project card descriptions) live in `src/data/site.ts`
