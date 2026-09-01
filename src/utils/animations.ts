@@ -3,7 +3,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// [hero] staggered cinematic entrance — label arrives first, then name crashes in,
+// [hero] staggered cinematic entrance - label arrives first, then name crashes in,
 // bio follows last.
 export function animateHero() {
   const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
@@ -24,7 +24,7 @@ export function animateHero() {
   );
 }
 
-// [about] scroll-triggered stagger — narrative arrives in sequence, followed by
+// [about] scroll-triggered stagger - narrative arrives in sequence, followed by
 // the Samsung credential card. Volunteer block (rendered in FieldWork) reuses the
 // .about-volunteer selector below and closes that section instead.
 export function animateAbout() {
@@ -68,7 +68,7 @@ export function animateAbout() {
   );
 }
 
-// [contact] scroll-triggered reveal — label first, then each link row staggers in.
+// [contact] scroll-triggered reveal - label first, then each link row staggers in.
 export function animateContact() {
   const defaults = { ease: 'power3.out' };
 
@@ -85,7 +85,7 @@ export function animateContact() {
   );
 }
 
-// [skills] scroll-triggered stagger — section label arrives first, then each group
+// [skills] scroll-triggered stagger - section label arrives first, then each group
 // card fades up in sequence as the grid enters the viewport.
 export function animateSkills() {
   const defaults = { ease: 'power3.out' };

@@ -1,4 +1,4 @@
-// [samsung] Credential card — header is the anchor, stat supports it.
+// [samsung] Credential card - header is the anchor, stat supports it.
 // Courses are switched via an indexed pill selector (not a dropdown) that
 // cross-fades a single detail panel, filling the card's full width.
 // Cursor-proximity glow on the card border (sage green).
@@ -78,12 +78,12 @@ export default function SamsungCard({
       ref={cardRef}
       className="bg-bg border-l-2 border-accent border border-accent-alt/10 rounded-sm px-6 py-6"
     >
-      {/* Header — dominant anchor of the card */}
+      {/* Header - dominant anchor of the card */}
       <p className="text-text/80 text-[0.62rem] font-body tracking-[0.22em] uppercase mb-1 leading-tight font-medium">
         Samsung Innovation Campus
       </p>
 
-      {/* Stat — supporting, not dominant */}
+      {/* Stat - supporting, not dominant */}
       <p
         className="text-muted/60 font-display font-light leading-none tracking-[-0.02em] mb-0.5"
         style={{ fontSize: '1.15rem' }}
@@ -99,7 +99,7 @@ export default function SamsungCard({
       {/* Divider */}
       <hr className="border-muted/12 mb-5" />
 
-      {/* Courses — indexed selector row switches the detail panel below, no dropdown */}
+      {/* Courses - indexed selector row switches the detail panel below, no dropdown */}
       <p className="text-muted/35 text-[0.56rem] font-body tracking-[0.2em] uppercase mb-3">
         Coursework
       </p>
@@ -129,7 +129,7 @@ export default function SamsungCard({
         })}
       </div>
 
-      {/* Detail panel — cross-fades between the active course, fills the full card width */}
+      {/* Detail panel - cross-fades between the active course, fills the full card width */}
       <div className="relative min-h-[4.5rem]">
         {courses.map((course, i) => (
           <p

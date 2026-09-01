@@ -12,13 +12,13 @@ export const about = {
     "My trajectory into the Internet of Things was not self-initiated; however, the field proved captivating due to its equilibrium between the abstract digital and tangible physical worlds. IoT functions as a multidisciplinary sweet spot, contrasting with the hardware-centric nature of electrical engineering and the software-confined paradigm of machine learning. It affords a unique operational autonomy, allowing one to manifest complex devices entirely within the purview of a single, integrated domain.",
   ],
   samsung: {
-    context: 'Selected for Samsung Innovation Campus — 27 of 350 shortlisted',
+    context: 'Selected for Samsung Innovation Campus, 27 of 350 shortlisted',
     stat: '27 / 350',
     subtext: 'selected via open test',
     courses: [
       {
         title: 'Version Control & Collaborative IoT Software Development',
-        detail: 'Covers the full Git lifecycle — installation, branching, conflict resolution, and advanced GitHub collaboration including pull requests, issue tracking, and introductory CI/CD with GitHub Actions.',
+        detail: 'Covers the full Git lifecycle: installation, branching, conflict resolution, and advanced GitHub collaboration including pull requests, issue tracking, and introductory CI/CD with GitHub Actions.',
       },
       {
         title: 'Fundamentals of IoT & Embedded Circuit Systems',
@@ -26,9 +26,9 @@ export const about = {
       },
     ],
   },
-  human: 'Outside the work, I draw. I read — mostly literary fiction, lately Osamu Dazai. I play basketball when I can find a court.',
+  human: 'Outside the work, I draw. I read, mostly literary fiction, lately Osamu Dazai. I play basketball when I can find a court.',
   volunteering: {
-    statement: 'In June 2026, I volunteered for the Green Bengaluru afforestation drive — part of a Guinness World Record attempt to plant 1.5 million native saplings across the city.',
+    statement: 'In June 2026, I volunteered for the Green Bengaluru afforestation drive, part of a Guinness World Record attempt to plant 1.5 million native saplings across the city.',
     organizer: 'Bengaluru Development Authority (BDA)',
     date: 'June 27, 2026',
     goal: 'Plant 1.5 million native saplings across 245–314 acres',
@@ -38,7 +38,7 @@ export const about = {
   minorProjects: [
     {
       name: 'Temperature & Humidity Monitor',
-      description: 'A DHT sensor paired with a display screen, running on Arduino. The project that started everything — basic in scope, formative in practice.',
+      description: 'A DHT sensor paired with a display screen, running on Arduino. The project that started everything, basic in scope, formative in practice.',
     },
     {
       name: 'Ocean Pollution Detection Sensor',
@@ -52,7 +52,7 @@ export const about = {
   seminars: [
     {
       title: 'Principles of Game Design',
-      source: 'Dr. Mitchell McEwan — Senior Lecturer, Macquarie University',
+      source: 'Dr. Mitchell McEwan - Senior Lecturer, Macquarie University',
       detail: '',
     },
     {
@@ -63,7 +63,7 @@ export const about = {
     {
       title: 'AI & IoT in Precision Agriculture',
       source: '',
-      detail: 'On bridging IoT sensor networks with AI inference for precision farming — soil monitoring, yield prediction, and autonomous irrigation as the layer between field data and farm decisions.',
+      detail: 'On bridging IoT sensor networks with AI inference for precision farming: soil monitoring, yield prediction, and autonomous irrigation as the layer between field data and farm decisions.',
     },
   ],
 };
@@ -111,7 +111,7 @@ export const skills = {
       number: '04',
       rows: [
         { items: ['Edge Impulse', 'Git', 'GitHub', 'PlatformIO', 'Arduino IDE', 'VS Code'] },
-        { category: 'Cloud — surface level', items: ['AWS IoT', 'Azure IoT Hub'], learning: true },
+        { category: 'Cloud - surface level', items: ['AWS IoT', 'Azure IoT Hub'], learning: true },
       ],
     },
   ],
@@ -120,5 +120,5 @@ export const skills = {
 export const hero = {
   label: 'IoT Engineer',
   name: 'Huzaifa.',
-  bio: "IoT sits at a rare intersection — not purely hardware, not purely software. It's the domain where a single person can take an idea from concept to working device. That's what drew me in.",
+  bio: "IoT sits at a rare intersection, not purely hardware, not purely software. It's the domain where a single person can take an idea from concept to working device. That's what drew me in.",
 };

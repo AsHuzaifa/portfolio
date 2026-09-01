@@ -1,4 +1,4 @@
-// [cardswap] GSAP elastic stacked card swap — click any back card to bring it front.
+// [cardswap] GSAP elastic stacked card swap - click any back card to bring it front.
 // No auto-cycling. Cursor-proximity glow follows mouse within each card.
 
 import { useEffect, useRef } from 'react';
@@ -23,7 +23,7 @@ const GLOW_REST = '0 0 0 1px rgba(42,74,62,0.10)';
 const GLOW_PAD = 40;
 
 function computeGlow(x: number, y: number, w: number, h: number): string {
-  // Proximity to center — glow intensifies as cursor approaches card center
+  // Proximity to center - glow intensifies as cursor approaches card center
   const cx = w / 2;
   const cy = h / 2;
   const dist = Math.sqrt((x - cx) ** 2 + (y - cy) ** 2);
@@ -56,7 +56,7 @@ export default function CardSwap({
     );
     orderRef.current = [...cardEls];
 
-    // Place cards at their stack positions — no animation on init
+    // Place cards at their stack positions - no animation on init
     cardEls.forEach((card, i) => {
       gsap.set(card, {
         x: i * cardDistance,

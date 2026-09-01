@@ -46,7 +46,7 @@ export const StaggeredMenu: React.FC<Props> = ({
 
   // Portfolio palette constants
   const MUTED      = '#8C7E6E';
-  const MUTED_OPEN = '#1A1714'; // text color — MUTED_OPEN previously matched sm-panel bg (#EDE7D9), making the toggle invisible once the panel slid in behind it
+  const MUTED_OPEN = '#1A1714'; // text color - MUTED_OPEN previously matched sm-panel bg (#EDE7D9), making the toggle invisible once the panel slid in behind it
   const LAYERS     = ['#C94A2A', '#2A4A3E'];
 
   useLayoutEffect(() => {
@@ -186,7 +186,7 @@ export const StaggeredMenu: React.FC<Props> = ({
     });
   }, []);
 
-  // Two static items — yPercent: 0 shows "Menu", yPercent: -50 shows "Close".
+  // Two static items - yPercent: 0 shows "Menu", yPercent: -50 shows "Close".
   // Avoids React state-update race conditions that broke the previous cycling approach.
   const animateText = useCallback((opening: boolean) => {
     const inner = textInnerRef.current;
@@ -248,7 +248,7 @@ export const StaggeredMenu: React.FC<Props> = ({
           ))}
         </div>
 
-        {/* Header — toggle button only */}
+        {/* Header - toggle button only */}
         <header className="absolute top-0 left-0 w-full flex items-center justify-end px-8 md:px-20 lg:px-32 py-8 bg-transparent pointer-events-none z-20">
           <button
             ref={toggleBtnRef}

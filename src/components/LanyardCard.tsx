@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Lanyard from './Lanyard';
 
-// Card face dimensions — portrait, roughly matches the card GLB's UV aspect ratio
+// Card face dimensions - portrait, roughly matches the card GLB's UV aspect ratio
 const CARD_W = 512;
 const CARD_H = 756;
 
