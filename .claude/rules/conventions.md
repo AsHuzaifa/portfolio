@@ -277,11 +277,13 @@ widened to 62% once two blobs per color still left visible flat corners).
 Verified visually via Playwright screenshots against the running dev server
 (desktop, mobile, hover state) — see "Local screenshot verification" below.
 
-Tile grid is capped at `sm:grid-cols-2` (not 3) for now — with only two
+Tile grid is capped at `sm:grid-cols-2` (not 3) for now, with only two
 projects, a 3-column grid left a large empty gap on wide viewports. Bump to
-`lg:grid-cols-3` once a third project is added. Tile aspect is `aspect-[4/5]`,
-noticeably taller than the rest of the site's tiles, intentional to match the
-reference's portrait/phone-like proportions and make Builds feel distinct.
+`lg:grid-cols-3` once a third project is added. Tile aspect started at
+`aspect-[4/5]` (portrait, matching the reference's phone-like proportions) but
+that read as too tall in practice; cut to `aspect-[8/5]` (exactly half the
+height-to-width ratio) at user request. Still visually distinct from the rest
+of the site's tiles, just landscape instead of portrait now.
 
 ### Local screenshot verification (session 14)
 `conventions.md` previously noted local dev + tooling as unreliable for
@@ -531,6 +533,28 @@ longer used.
 All other About copy (education line, human note, Green Bengaluru statement,
 Samsung card content, minor project card descriptions) live in `src/data/site.ts`
 and are final.
+
+### Builds copy cleanup (session 14)
+The Smart Home Hub and NetSim copy (tagline, overview, features, scope in
+`projects` in `site.ts`) was written by Claude this session and read as
+AI-generated on a pass: heavy em dash use, and a recurring "X, not Y" /
+"not just A, it's B" contrastive setup-and-punchline structure (e.g. "Most
+home-automation demos stop at devices behaving prettily. This one also
+models..."). User asked for a cleanup pass across the whole site plus
+specifically the two project pages. Rewrote both entries: em dashes replaced
+with commas, colons, or parentheses depending on what reads most natural in
+context (never a hyphen standing in for an em dash), and the contrastive
+strawman sentences either cut or folded into a plainer statement of what the
+thing does. Also caught and fixed a stray em dash in `[slug].astro`'s `<title>`
+template literal (`${project.name} — Huzaifa`) — changed to a plain hyphen to
+match the hyphen already used in `Layout.astro`'s default title
+(`'Huzaifa - IoT Engineering'`).
+
+Checked the rest of the site's copy (hero, About, Skills, Field Work, Contact)
+for the same issues and found none — no em dashes, no buzzword-y AI tells
+(`seamless`, `robust`, `leverage`, etc.). That copy predates this session and
+was already user-written/approved, so it wasn't touched beyond confirming it
+was already clean.
 
 ---
 
