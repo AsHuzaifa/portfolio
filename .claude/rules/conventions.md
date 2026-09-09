@@ -71,7 +71,8 @@ d:\portfolio\
     ├── styles/
     │   └── global.css               ← @theme tokens, base layer, marble background on html
     └── utils/
-        └── animations.ts            ← animateHero, animateAbout, animateSkills, animateContact, initAccordions
+        ├── animations.ts            ← animateHero, animateAbout, animateProjects, animateSkills, animateContact, initAccordions
+        └── fluidArt.ts              ← buildFluidBackground(colors, seed), used by ProjectsSection.astro tiles
 ```
 
 ---
@@ -199,8 +200,9 @@ Current exports (in file order): `nav`, `about`, `projects`, `contact`, `skills`
 - `about` — narrative, education, samsung (context/stat/subtext/courses), human, volunteering, minorProjects, seminars
 - `projects` — array of major-project entries (added session 14), each with `slug`, `name`,
   `tagline`, `stack: string[]`, `repo`, `demo` (nullable), `image` (nullable, path under `public/`
-  starting with `/`), `overview`, `features[]` (`title`, `detail`), `scope`. Consumed by
-  `ProjectsSection.astro` (tile grid — text-only, ignores `image`) and `pages/projects/[slug].astro`
+  starting with `/`), `fluid: string[]` (2–3 hex colors driving the tile's fluid-art background,
+  see "Builds tile design" below), `overview`, `features[]` (`title`, `detail`), `scope`. Consumed by
+  `ProjectsSection.astro` (tile grid — fluid art + glass panel, ignores `image`/`stack`) and `pages/projects/[slug].astro`
   (detail page, one per array entry via `getStaticPaths` — renders `image` full-width above the
   overview when present). Entries so far: Smart Home Hub (`image: null`, no screenshot yet),
   NetSim (`image: '/assets/projects/netsim.png'`, copied from the source repo's `og-image.png`).
@@ -208,6 +210,59 @@ Current exports (in file order): `nav`, `about`, `projects`, `contact`, `skills`
   needed once there was more than one array element for TS to infer a clean union type.
 - `skills` — `groups[]`, each with `label`, `number`, `rows[]`. Each row: `category?`, `items: string[]`, `learning?: boolean`, `note?: string`
 - `contact` — `links[]`, each with `label`, `handle`, `url`
+
+### Builds tile design — fluid art + glass panel (session 14)
+User-directed departure from the site's normal flat/bordered tile treatment
+(reference: phone mockups with abstract marbled-swirl backgrounds and a frosted
+glass panel holding text). Confirmed with the user before building: (1) colors
+intentionally break from the site's cream/terracotta/deep-green palette —
+vivid, saturated per-project hues, matching the reference rather than staying
+in-brand; (2) each project gets its own distinct color combo rather than one
+shared treatment.
+
+Each `projects` entry has a `fluid: string[]` field (2–3 hex colors). Smart Home
+Hub uses a warm gold/orange/rust combo (evokes lighting/warmth). NetSim reuses
+the pink/purple/blue of its own in-app Windows-98 desktop wallpaper (visible in
+its screenshot) as a deliberate callback to the product's own visual identity.
+
+Implementation is pure CSS, no generated images: `src/utils/fluidArt.ts`
+exports `buildFluidBackground(colors, seed)`, which lays out two elliptical
+`radial-gradient` blobs per color at varied positions/sizes (`BLOBS` array) with
+a `transparent 62%` falloff — tight enough to keep visible color variation, wide
+enough that blobs overlap and cover most of the tile rather than leaving flat
+base-color gaps. `ProjectsSection.astro` renders this on an absolutely
+positioned `-inset-[6%] blur-2xl` layer (slight oversize + blur to soften the
+gradient edges into something that reads as marbled rather than circular), with
+an alternating `rotate-3` / `-rotate-2` per tile index so the swirl isn't
+axis-aligned. A `bg-white/12 backdrop-blur-lg border border-white/25` glass
+panel sits at the bottom holding the project name and tagline in white text —
+white text is safe here regardless of a project's fluid colors, since the panel
+carries its own frosted-white tint.
+
+Tuning history: first pass used one blob per color with heavy `blur-3xl` and
+`-inset-[15%]` oversize, which smoothed everything into a flat 2-tone diagonal
+gradient — no visible swirl. Fixed by halving the blur, tightening the oversize,
+and doubling blob count with a smaller per-blob falloff (48% initially, then
+widened to 62% once two blobs per color still left visible flat corners).
+Verified visually via Playwright screenshots against the running dev server
+(desktop, mobile, hover state) — see "Local screenshot verification" below.
+
+Tile grid is capped at `sm:grid-cols-2` (not 3) for now — with only two
+projects, a 3-column grid left a large empty gap on wide viewports. Bump to
+`lg:grid-cols-3` once a third project is added. Tile aspect is `aspect-[4/5]`,
+noticeably taller than the rest of the site's tiles, intentional to match the
+reference's portrait/phone-like proportions and make Builds feel distinct.
+
+### Local screenshot verification (session 14)
+`conventions.md` previously noted local dev + tooling as unreliable for
+verification (see Testing workflow, below) — that was revisited this session at
+user request ("let's work on localhost for now"). Playwright isn't a project
+dependency; it was installed ad hoc into the scratchpad directory (`npm install
+playwright` in a scratch folder, then `npx playwright install chromium`) and
+driven with a small throwaway script rather than added to `package.json`. Used
+to confirm the Builds tile redesign actually renders (desktop, mobile, hover)
+and that the console has no errors, without adding a permanent test dependency
+to the project.
 
 ### Nav links from sub-pages (session 14)
 Before Builds, the site was a true single page — `nav.items[].link` was a bare

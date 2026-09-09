@@ -83,6 +83,7 @@ export const projects = [
     repo: 'https://github.com/AsHuzaifa/smart-home-hub',
     demo: null,
     image: null,
+    fluid: ['#F4A93B', '#E4572E', '#7A2E12'],
     overview: "A client-side simulation of a smart home automation system: a drag-and-drop rules engine, built the way Node-RED handles logic, wired to a live 3D floorplan where simulated devices — lights, fans, an AC unit, doors, a thermostat, temperature and motion sensors — react in real time as rules fire. Most home-automation demos stop at devices behaving prettily. This one also models device connectivity — signal, battery, disconnects — and a simulated command-security layer, both wired into the real rules engine rather than sitting there as decoration.",
     features: [
       {
@@ -112,6 +113,7 @@ export const projects = [
     repo: 'https://github.com/AsHuzaifa/netsim',
     demo: 'https://netsim-seven.vercel.app',
     image: '/assets/projects/netsim.png',
+    fluid: ['#FF3CAC', '#784BA0', '#2B86C5'],
     overview: "A LoRaWAN-style constrained-device network simulator, dressed as a Windows 98 / Y2K desktop. Static site, zero backend — the entire simulation runs inside a Web Worker and talks to the interface over postMessage. Up to fifty battery-powered end devices talk to three gateways, with real RF and protocol behavior underneath the retro chrome: EU868-style duty-cycle enforcement, Adaptive Data Rate driven by simulated RSSI/SNR, the Semtech time-on-air formula for real per-spreading-factor airtime, collision modeling with a capture effect, confirmed-message retry with unconfirmed fire-and-forget loss, and per-radio-state energy draw depleting a finite battery.",
     features: [
       {
