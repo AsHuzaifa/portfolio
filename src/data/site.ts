@@ -82,6 +82,7 @@ export const projects = [
     stack: ['React', 'TypeScript', 'Vite', 'React Flow', 'React Three Fiber', 'Zustand', 'Tailwind CSS'],
     repo: 'https://github.com/AsHuzaifa/smart-home-hub',
     demo: null,
+    image: null,
     overview: "A client-side simulation of a smart home automation system: a drag-and-drop rules engine, built the way Node-RED handles logic, wired to a live 3D floorplan where simulated devices — lights, fans, an AC unit, doors, a thermostat, temperature and motion sensors — react in real time as rules fire. Most home-automation demos stop at devices behaving prettily. This one also models device connectivity — signal, battery, disconnects — and a simulated command-security layer, both wired into the real rules engine rather than sitting there as decoration.",
     features: [
       {
@@ -102,6 +103,43 @@ export const projects = [
       },
     ],
     scope: "This is a portfolio piece demonstrating a rules-engine and 3D-simulation architecture, not a production IoT platform: no real backend, no real hardware or MQTT integration, no real authentication, no real cryptography. The security layer teaches concepts through honest simulation rather than claiming to be something it isn't.",
+  },
+  {
+    slug: 'netsim',
+    name: 'NetSim',
+    tagline: 'A LoRaWAN network simulator wearing a Windows 98 desktop — real RF physics under a retro UI.',
+    stack: ['React 19', 'TypeScript', 'Vite', '98.css', 'Web Workers'],
+    repo: 'https://github.com/AsHuzaifa/netsim',
+    demo: 'https://netsim-seven.vercel.app',
+    image: '/assets/projects/netsim.png',
+    overview: "A LoRaWAN-style constrained-device network simulator, dressed as a Windows 98 / Y2K desktop. Static site, zero backend — the entire simulation runs inside a Web Worker and talks to the interface over postMessage. Up to fifty battery-powered end devices talk to three gateways, with real RF and protocol behavior underneath the retro chrome: EU868-style duty-cycle enforcement, Adaptive Data Rate driven by simulated RSSI/SNR, the Semtech time-on-air formula for real per-spreading-factor airtime, collision modeling with a capture effect, confirmed-message retry with unconfirmed fire-and-forget loss, and per-radio-state energy draw depleting a finite battery.",
+    features: [
+      {
+        title: 'Network Topology',
+        detail: 'A live map of every device and gateway, with transmissions animated as they happen — blue for a transmit, green for a successful delivery, red for a collision. Click any device to open its inspector.',
+      },
+      {
+        title: 'Device Inspector',
+        detail: 'Per-device radio settings, battery level, and live stats — the same numbers driving the physics underneath, not decorative placeholders.',
+      },
+      {
+        title: 'Airtime Monitor',
+        detail: 'Duty-cycle budget usage per device, tracked against the EU868-style 1% airtime cap that the simulation actually enforces.',
+      },
+      {
+        title: 'Battery Status',
+        detail: 'A drain-over-time chart and a lowest-battery ranking, reflecting real per-radio-state energy draw across sleep, receive, and transmit.',
+      },
+      {
+        title: 'Event Log',
+        detail: 'The raw simulation event stream — every transmit, delivery, collision, and ADR update, timestamped as it happens.',
+      },
+      {
+        title: 'Control Panel',
+        detail: 'Pause or resume the simulation, add and remove devices, kill a gateway, inject interference, run a stress test, and tune simulation parameters live.',
+      },
+    ],
+    scope: "This is a physics simulation, not a live radio network: there's no real hardware and no actual RF transmission, and the retro desktop shell runs entirely client-side in the browser. The value is in modeling the real constraints of a LoRaWAN deployment, duty cycle, adaptive data rate, collisions, battery, accurately enough to be useful for understanding them, not in talking to real devices.",
   },
 ];
 

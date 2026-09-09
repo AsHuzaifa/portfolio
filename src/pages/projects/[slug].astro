@@ -60,6 +60,14 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 
       <hr class="border-t border-muted/20 mb-14" />
 
+      {project.image && (
+        <img
+          src={`${base}${project.image.replace(/^\//, '')}`}
+          alt={`${project.name} screenshot`}
+          class="w-full border border-muted/20 mb-14"
+        />
+      )}
+
       <!-- Overview -->
       <p class="text-text text-base md:text-lg leading-[1.8] font-body font-light mb-14">
         {project.overview}

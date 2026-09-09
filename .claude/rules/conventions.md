@@ -13,7 +13,7 @@ Read this before doing anything. It restores full session context.
 | About (`#origin`) | Complete — React islands integrated, copy approved, committed, live |
 | Skills (`#skills`) | Complete — 4 groups, confident/learning distinction, scroll-triggered stagger, translucent bg, bolder border |
 | Field Work | Complete — CardSwap left, "Attended" seminars list right; flex layout, responsive. Green Bengaluru volunteering block now closes this section (moved from Origin, session 11) |
-| Builds (`#builds`) | In progress (session 14) — new major-projects section, inserted between Origin and Skills. Tile grid links to standalone `/projects/[slug]/` detail pages. First project shipped: Smart Home Hub. More to come (NeuroSync, Posture Detection, etc.) as they're ready |
+| Builds (`#builds`) | In progress (session 14) — new major-projects section, inserted between Origin and Skills. Tile grid links to standalone `/projects/[slug]/` detail pages. Two entries shipped: Smart Home Hub, NetSim (NetSim's detail page also carries a screenshot — see `image` field below). More to come (NeuroSync, Posture Detection, etc.) as they're ready. Currently local-only (not pushed) at user's request |
 | Contact (`#reach`) | Complete — 4 links (GitHub, Email, Instructables, ORCID — LinkedIn removed session 11), scroll-triggered stagger |
 | Navigation (StaggeredMenu) | Complete — `StaggeredMenu.tsx` mounted in `Layout.astro`; slides in from right, 4 nav items |
 | GitHub Pages deployment | Complete — `astro.config.mjs` configured, Actions workflow at `.github/workflows/deploy.yml` |
@@ -198,9 +198,14 @@ Current exports (in file order): `nav`, `about`, `projects`, `contact`, `skills`
 - `hero` — label, name, bio
 - `about` — narrative, education, samsung (context/stat/subtext/courses), human, volunteering, minorProjects, seminars
 - `projects` — array of major-project entries (added session 14), each with `slug`, `name`,
-  `tagline`, `stack: string[]`, `repo`, `demo` (nullable), `overview`, `features[]` (`title`, `detail`),
-  `scope`. Consumed by `ProjectsSection.astro` (tile grid) and `pages/projects/[slug].astro`
-  (detail page, one per array entry via `getStaticPaths`). First entry: Smart Home Hub.
+  `tagline`, `stack: string[]`, `repo`, `demo` (nullable), `image` (nullable, path under `public/`
+  starting with `/`), `overview`, `features[]` (`title`, `detail`), `scope`. Consumed by
+  `ProjectsSection.astro` (tile grid — text-only, ignores `image`) and `pages/projects/[slug].astro`
+  (detail page, one per array entry via `getStaticPaths` — renders `image` full-width above the
+  overview when present). Entries so far: Smart Home Hub (`image: null`, no screenshot yet),
+  NetSim (`image: '/assets/projects/netsim.png'`, copied from the source repo's `og-image.png`).
+  `demo`/`image` are `null` rather than omitted so the two entries stay structurally identical —
+  needed once there was more than one array element for TS to infer a clean union type.
 - `skills` — `groups[]`, each with `label`, `number`, `rows[]`. Each row: `category?`, `items: string[]`, `learning?: boolean`, `note?: string`
 - `contact` — `links[]`, each with `label`, `handle`, `url`
 
@@ -530,14 +535,17 @@ Commits push to `main`. Netlify auto-deploys.
 1. **Card face editing** — front face content is final; blank cream back face added
    and deployed successfully in session 10. Scale increase (2.25→2.85) still unresolved/
    untested since session 9 — likely culprit for that session's breakage, not the back face.
-2. **Builds section — add remaining projects** — Smart Home Hub shipped session 14 as the
-   first `projects` entry. NeuroSync and Posture Detection are next once their repos/demos
-   are ready; add each as a new object in the `projects` array in `site.ts` following the
-   Smart Home Hub shape (`slug`, `name`, `tagline`, `stack`, `repo`, `demo`, `overview`,
-   `features[]`, `scope`) — no component changes needed, the tile grid and `[slug].astro`
-   detail page both iterate the array. The smaller minor-projects (Smart Attendance, Ocean
-   Sensor, Temp/Humidity) stay in Field Work's `CardSwap`, not Builds — Builds is for the
-   larger, individually-documented projects.
+2. **Builds section — add remaining projects** — Smart Home Hub and NetSim shipped session 14
+   as the first two `projects` entries (NetSim sourced from `D:\NetSim`'s README + its GitHub repo
+   description/homepage URL for the live demo link, screenshot copied from its `public/og-image.png`).
+   NeuroSync and Posture Detection are next once their repos/demos are ready; add each as a new
+   object in the `projects` array in `site.ts` following the same shape (`slug`, `name`, `tagline`,
+   `stack`, `repo`, `demo`, `image`, `overview`, `features[]`, `scope`) — no component changes
+   needed, the tile grid and `[slug].astro` detail page both iterate the array. The smaller
+   minor-projects (Smart Attendance, Ocean Sensor, Temp/Humidity) stay in Field Work's `CardSwap`,
+   not Builds — Builds is for the larger, individually-documented projects.
+   **Not yet pushed** — session 14 work is committed locally on `main` but held back from
+   `origin`, per user request to work on localhost for now.
 
 ---
 
