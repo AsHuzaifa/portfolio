@@ -204,10 +204,12 @@ Current exports (in file order): `nav`, `about`, `projects`, `contact`, `skills`
   see "Builds tile design" below), `overview`, `features[]` (`title`, `detail`), `scope`. Consumed by
   `ProjectsSection.astro` (tile grid — fluid art + glass panel, ignores `image`/`stack`) and `pages/projects/[slug].astro`
   (detail page, one per array entry via `getStaticPaths` — renders `image` full-width above the
-  overview when present). Entries so far: Smart Home Hub (`image: null`, no screenshot yet),
-  NetSim (`image: '/assets/projects/netsim.png'`, copied from the source repo's `og-image.png`).
-  `demo`/`image` are `null` rather than omitted so the two entries stay structurally identical —
-  needed once there was more than one array element for TS to infer a clean union type.
+  overview when present). Entries so far: Smart Home Hub (`image: '/assets/projects/smart-home-hub.png'`,
+  a Playwright screenshot of its live Vercel deployment — see below), NetSim
+  (`image: '/assets/projects/netsim.png'`, copied from the source repo's `og-image.png`).
+  `demo`/`image` were briefly `null` for Smart Home Hub before its live deployment was found;
+  kept the pattern of using `null` rather than omitting a key so array entries stay structurally
+  identical for TS's inferred union type.
 - `skills` — `groups[]`, each with `label`, `number`, `rows[]`. Each row: `category?`, `items: string[]`, `learning?: boolean`, `note?: string`
 - `contact` — `links[]`, each with `label`, `handle`, `url`
 
@@ -220,10 +222,21 @@ vivid, saturated per-project hues, matching the reference rather than staying
 in-brand; (2) each project gets its own distinct color combo rather than one
 shared treatment.
 
-Each `projects` entry has a `fluid: string[]` field (2–3 hex colors). Smart Home
-Hub uses a warm gold/orange/rust combo (evokes lighting/warmth). NetSim reuses
-the pink/purple/blue of its own in-app Windows-98 desktop wallpaper (visible in
-its screenshot) as a deliberate callback to the product's own visual identity.
+Each `projects` entry has a `fluid: string[]` field (2–3 hex colors). Both
+projects' palettes are pulled from their own live deployment rather than
+invented: NetSim reuses the pink/purple/blue of its own in-app Windows-98
+desktop wallpaper (visible in its screenshot). Smart Home Hub's first pass
+was an invented gold/orange/rust guess — corrected once the live Vercel
+deployment (`https://smarthome-delta-ten.vercel.app`, found via `gh repo view
+--json homepageUrl`) was actually screenshotted: the real UI is a dark
+navy/charcoal 3D scene with warm amber interior-lighting glow, not a flat warm
+palette. Colors were extracted with a small Playwright script that draws the
+screenshot to a canvas and histograms quantized pixel colors (`dominant-colors.mjs`
+in the session's scratchpad, not committed) — picking a representative dark
+navy (`#233642`), warm amber (`#D98A3F`), and ember (`#8A3A12`) from the top
+results rather than eyeballing them, since the raw histogram is dominated by
+near-black background and the useful accent colors are a small percentage of
+total pixels.
 
 Implementation is pure CSS, no generated images: `src/utils/fluidArt.ts`
 exports `buildFluidBackground(colors, seed)`, which lays out two elliptical

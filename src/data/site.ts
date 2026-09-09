@@ -81,9 +81,9 @@ export const projects = [
     tagline: 'A drag-and-drop rules engine wired to a live 3D floorplan — devices that actually react.',
     stack: ['React', 'TypeScript', 'Vite', 'React Flow', 'React Three Fiber', 'Zustand', 'Tailwind CSS'],
     repo: 'https://github.com/AsHuzaifa/smart-home-hub',
-    demo: null,
-    image: null,
-    fluid: ['#F4A93B', '#E4572E', '#7A2E12'],
+    demo: 'https://smarthome-delta-ten.vercel.app',
+    image: '/assets/projects/smart-home-hub.png',
+    fluid: ['#D98A3F', '#8A3A12', '#233642'],
     overview: "A client-side simulation of a smart home automation system: a drag-and-drop rules engine, built the way Node-RED handles logic, wired to a live 3D floorplan where simulated devices — lights, fans, an AC unit, doors, a thermostat, temperature and motion sensors — react in real time as rules fire. Most home-automation demos stop at devices behaving prettily. This one also models device connectivity — signal, battery, disconnects — and a simulated command-security layer, both wired into the real rules engine rather than sitting there as decoration.",
     features: [
       {
