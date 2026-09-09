@@ -1,7 +1,8 @@
+import { getBaseUrl } from '../utils/basePath';
+
 // BASE_URL-prefixed so nav links resolve correctly from sub-pages (e.g. /projects/[slug]/),
-// not just from the single-page scroll on the homepage itself. BASE_URL doesn't
-// reliably include a trailing slash, so it's normalized here.
-const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+// not just from the single-page scroll on the homepage itself.
+const base = getBaseUrl();
 
 export const nav = {
   items: [

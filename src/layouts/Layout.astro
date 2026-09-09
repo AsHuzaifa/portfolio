@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import StaggeredMenu from '../components/StaggeredMenu';
 import { nav } from '../data/site';
+import { getBaseUrl } from '../utils/basePath';
 
 interface Props {
   title?: string;
@@ -12,13 +13,15 @@ const {
   title = 'Huzaifa - IoT Engineering',
   description = 'IoT engineer working at the edge of hardware and software.',
 } = Astro.props;
+
+const base = getBaseUrl();
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" style={{ '--marble-bg-url': `url(${base}assets/marble-bg.jpg)` }}>
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />

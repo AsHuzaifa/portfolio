@@ -72,7 +72,8 @@ d:\portfolio\
     │   └── global.css               ← @theme tokens, base layer, marble background on html
     └── utils/
         ├── animations.ts            ← animateHero, animateAbout, animateProjects, animateSkills, animateContact, initAccordions
-        └── fluidArt.ts              ← buildFluidBackground(colors, seed), used by ProjectsSection.astro tiles
+        ├── fluidArt.ts              ← buildFluidBackground(colors, seed), used by ProjectsSection.astro tiles
+        └── basePath.ts              ← getBaseUrl(), normalizes import.meta.env.BASE_URL; used anywhere an absolute path needs the GitHub Pages base prefix
 ```
 
 ---
@@ -128,7 +129,7 @@ two-layer `background-image`:
 html {
   background-image:
     linear-gradient(rgba(245, 240, 232, 0.82), rgba(245, 240, 232, 0.82)),
-    url('/assets/marble-bg.jpg');
+    var(--marble-bg-url);
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
@@ -138,6 +139,22 @@ html {
 The linear-gradient layer acts as a semi-transparent cream overlay — no pseudo-element,
 no z-index manipulation. The `body` element has no `background-color` so the marble
 on `html` shows through.
+
+**Why `var(--marble-bg-url)` instead of a literal `url('/assets/marble-bg.jpg')`
+(fixed session 14):** a plain CSS file has no way to know the site's `base`
+(`/portfolio` on GitHub Pages) — a literal absolute path always resolves from
+the domain root, 404ing on every page once `base` is non-empty (this had been
+broken site-wide, not just on the new project pages, since the marble background
+was introduced). Fixed by setting the custom property inline on `<html>` in
+`Layout.astro`: `style={{ '--marble-bg-url': \`url(${base}assets/marble-bg.jpg)\` }}`,
+using the same `getBaseUrl()` helper (`src/utils/basePath.ts`) as the nav links
+and project pages. The favicon `<link>` in `Layout.astro` had the identical bug
+(`href="/favicon.svg"`) and got the same fix (`href={\`${base}favicon.svg\`}`).
+
+`getBaseUrl()` replaces what had been the same base-normalizing ternary
+duplicated in `site.ts`, `ProjectsSection.astro`, and `[slug].astro` — all three
+were refactored to import it instead once a fourth call site (`Layout.astro`)
+made the duplication worth collapsing.
 
 **Why no bg-bg on body**: Tailwind's `bg-bg` class sets an opaque `background-color`
 on body which covers the html background entirely. Removed from Layout.astro. The cream
@@ -528,6 +545,17 @@ with `padding: 40px; margin: -40px` so the glow has room without affecting layou
 Cause: `<body class="bg-bg ...">` in Layout.astro applied an opaque `background-color`
 on body, which painted over the `html` element's `background-image` entirely.
 Fix: removed `bg-bg` from body. The `html` rule in `global.css` owns the background color.
+
+**Marble background + favicon 404 under GitHub Pages base path (session 14)**
+Cause: `global.css`'s `url('/assets/marble-bg.jpg')` and `Layout.astro`'s
+`href="/favicon.svg"` were literal absolute paths, which resolve from the
+domain root and ignore `astro.config.mjs`'s `base: '/portfolio'` entirely.
+Broke site-wide (not just on the pages added this session) — a bug that had
+been live since the marble background was introduced but only surfaced now
+because local dev testing was reinstated this session (see Testing workflow).
+Fix: see "Marble background" above — CSS custom property set from
+`Layout.astro` via the new `getBaseUrl()` util, and the favicon `href` built
+the same way.
 
 **SVG marble watermark not visible (session 2)**
 Cause: `z-index: -1` on a fixed child paints behind `html`'s background canvas

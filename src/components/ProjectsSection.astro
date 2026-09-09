@@ -1,9 +1,9 @@
 ---
 import { projects } from '../data/site';
 import { buildFluidBackground } from '../utils/fluidArt';
+import { getBaseUrl } from '../utils/basePath';
 
-// BASE_URL doesn't reliably include a trailing slash, so it's normalized here.
-const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const base = getBaseUrl();
 ---
 
 <section id="builds" class="px-8 md:px-20 lg:px-32 pt-24 pb-28">

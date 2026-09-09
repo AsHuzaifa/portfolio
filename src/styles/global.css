@@ -17,7 +17,7 @@
     background-color: var(--color-bg);
     background-image:
       linear-gradient(rgba(245, 240, 232, 0.82), rgba(245, 240, 232, 0.82)),
-      url('/assets/marble-bg.jpg');
+      var(--marble-bg-url);
     background-size: cover;
     background-attachment: fixed;
     background-position: center;
