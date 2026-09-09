@@ -13,7 +13,7 @@ Read this before doing anything. It restores full session context.
 | About (`#origin`) | Complete — React islands integrated, copy approved, committed, live |
 | Skills (`#skills`) | Complete — 4 groups, confident/learning distinction, scroll-triggered stagger, translucent bg, bolder border |
 | Field Work | Complete — CardSwap left, "Attended" seminars list right; flex layout, responsive. Green Bengaluru volunteering block now closes this section (moved from Origin, session 11) |
-| Builds (`#builds`) | In progress (session 14) — new major-projects section, inserted between Origin and Skills. Tile grid links to standalone `/projects/[slug]/` detail pages. Two entries shipped: Smart Home Hub, NetSim (NetSim's detail page also carries a screenshot — see `image` field below). More to come (NeuroSync, Posture Detection, etc.) as they're ready. Currently local-only (not pushed) at user's request |
+| Builds (`#builds`) | Complete for now (session 14) — new major-projects section, inserted between Origin and Skills. Tile grid (fluid-art backgrounds + glass panel, `aspect-[8/5]`) links to standalone `/projects/[slug]/` detail pages. Two entries shipped: Smart Home Hub, NetSim, each with a screenshot of its live deployment. Pushed to `main`, live on Netlify + GitHub Pages. More projects (NeuroSync, Posture Detection) to come as they're ready |
 | Contact (`#reach`) | Complete — 4 links (GitHub, Email, Instructables, ORCID — LinkedIn removed session 11), scroll-triggered stagger |
 | Navigation (StaggeredMenu) | Complete — `StaggeredMenu.tsx` mounted in `Layout.astro`; slides in from right, 4 nav items |
 | GitHub Pages deployment | Complete — `astro.config.mjs` configured, Actions workflow at `.github/workflows/deploy.yml` |
@@ -35,7 +35,10 @@ d:\portfolio\
 ├── package.json
 ├── public/
 │   └── assets/
-│       └── marble-bg.jpg            ← marble background JPEG (user-provided)
+│       ├── marble-bg.jpg            ← marble background JPEG (user-provided)
+│       └── projects/
+│           ├── smart-home-hub.png   ← screenshot of its live Vercel deployment (session 14)
+│           └── netsim.png           ← its own public/og-image.png, copied over (session 14)
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml               ← builds on push to main, deploys dist/ to gh-pages branch
@@ -304,19 +307,13 @@ StaggeredMenu mounts in `Layout.astro` on every page, so a project detail page
 also renders the same nav, and a bare `#origin` there tries to scroll to an
 anchor that doesn't exist on that page.
 
-Fix: nav links are now built as `` `${base}#id` `` where `base` is
-`import.meta.env.BASE_URL` normalized to always end in `/`. From the homepage
-this still resolves to the same document (anchor-scrolls, no reload); from a
-sub-page it navigates back to the homepage and then jumps to the anchor.
-`ProjectsSection.astro`'s tile links and `[slug].astro`'s "back to Builds" link
-use the same normalized-`base` pattern for their `/projects/...` and `#builds` URLs.
-
-**Why normalize BASE_URL:** `import.meta.env.BASE_URL` does not reliably include
-a trailing slash (observed as `/portfolio`, not `/portfolio/`, with
-`base: '/portfolio'` in `astro.config.mjs`). Concatenating directly produced
-broken URLs (`/portfolioprojects/...`, `/portfolio#opening`). All three files
-that read `BASE_URL` normalize it the same way:
-`base.endsWith('/') ? base : `${base}/``.
+Fix: nav links are now built as `` `${base}#id` `` where `base` comes from the
+`getBaseUrl()` util (see "Marble background" above for why that util exists and
+what it normalizes). From the homepage this still resolves to the same document
+(anchor-scrolls, no reload); from a sub-page it navigates back to the homepage
+and then jumps to the anchor. `ProjectsSection.astro`'s tile links and
+`[slug].astro`'s "back to Builds" link use the same `getBaseUrl()` pattern for
+their `/projects/...` and `#builds` URLs.
 
 `about.samsung.courses` is `{ title: string; detail: string }[]` — per-course accordion in SamsungCard.
 `about.minorProjects` is `{ name: string; description: string }[]` — consumed by CardSwap.
@@ -657,15 +654,18 @@ Commits push to `main`. Netlify auto-deploys.
    untested since session 9 — likely culprit for that session's breakage, not the back face.
 2. **Builds section — add remaining projects** — Smart Home Hub and NetSim shipped session 14
    as the first two `projects` entries (NetSim sourced from `D:\NetSim`'s README + its GitHub repo
-   description/homepage URL for the live demo link, screenshot copied from its `public/og-image.png`).
-   NeuroSync and Posture Detection are next once their repos/demos are ready; add each as a new
-   object in the `projects` array in `site.ts` following the same shape (`slug`, `name`, `tagline`,
-   `stack`, `repo`, `demo`, `image`, `overview`, `features[]`, `scope`) — no component changes
-   needed, the tile grid and `[slug].astro` detail page both iterate the array. The smaller
+   description/homepage URL for the live demo link; Smart Home Hub's image and tile palette both
+   pulled from its own live Vercel deployment). NeuroSync and Posture Detection are next once their
+   repos/demos are ready; add each as a new object in the `projects` array in `site.ts` following
+   the same shape (`slug`, `name`, `tagline`, `stack`, `repo`, `demo`, `image`, `fluid`, `overview`,
+   `features[]`, `scope`) — no component changes needed, the tile grid and `[slug].astro` detail
+   page both iterate the array. Bump `ProjectsSection.astro`'s grid from `sm:grid-cols-2` to
+   `lg:grid-cols-3` once a third project lands (see "Builds tile design"). The smaller
    minor-projects (Smart Attendance, Ocean Sensor, Temp/Humidity) stay in Field Work's `CardSwap`,
    not Builds — Builds is for the larger, individually-documented projects.
-   **Not yet pushed** — session 14 work is committed locally on `main` but held back from
-   `origin`, per user request to work on localhost for now.
+
+All session 14 work (Builds section, fluid-art tiles, base-path fixes, copy cleanup) is pushed
+to `main` and live on both Netlify and GitHub Pages.
 
 ---
 
@@ -713,8 +713,16 @@ meshline:            ^3.3.1
 - GitHub remote: `https://github.com/AsHuzaifa/portfolio.git` — push to `main`
 - Netlify: https://ashuzaifa.netlify.app — auto-deploys on push to `main`
 
-### Testing workflow (changed session 10)
-Local dev server (`astro dev`) is unreliable for verification in this environment —
-localhost connections from tooling don't reliably reach it. **Don't attempt local dev
-testing/screenshots before pushing.** Commit and push directly; the user tests on the
-live deployed site themselves and reports back if something's wrong.
+### Testing workflow (changed session 10, revised session 14)
+Session 10's finding was that `astro dev` was unreliable for verification in this
+environment. Session 14 revisited this at user request ("let's work on localhost
+for now") and it worked fine: `astro dev --background` (per `CLAUDE.md`) serves
+reliably, and Playwright (installed ad hoc into a scratch folder, not a project
+dependency — see "Local screenshot verification") can drive it for real
+screenshots and console-error checks. This is how the session-14 base-path bug
+(marble background + favicon 404ing under `/portfolio`) was actually caught —
+it wouldn't have surfaced from a build-only check.
+
+Current guidance: local dev + Playwright verification is fine and worth doing
+for visual changes. Still commit and push when the user says to; don't treat a
+clean local screenshot as a substitute for asking before pushing.
