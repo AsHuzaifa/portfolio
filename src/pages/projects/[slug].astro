@@ -1,0 +1,99 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { projects } from '../../data/site';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+// BASE_URL doesn't reliably include a trailing slash, so it's normalized here.
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+---
+
+<Layout title={`${project.name} — Huzaifa`} description={project.tagline}>
+  <main class="px-8 md:px-20 lg:px-32 pt-32 pb-32">
+    <div class="max-w-[820px] mx-auto">
+
+      <a
+        href={`${base}#builds`}
+        class="inline-flex items-center gap-2 text-muted/60 text-xs tracking-[0.15em] uppercase font-body
+               hover:text-accent-alt transition-colors duration-300 mb-16"
+      >
+        <span>&#8592;</span> Builds
+      </a>
+
+      <h1 class="font-display font-light text-text leading-[1.05] tracking-[-0.02em] mb-6"
+          style="font-size: clamp(2.4rem, 5vw, 3.6rem);">
+        {project.name}
+      </h1>
+
+      <p class="text-muted text-lg leading-[1.7] font-body font-light mb-10 max-w-2xl">
+        {project.tagline}
+      </p>
+
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-3 mb-14">
+        <a
+          href={project.repo}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-text text-sm font-body font-medium border-b border-text/30
+                 hover:border-accent-alt hover:text-accent-alt transition-colors duration-300"
+        >
+          View repository &#8599;
+        </a>
+        {project.demo && (
+          <a
+            href={project.demo}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-text text-sm font-body font-medium border-b border-text/30
+                   hover:border-accent-alt hover:text-accent-alt transition-colors duration-300"
+          >
+            Live demo &#8599;
+          </a>
+        )}
+      </div>
+
+      <hr class="border-t border-muted/20 mb-14" />
+
+      <!-- Overview -->
+      <p class="text-text text-base md:text-lg leading-[1.8] font-body font-light mb-14">
+        {project.overview}
+      </p>
+
+      <!-- Stack -->
+      <div class="mb-14">
+        <p class="text-muted/50 text-[0.65rem] tracking-[0.2em] uppercase font-body mb-4">Stack</p>
+        <div class="flex flex-wrap gap-x-4 gap-y-2">
+          {project.stack.map((tech) => (
+            <span class="text-text/75 text-sm font-body font-light">{tech}</span>
+          ))}
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="mb-14">
+        <p class="text-muted/50 text-[0.65rem] tracking-[0.2em] uppercase font-body mb-6">What it does</p>
+        <div class="space-y-8">
+          {project.features.map((feature) => (
+            <div class="border-t border-muted/10 pt-6">
+              <p class="text-text text-base font-body font-medium mb-2">{feature.title}</p>
+              <p class="text-muted text-[0.9rem] leading-relaxed font-body font-light">{feature.detail}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Scope -->
+      <div class="bg-surface/50 border border-muted/20 px-7 py-7">
+        <p class="text-muted/50 text-[0.65rem] tracking-[0.2em] uppercase font-body mb-3">Scope</p>
+        <p class="text-muted text-[0.85rem] leading-relaxed font-body font-light">{project.scope}</p>
+      </div>
+
+    </div>
+  </main>
+</Layout>

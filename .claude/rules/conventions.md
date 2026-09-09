@@ -1,5 +1,5 @@
 w# conventions.md — Portfolio Session Log
-Last updated: August 22, 2026 (session 13)
+Last updated: September 9, 2026 (session 14)
 
 Read this before doing anything. It restores full session context.
 
@@ -13,6 +13,7 @@ Read this before doing anything. It restores full session context.
 | About (`#origin`) | Complete — React islands integrated, copy approved, committed, live |
 | Skills (`#skills`) | Complete — 4 groups, confident/learning distinction, scroll-triggered stagger, translucent bg, bolder border |
 | Field Work | Complete — CardSwap left, "Attended" seminars list right; flex layout, responsive. Green Bengaluru volunteering block now closes this section (moved from Origin, session 11) |
+| Builds (`#builds`) | In progress (session 14) — new major-projects section, inserted between Origin and Skills. Tile grid links to standalone `/projects/[slug]/` detail pages. First project shipped: Smart Home Hub. More to come (NeuroSync, Posture Detection, etc.) as they're ready |
 | Contact (`#reach`) | Complete — 4 links (GitHub, Email, Instructables, ORCID — LinkedIn removed session 11), scroll-triggered stagger |
 | Navigation (StaggeredMenu) | Complete — `StaggeredMenu.tsx` mounted in `Layout.astro`; slides in from right, 4 nav items |
 | GitHub Pages deployment | Complete — `astro.config.mjs` configured, Actions workflow at `.github/workflows/deploy.yml` |
@@ -48,6 +49,7 @@ d:\portfolio\
 └── src/
     ├── components/
     │   ├── AboutSection.astro       ← Origin section; narrative, education, human, Samsung, volunteering
+    │   ├── ProjectsSection.astro    ← Builds section (id="builds"), tile grid driven by projects export, links to /projects/[slug]/
     │   ├── SkillsSection.astro      ← Skills section (id="skills"), driven by skills export in site.ts
     │   ├── FieldWork.astro          ← Field Work section; wraps CardSwap, driven by about.minorProjects
     │   ├── ContactSection.astro     ← Reach section, driven by contact export in site.ts
@@ -63,7 +65,9 @@ d:\portfolio\
     ├── layouts/
     │   └── Layout.astro             ← base HTML shell, fonts, mounts StaggeredMenu client:load
     ├── pages/
-    │   └── index.astro              ← single-page entry; order: Opening → Origin → Skills → Field Work → Reach
+    │   ├── index.astro              ← single-page entry; order: Opening → Origin → Builds → Skills → Field Work → Reach
+    │   └── projects/
+    │       └── [slug].astro         ← dynamic route, getStaticPaths over projects export; one static page per project
     ├── styles/
     │   └── global.css               ← @theme tokens, base layer, marble background on html
     └── utils/
@@ -164,10 +168,17 @@ exception — the originally planned `#signal` was renamed to `#skills` at user
 request for clarity.
 - `#opening` — Hero section
 - `#origin`  — About section
+- `#builds`  — Projects section (added session 14)
 - `#skills`  — Skills section (renamed from `#signal` in session 6)
 - `#reach`   — Contact section
 
-Field Work has no `id` — it is a visual block, not a nav target.
+Field Work has no `id` — it is a visual block, not a nav target. Builds does have
+an `id` and a nav entry — unlike Field Work's minor/attended items, it's a primary
+content section with its own dedicated sub-pages.
+
+Section number badges (top-right of each section header) reflect page order and
+were bumped when Builds was inserted: Origin `01`, Builds `02`, Skills `03`,
+Reach `04`.
 
 Convention: section `id` is thematic where possible, functional if clearer.
 Visible label in the section header matches the ID.
@@ -179,13 +190,41 @@ structural gutter between them.
 
 ### Content architecture
 No hardcoded strings in components. All copy lives in `src/data/site.ts`.
-Current exports (in file order): `nav`, `about`, `contact`, `skills`, `hero`.
+Current exports (in file order): `nav`, `about`, `projects`, `contact`, `skills`, `hero`.
 
 - `nav` — `items[]`, each with `label`, `link`, `ariaLabel`. Used by StaggeredMenu in Layout.astro.
+  `link` values are `${base}#id` (BASE_URL-prefixed, trailing slash normalized) rather than
+  bare `#id` — see "Nav links from sub-pages" below.
 - `hero` — label, name, bio
 - `about` — narrative, education, samsung (context/stat/subtext/courses), human, volunteering, minorProjects, seminars
+- `projects` — array of major-project entries (added session 14), each with `slug`, `name`,
+  `tagline`, `stack: string[]`, `repo`, `demo` (nullable), `overview`, `features[]` (`title`, `detail`),
+  `scope`. Consumed by `ProjectsSection.astro` (tile grid) and `pages/projects/[slug].astro`
+  (detail page, one per array entry via `getStaticPaths`). First entry: Smart Home Hub.
 - `skills` — `groups[]`, each with `label`, `number`, `rows[]`. Each row: `category?`, `items: string[]`, `learning?: boolean`, `note?: string`
 - `contact` — `links[]`, each with `label`, `handle`, `url`
+
+### Nav links from sub-pages (session 14)
+Before Builds, the site was a true single page — `nav.items[].link` was a bare
+`#id` anchor, which only works when the link and its target share the same
+document. Adding standalone `/projects/[slug]/` pages broke that assumption:
+StaggeredMenu mounts in `Layout.astro` on every page, so a project detail page
+also renders the same nav, and a bare `#origin` there tries to scroll to an
+anchor that doesn't exist on that page.
+
+Fix: nav links are now built as `` `${base}#id` `` where `base` is
+`import.meta.env.BASE_URL` normalized to always end in `/`. From the homepage
+this still resolves to the same document (anchor-scrolls, no reload); from a
+sub-page it navigates back to the homepage and then jumps to the anchor.
+`ProjectsSection.astro`'s tile links and `[slug].astro`'s "back to Builds" link
+use the same normalized-`base` pattern for their `/projects/...` and `#builds` URLs.
+
+**Why normalize BASE_URL:** `import.meta.env.BASE_URL` does not reliably include
+a trailing slash (observed as `/portfolio`, not `/portfolio/`, with
+`base: '/portfolio'` in `astro.config.mjs`). Concatenating directly produced
+broken URLs (`/portfolioprojects/...`, `/portfolio#opening`). All three files
+that read `BASE_URL` normalize it the same way:
+`base.endsWith('/') ? base : `${base}/``.
 
 `about.samsung.courses` is `{ title: string; detail: string }[]` — per-course accordion in SamsungCard.
 `about.minorProjects` is `{ name: string; description: string }[]` — consumed by CardSwap.
@@ -470,6 +509,12 @@ panel finished sliding in behind the header, the "Close" text and icon blended
 invisibly into it (both header z-20 and panel are on top of each other, same color).
 Fix: changed `MUTED_OPEN` to `#1A1714` (site text color) in `StaggeredMenu.tsx`.
 
+**Nav/tile links broken on GitHub Pages base path (session 14)**
+Cause: `import.meta.env.BASE_URL` doesn't reliably include a trailing slash;
+concatenating `${base}#opening` / `${base}projects/...` directly produced
+`/portfolio#opening` and `/portfolioprojects/...`. See "Nav links from
+sub-pages" above for the full fix.
+
 **`git commit` heredoc syntax fails in PowerShell**
 Cause: PowerShell 5.1 does not support bash heredocs (`<<'EOF'`).
 Fix: use Bash tool for git commits, not PowerShell.
@@ -485,9 +530,14 @@ Commits push to `main`. Netlify auto-deploys.
 1. **Card face editing** — front face content is final; blank cream back face added
    and deployed successfully in session 10. Scale increase (2.25→2.85) still unresolved/
    untested since session 9 — likely culprit for that session's breakage, not the back face.
-2. **Projects section** — NeuroSync and Posture Detection (in progress); smaller
-   projects (Smart Attendance, Ocean Sensor, Temp/Humidity) already have copy in `site.ts`.
-   Hold until asset placeholders below are resolved.
+2. **Builds section — add remaining projects** — Smart Home Hub shipped session 14 as the
+   first `projects` entry. NeuroSync and Posture Detection are next once their repos/demos
+   are ready; add each as a new object in the `projects` array in `site.ts` following the
+   Smart Home Hub shape (`slug`, `name`, `tagline`, `stack`, `repo`, `demo`, `overview`,
+   `features[]`, `scope`) — no component changes needed, the tile grid and `[slug].astro`
+   detail page both iterate the array. The smaller minor-projects (Smart Attendance, Ocean
+   Sensor, Temp/Humidity) stay in Field Work's `CardSwap`, not Builds — Builds is for the
+   larger, individually-documented projects.
 
 ---
 

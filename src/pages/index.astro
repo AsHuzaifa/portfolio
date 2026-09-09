@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import AboutSection from '../components/AboutSection.astro';
+import ProjectsSection from '../components/ProjectsSection.astro';
 import SkillsSection from '../components/SkillsSection.astro';
 import FieldWork from '../components/FieldWork.astro';
 import ContactSection from '../components/ContactSection.astro';
@@ -44,6 +45,9 @@ import { hero } from '../data/site';
     <!-- Origin / About -->
     <AboutSection />
 
+    <!-- Builds / Projects -->
+    <ProjectsSection />
+
     <!-- Signal / Skills -->
     <SkillsSection />
 
@@ -57,9 +61,10 @@ import { hero } from '../data/site';
 </Layout>
 
 <script>
-  import { animateHero, animateAbout, animateSkills, animateContact, initAccordions } from '../utils/animations';
+  import { animateHero, animateAbout, animateProjects, animateSkills, animateContact, initAccordions } from '../utils/animations';
   animateHero();
   animateAbout();
+  animateProjects();
   animateSkills();
   animateContact();
   initAccordions();

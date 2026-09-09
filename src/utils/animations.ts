@@ -68,6 +68,24 @@ export function animateAbout() {
   );
 }
 
+// [projects] scroll-triggered stagger - section label arrives first, then each
+// project tile fades up in sequence as the grid enters the viewport.
+export function animateProjects() {
+  const defaults = { ease: 'power3.out' };
+
+  gsap.fromTo('.projects-label',
+    { opacity: 0, y: 12 },
+    { opacity: 1, y: 0, duration: 0.6, ...defaults,
+      scrollTrigger: { trigger: '.projects-label', start: 'top 88%' } }
+  );
+
+  gsap.fromTo('.project-tile',
+    { opacity: 0, y: 32 },
+    { opacity: 1, y: 0, duration: 0.7, stagger: 0.11, ...defaults,
+      scrollTrigger: { trigger: '.projects-grid', start: 'top 80%' } }
+  );
+}
+
 // [contact] scroll-triggered reveal - label first, then each link row staggers in.
 export function animateContact() {
   const defaults = { ease: 'power3.out' };

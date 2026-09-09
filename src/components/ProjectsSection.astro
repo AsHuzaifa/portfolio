@@ -1,0 +1,54 @@
+---
+import { projects } from '../data/site';
+
+// BASE_URL doesn't reliably include a trailing slash, so it's normalized here.
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+---
+
+<section id="builds" class="px-8 md:px-20 lg:px-32 pt-24 pb-28">
+  <div class="max-w-[1200px] mx-auto">
+
+    <!-- Section entry: thin rule + label -->
+    <div class="mb-16 md:mb-20">
+      <hr class="border-t border-muted/20" />
+      <div class="flex justify-between items-baseline mt-4">
+        <p class="projects-label text-muted text-xs tracking-[0.2em] uppercase">Builds</p>
+        <span class="text-muted/25 text-xs tracking-[0.2em] font-body">02</span>
+      </div>
+    </div>
+
+    <!-- Project tiles -->
+    <div class="projects-grid grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+      {projects.map((project) => (
+        <a
+          href={`${base}projects/${project.slug}/`}
+          class="project-tile group block bg-surface/30 border border-muted/25 px-7 py-8 lg:px-9 lg:py-10
+                 hover:shadow-[0_0_28px_rgba(42,74,62,0.09)] transition-shadow duration-500"
+        >
+          <div class="flex items-baseline justify-between mb-5">
+            <p class="font-display font-light text-text text-xl md:text-2xl tracking-[-0.01em]">
+              {project.name}
+            </p>
+            <span class="text-muted/30 text-sm group-hover:text-accent-alt/60 group-hover:translate-x-0.5
+                         transition-all duration-300">
+              &#8599;
+            </span>
+          </div>
+
+          <p class="text-muted text-[0.85rem] leading-relaxed font-body font-light mb-6">
+            {project.tagline}
+          </p>
+
+          <div class="flex flex-wrap gap-x-3 gap-y-1.5">
+            {project.stack.map((tech) => (
+              <span class="text-[0.6rem] tracking-[0.1em] uppercase text-muted/45 font-body">
+                {tech}
+              </span>
+            ))}
+          </div>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</section>
