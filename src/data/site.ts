@@ -92,76 +92,6 @@ interface Project {
 
 export const projects: Project[] = [
   {
-    slug: 'smart-home-hub',
-    name: 'Smart Home Hub',
-    tagline: 'A drag-and-drop rules engine wired to a live 3D floorplan, with devices that actually react.',
-    stack: ['React', 'TypeScript', 'Vite', 'React Flow', 'React Three Fiber', 'Zustand', 'Tailwind CSS'],
-    repo: 'https://github.com/AsHuzaifa/smart-home-hub',
-    demo: 'https://smarthome-delta-ten.vercel.app',
-    image: '/assets/projects/smart-home-hub.png',
-    fluid: ['#D98A3F', '#8A3A12', '#233642'],
-    overview: "A client-side simulation of a smart home automation system: a drag-and-drop rules engine, built the way Node-RED handles logic, wired to a live 3D floorplan where simulated devices (lights, fans, an AC unit, doors, a thermostat, temperature and motion sensors) react in real time as rules fire. It also models device connectivity (signal, battery, disconnects) and a simulated command-security layer, both wired into the real rules engine instead of just sitting there for show.",
-    features: [
-      {
-        title: 'Devices',
-        detail: "A room-grouped control panel: toggle lights and fans, lock or open doors, adjust thermostats and temperature sensors, trigger motion. A device that's currently offline can't be commanded until it reconnects.",
-      },
-      {
-        title: 'Rules',
-        detail: 'A React Flow canvas for wiring up automations visually: drag Trigger, Condition, and Action nodes onto the canvas and connect them, e.g. "if living room temp > 25 and motion detected, turn on fan." Multiple conditions feeding one action combine with AND, and a validation banner flags unconnected nodes, missing selections, or a rule with no action.',
-      },
-      {
-        title: 'Network',
-        detail: "A simulated connectivity layer: every device has a signal strength, and battery-powered devices drain over time and can lose connection. Devices also drift and disconnect on their own to mimic real-world flakiness, and it's wired into the rules engine for real: a rule can't fire off a stale reading from an unreachable device, and it can't be manually commanded either.",
-      },
-      {
-        title: 'Security',
-        detail: 'Click any device in the 3D scene to open a panel explaining the simulated security model behind it (a fake per-device token, schema-validated commands), plus a one-click simulated replay-attack demo that shows the outcome inline and logs every check. Everything here is labeled as simulation: no real cryptography or authentication is involved.',
-      },
-    ],
-    scope: "This is a portfolio piece demonstrating a rules-engine and 3D-simulation architecture, not a production IoT platform. There's no real backend, no real hardware or MQTT integration, no real authentication, and no real cryptography; the security layer teaches the concepts through simulation rather than pretending to be the real thing.",
-    gallery: null,
-  },
-  {
-    slug: 'netsim',
-    name: 'NetSim',
-    tagline: 'A LoRaWAN network simulator wearing a Windows 98 desktop, real RF physics under a retro UI.',
-    stack: ['React 19', 'TypeScript', 'Vite', '98.css', 'Web Workers'],
-    repo: 'https://github.com/AsHuzaifa/netsim',
-    demo: 'https://netsim-seven.vercel.app',
-    image: '/assets/projects/netsim.png',
-    fluid: ['#FF3CAC', '#784BA0', '#2B86C5'],
-    overview: "A LoRaWAN-style constrained-device network simulator, dressed as a Windows 98 / Y2K desktop. It's a static site with zero backend: the entire simulation runs inside a Web Worker and talks to the interface over postMessage. Up to fifty battery-powered end devices talk to three gateways, with real RF and protocol behavior underneath the retro chrome: EU868-style duty-cycle enforcement, Adaptive Data Rate driven by simulated RSSI/SNR, the Semtech time-on-air formula for real per-spreading-factor airtime, collision modeling with a capture effect, confirmed-message retry alongside unconfirmed fire-and-forget loss, and per-radio-state energy draw depleting a finite battery.",
-    features: [
-      {
-        title: 'Network Topology',
-        detail: 'A live map of every device and gateway, with transmissions animated as they happen: blue for a transmit, green for a successful delivery, red for a collision. Click any device to open its inspector.',
-      },
-      {
-        title: 'Device Inspector',
-        detail: 'Per-device radio settings, battery level, and live stats, the same numbers actually driving the physics underneath.',
-      },
-      {
-        title: 'Airtime Monitor',
-        detail: 'Duty-cycle budget usage per device, tracked against the EU868-style 1% airtime cap that the simulation actually enforces.',
-      },
-      {
-        title: 'Battery Status',
-        detail: 'A drain-over-time chart and a lowest-battery ranking, reflecting real per-radio-state energy draw across sleep, receive, and transmit.',
-      },
-      {
-        title: 'Event Log',
-        detail: 'The raw simulation event stream: every transmit, delivery, collision, and ADR update, timestamped as it happens.',
-      },
-      {
-        title: 'Control Panel',
-        detail: 'Pause or resume the simulation, add and remove devices, kill a gateway, inject interference, run a stress test, and tune simulation parameters live.',
-      },
-    ],
-    scope: "This is a physics simulation, not a live radio network: there's no real hardware and no actual RF transmission, and the retro desktop shell runs entirely client-side in the browser. The value is in modeling the real constraints of a LoRaWAN deployment (duty cycle, adaptive data rate, collisions, battery) accurately enough to be useful for understanding them.",
-    gallery: null,
-  },
-  {
     slug: 'pulse',
     name: 'PULSE',
     tagline: 'A wearable glove that reads your vitals and adjusts the room to match your mood.',
@@ -208,6 +138,107 @@ export const projects: Project[] = [
         caption: 'Sensor layout: GSR sensor, MAX30102, 6-axis MPU6050, and the ESP32 powering it all.',
       },
     ],
+  },
+  {
+    slug: 'netsim',
+    name: 'NetSim',
+    tagline: 'A LoRaWAN network simulator wearing a Windows 98 desktop, real RF physics under a retro UI.',
+    stack: ['React 19', 'TypeScript', 'Vite', '98.css', 'Web Workers'],
+    repo: 'https://github.com/AsHuzaifa/netsim',
+    demo: 'https://netsim-seven.vercel.app',
+    image: '/assets/projects/netsim.png',
+    fluid: ['#FF3CAC', '#784BA0', '#2B86C5'],
+    overview: "A LoRaWAN-style constrained-device network simulator, dressed as a Windows 98 / Y2K desktop. It's a static site with zero backend: the entire simulation runs inside a Web Worker and talks to the interface over postMessage. Up to fifty battery-powered end devices talk to three gateways, with real RF and protocol behavior underneath the retro chrome: EU868-style duty-cycle enforcement, Adaptive Data Rate driven by simulated RSSI/SNR, the Semtech time-on-air formula for real per-spreading-factor airtime, collision modeling with a capture effect, confirmed-message retry alongside unconfirmed fire-and-forget loss, and per-radio-state energy draw depleting a finite battery.",
+    features: [
+      {
+        title: 'Network Topology',
+        detail: 'A live map of every device and gateway, with transmissions animated as they happen: blue for a transmit, green for a successful delivery, red for a collision. Click any device to open its inspector.',
+      },
+      {
+        title: 'Device Inspector',
+        detail: 'Per-device radio settings, battery level, and live stats, the same numbers actually driving the physics underneath.',
+      },
+      {
+        title: 'Airtime Monitor',
+        detail: 'Duty-cycle budget usage per device, tracked against the EU868-style 1% airtime cap that the simulation actually enforces.',
+      },
+      {
+        title: 'Battery Status',
+        detail: 'A drain-over-time chart and a lowest-battery ranking, reflecting real per-radio-state energy draw across sleep, receive, and transmit.',
+      },
+      {
+        title: 'Event Log',
+        detail: 'The raw simulation event stream: every transmit, delivery, collision, and ADR update, timestamped as it happens.',
+      },
+      {
+        title: 'Control Panel',
+        detail: 'Pause or resume the simulation, add and remove devices, kill a gateway, inject interference, run a stress test, and tune simulation parameters live.',
+      },
+    ],
+    scope: "This is a physics simulation, not a live radio network: there's no real hardware and no actual RF transmission, and the retro desktop shell runs entirely client-side in the browser. The value is in modeling the real constraints of a LoRaWAN deployment (duty cycle, adaptive data rate, collisions, battery) accurately enough to be useful for understanding them.",
+    gallery: null,
+  },
+  {
+    slug: 'smart-home-hub',
+    name: 'Smart Home Hub',
+    tagline: 'A drag-and-drop rules engine wired to a live 3D floorplan, with devices that actually react.',
+    stack: ['React', 'TypeScript', 'Vite', 'React Flow', 'React Three Fiber', 'Zustand', 'Tailwind CSS'],
+    repo: 'https://github.com/AsHuzaifa/smart-home-hub',
+    demo: 'https://smarthome-delta-ten.vercel.app',
+    image: '/assets/projects/smart-home-hub.png',
+    fluid: ['#D98A3F', '#8A3A12', '#233642'],
+    overview: "A client-side simulation of a smart home automation system: a drag-and-drop rules engine, built the way Node-RED handles logic, wired to a live 3D floorplan where simulated devices (lights, fans, an AC unit, doors, a thermostat, temperature and motion sensors) react in real time as rules fire. It also models device connectivity (signal, battery, disconnects) and a simulated command-security layer, both wired into the real rules engine instead of just sitting there for show.",
+    features: [
+      {
+        title: 'Devices',
+        detail: "A room-grouped control panel: toggle lights and fans, lock or open doors, adjust thermostats and temperature sensors, trigger motion. A device that's currently offline can't be commanded until it reconnects.",
+      },
+      {
+        title: 'Rules',
+        detail: 'A React Flow canvas for wiring up automations visually: drag Trigger, Condition, and Action nodes onto the canvas and connect them, e.g. "if living room temp > 25 and motion detected, turn on fan." Multiple conditions feeding one action combine with AND, and a validation banner flags unconnected nodes, missing selections, or a rule with no action.',
+      },
+      {
+        title: 'Network',
+        detail: "A simulated connectivity layer: every device has a signal strength, and battery-powered devices drain over time and can lose connection. Devices also drift and disconnect on their own to mimic real-world flakiness, and it's wired into the rules engine for real: a rule can't fire off a stale reading from an unreachable device, and it can't be manually commanded either.",
+      },
+      {
+        title: 'Security',
+        detail: 'Click any device in the 3D scene to open a panel explaining the simulated security model behind it (a fake per-device token, schema-validated commands), plus a one-click simulated replay-attack demo that shows the outcome inline and logs every check. Everything here is labeled as simulation: no real cryptography or authentication is involved.',
+      },
+    ],
+    scope: "This is a portfolio piece demonstrating a rules-engine and 3D-simulation architecture, not a production IoT platform. There's no real backend, no real hardware or MQTT integration, no real authentication, and no real cryptography; the security layer teaches the concepts through simulation rather than pretending to be the real thing.",
+    gallery: null,
+  },
+  {
+    slug: 'minor-works',
+    name: 'Minor Works',
+    tagline: 'Everything too small for its own repository, but too good to lose.',
+    stack: ['HTML', 'CSS', 'JavaScript (ES modules)', 'Canvas', 'SVG'],
+    repo: 'https://github.com/AsHuzaifa/minor-works',
+    demo: 'https://minor-works.vercel.app',
+    image: '/assets/projects/minor-works.png',
+    fluid: ['#F0F0E0', '#707070', '#0A0A0A'],
+    overview: "A small site holding the foundational, small-scale projects that led the way to the bigger ones: sensors, scripts, circuits, and the notes that came with them. Four entries, each with its own page covering the specs, how it works, and what it cost to learn. Built with plain HTML, CSS, and ES modules, no framework, no bundler, no dependencies. There are no image assets either: every visual is drawn on canvas from a seeded generator, and every chart is inline SVG.",
+    features: [
+      {
+        title: 'Temperature & Humidity Monitor (2023)',
+        detail: 'A DHT sensor and a display on an Arduino. The first build, and the one that taught the rest.',
+      },
+      {
+        title: 'Ocean Pollution Detection Sensor (2024)',
+        detail: 'A waterproof array lowered into water, returning pH and chemical readings live instead of weeks after a lab visit.',
+      },
+      {
+        title: 'Smart Attendance Register System (2024)',
+        detail: "Face recognition attendance with no hardware beyond a webcam. Built at Smart India Hackathon, top 20 of roughly 150 teams. Its dashboard is rebuilt here as a working demo: drag the match threshold and watch the register break in both directions.",
+      },
+      {
+        title: 'PIR & GSM Security Alarm (2024)',
+        detail: 'A passive infrared sensor and a SIM module that texts a phone when something moves. No WiFi, no app, no account.',
+      },
+    ],
+    scope: "These are small, foundational projects, not production systems: proof that a sensor works, that a script runs, that an idea holds up outside a lab. The Smart Attendance demo runs its face matching against a simulated room, not a live camera.",
+    gallery: null,
   },
 ];
 

@@ -19,7 +19,7 @@ const base = getBaseUrl();
     </div>
 
     <!-- Project tiles - fluid art background per project, glass panel holds title + tagline -->
-    <div class="projects-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+    <div class="projects-grid grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
       {projects.map((project, i) => (
         <a
           href={`${base}projects/${project.slug}/`}
