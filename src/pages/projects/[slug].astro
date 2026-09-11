@@ -96,6 +96,29 @@ const base = getBaseUrl();
         </div>
       </div>
 
+      <!-- Hardware gallery -->
+      {project.gallery && (
+        <div class="mb-14">
+          <p class="text-muted/50 text-[0.65rem] tracking-[0.2em] uppercase font-body mb-6">Hardware</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {project.gallery.map((photo) => (
+              <figure>
+                <img
+                  src={`${base}${photo.src.replace(/^\//, '')}`}
+                  alt={photo.caption ?? `${project.name} hardware`}
+                  class="w-full border border-muted/20"
+                />
+                {photo.caption && (
+                  <figcaption class="text-muted/60 text-[0.75rem] font-body font-light mt-2">
+                    {photo.caption}
+                  </figcaption>
+                )}
+              </figure>
+            ))}
+          </div>
+        </div>
+      )}
+
       <!-- Scope -->
       <div class="bg-surface/50 border border-muted/20 px-7 py-7">
         <p class="text-muted/50 text-[0.65rem] tracking-[0.2em] uppercase font-body mb-3">Scope</p>

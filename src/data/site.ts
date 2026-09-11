@@ -75,7 +75,22 @@ export const about = {
   ],
 };
 
-export const projects = [
+interface Project {
+  slug: string;
+  name: string;
+  tagline: string;
+  stack: string[];
+  repo: string;
+  demo: string | null;
+  image: string | null;
+  fluid: string[];
+  overview: string;
+  features: { title: string; detail: string }[];
+  scope: string;
+  gallery: { src: string; caption?: string }[] | null;
+}
+
+export const projects: Project[] = [
   {
     slug: 'smart-home-hub',
     name: 'Smart Home Hub',
@@ -105,6 +120,7 @@ export const projects = [
       },
     ],
     scope: "This is a portfolio piece demonstrating a rules-engine and 3D-simulation architecture, not a production IoT platform. There's no real backend, no real hardware or MQTT integration, no real authentication, and no real cryptography; the security layer teaches the concepts through simulation rather than pretending to be the real thing.",
+    gallery: null,
   },
   {
     slug: 'netsim',
@@ -143,6 +159,42 @@ export const projects = [
       },
     ],
     scope: "This is a physics simulation, not a live radio network: there's no real hardware and no actual RF transmission, and the retro desktop shell runs entirely client-side in the browser. The value is in modeling the real constraints of a LoRaWAN deployment (duty cycle, adaptive data rate, collisions, battery) accurately enough to be useful for understanding them.",
+    gallery: null,
+  },
+  {
+    slug: 'pulse',
+    name: 'PULSE',
+    tagline: 'A wearable glove that reads your vitals and adjusts the room to match your mood.',
+    stack: ['ESP32', 'GSR / MAX30102 / MPU6050', 'MQTT', 'Node.js', 'React', 'TypeScript', 'Vite'],
+    repo: 'https://github.com/AsHuzaifa/pulse',
+    demo: 'https://pulse-jet-two.vercel.app',
+    image: '/assets/projects/pulse.png',
+    fluid: ['#e8b04b', '#b48ce0', '#4fd1c5', '#0e1119'],
+    overview: "PULSE is a wearable glove built under the Samsung Innovation Campus program at Presidency University. It reads skin conductance, heart rate, blood oxygen, and motion, works out what state you're in, and adjusts the room around you: lighting colour and brightness, music and volume, and the AC. The pipeline behind it runs in four stages: a rolling mean to smooth the raw sensor noise, a 60-second calibration window so thresholds sit relative to your own baseline instead of a fixed number, a weighted Z-score into a 0-100 Arousal Index, and a hysteresis layer that keeps the mood label from flickering across a boundary. That last stage trades a little point-for-point accuracy (86% versus 79% with raw thresholding) for something more useful in practice: in a 20-run test with a signal parked right on a decision boundary, raw thresholding produced 65 spurious band changes a minute, the hysteresis layer produced zero.",
+    features: [
+      {
+        title: 'Sensors',
+        detail: 'GSR for skin conductance, a MAX30102 for heart rate and blood oxygen over I2C, and a 6-axis MPU6050 for motion, all on the glove and published over MQTT to a Node.js bridge.',
+      },
+      {
+        title: 'Classification pipeline',
+        detail: 'Four stages, smoothing, per-person calibration, a weighted Z-score arousal index, and a hysteresis state machine, turn three noisy signals into a mood label stable enough to actually drive a light switch.',
+      },
+      {
+        title: 'Five moods',
+        detail: 'Calm, focused, energized, stressed, and fatigued, each mapped to its own lighting colour, soundscape, volume level, and AC behaviour.',
+      },
+      {
+        title: 'Live and demo dashboard',
+        detail: "Opens in live mode automatically on localhost or a local network, where the glove's bridge might actually be, and in demo mode everywhere else, always labelled clearly so a demo reading is never mistaken for a live one.",
+      },
+      {
+        title: 'Guided breathing',
+        detail: 'A free mode where the room just follows whatever state you\'re in, plus a guided breathing exercise you can start straight from the dashboard.',
+      },
+    ],
+    scope: "This is a wellness prototype, not a medical device: nothing it displays is a clinical reading, a diagnosis, or an alarm, and the accuracy figures it cites come from a 30-session Monte Carlo simulation, not a human-subject study. Built with a team of four (Kevin Immanuel, Harshit W., and Sinan Ali alongside me) under the Samsung Innovation Campus program; the dashboard and classification pipeline here are mine.",
+    gallery: null,
   },
 ];
 

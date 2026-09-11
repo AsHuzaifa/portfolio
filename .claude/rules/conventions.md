@@ -1,5 +1,5 @@
 w# conventions.md — Portfolio Session Log
-Last updated: September 9, 2026 (session 14)
+Last updated: September 11, 2026 (session 15)
 
 Read this before doing anything. It restores full session context.
 
@@ -13,7 +13,7 @@ Read this before doing anything. It restores full session context.
 | About (`#origin`) | Complete — React islands integrated, copy approved, committed, live |
 | Skills (`#skills`) | Complete — 4 groups, confident/learning distinction, scroll-triggered stagger, translucent bg, bolder border |
 | Field Work | Complete — CardSwap left, "Attended" seminars list right; flex layout, responsive. Green Bengaluru volunteering block now closes this section (moved from Origin, session 11) |
-| Builds (`#builds`) | Complete for now (session 14) — new major-projects section, inserted between Origin and Skills. Tile grid (fluid-art backgrounds + glass panel, `aspect-[8/5]`) links to standalone `/projects/[slug]/` detail pages. Two entries shipped: Smart Home Hub, NetSim, each with a screenshot of its live deployment. Pushed to `main`, live on Netlify + GitHub Pages. More projects (NeuroSync, Posture Detection) to come as they're ready |
+| Builds (`#builds`) | In progress (session 15) — new major-projects section, inserted between Origin and Skills. Tile grid (fluid-art backgrounds + glass panel, `aspect-[8/5]`, now `lg:grid-cols-3`) links to standalone `/projects/[slug]/` detail pages. Three entries: Smart Home Hub, NetSim (both pushed live session 14), and PULSE (added session 15, working locally, hardware gallery photos pending, not yet pushed). NeuroSync and Posture Detection still to come |
 | Contact (`#reach`) | Complete — 4 links (GitHub, Email, Instructables, ORCID — LinkedIn removed session 11), scroll-triggered stagger |
 | Navigation (StaggeredMenu) | Complete — `StaggeredMenu.tsx` mounted in `Layout.astro`; slides in from right, 4 nav items |
 | GitHub Pages deployment | Complete — `astro.config.mjs` configured, Actions workflow at `.github/workflows/deploy.yml` |
@@ -38,7 +38,9 @@ d:\portfolio\
 │       ├── marble-bg.jpg            ← marble background JPEG (user-provided)
 │       └── projects/
 │           ├── smart-home-hub.png   ← screenshot of its live Vercel deployment (session 14)
-│           └── netsim.png           ← its own public/og-image.png, copied over (session 14)
+│           ├── netsim.png           ← its own public/og-image.png, copied over (session 14)
+│           ├── pulse.png            ← screenshot of its live Vercel deployment (session 15)
+│           └── (pulse hardware photos pending — see Open Placeholders)
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml               ← builds on push to main, deploys dist/ to gh-pages branch
@@ -218,18 +220,28 @@ Current exports (in file order): `nav`, `about`, `projects`, `contact`, `skills`
   bare `#id` — see "Nav links from sub-pages" below.
 - `hero` — label, name, bio
 - `about` — narrative, education, samsung (context/stat/subtext/courses), human, volunteering, minorProjects, seminars
-- `projects` — array of major-project entries (added session 14), each with `slug`, `name`,
-  `tagline`, `stack: string[]`, `repo`, `demo` (nullable), `image` (nullable, path under `public/`
-  starting with `/`), `fluid: string[]` (2–3 hex colors driving the tile's fluid-art background,
-  see "Builds tile design" below), `overview`, `features[]` (`title`, `detail`), `scope`. Consumed by
-  `ProjectsSection.astro` (tile grid — fluid art + glass panel, ignores `image`/`stack`) and `pages/projects/[slug].astro`
-  (detail page, one per array entry via `getStaticPaths` — renders `image` full-width above the
-  overview when present). Entries so far: Smart Home Hub (`image: '/assets/projects/smart-home-hub.png'`,
-  a Playwright screenshot of its live Vercel deployment — see below), NetSim
-  (`image: '/assets/projects/netsim.png'`, copied from the source repo's `og-image.png`).
-  `demo`/`image` were briefly `null` for Smart Home Hub before its live deployment was found;
-  kept the pattern of using `null` rather than omitting a key so array entries stay structurally
-  identical for TS's inferred union type.
+- `projects: Project[]` — array of major-project entries (added session 14). `Project` is now an
+  explicit interface (added session 15, in `site.ts` above the array): `slug`, `name`, `tagline`,
+  `stack: string[]`, `repo`, `demo: string | null`, `image: string | null` (path under `public/`
+  starting with `/`), `fluid: string[]` (2–4 hex colors driving the tile's fluid-art background,
+  see "Builds tile design" below), `overview`, `features: { title, detail }[]`, `scope`,
+  `gallery: { src: string; caption?: string }[] | null` (added session 15, see "PULSE project"
+  below). Consumed by `ProjectsSection.astro` (tile grid, fluid art + glass panel, ignores
+  `image`/`stack`/`gallery`) and `pages/projects/[slug].astro` (detail page, one per array entry
+  via `getStaticPaths`; renders `image` full-width above the overview, and `gallery` as a photo
+  grid between features and scope, both only when present).
+
+  **Why the explicit `Project` interface (session 15):** with every entry's `gallery` set to
+  `null` (none had real gallery data yet), TypeScript inferred the array's `gallery` type as
+  always-`null`, so `project.gallery && project.gallery.map(...)` in `[slug].astro` narrowed to
+  `never` and failed to typecheck. An explicit interface with `gallery: {...}[] | null` fixes the
+  inferred type regardless of what any single entry currently holds.
+
+  Entries so far: Smart Home Hub (`image` from a Playwright screenshot of its live Vercel
+  deployment), NetSim (`image` copied from the source repo's own `og-image.png`), PULSE
+  (`image` from a Playwright screenshot of its live Vercel deployment; `gallery` still `null`
+  pending hardware photos). `demo`/`image`/`gallery` use `null` rather than being omitted so
+  every entry stays structurally identical.
 - `skills` — `groups[]`, each with `label`, `number`, `rows[]`. Each row: `category?`, `items: string[]`, `learning?: boolean`, `note?: string`
 - `contact` — `links[]`, each with `label`, `handle`, `url`
 
@@ -280,13 +292,55 @@ widened to 62% once two blobs per color still left visible flat corners).
 Verified visually via Playwright screenshots against the running dev server
 (desktop, mobile, hover state) — see "Local screenshot verification" below.
 
-Tile grid is capped at `sm:grid-cols-2` (not 3) for now, with only two
-projects, a 3-column grid left a large empty gap on wide viewports. Bump to
-`lg:grid-cols-3` once a third project is added. Tile aspect started at
+Tile grid was `sm:grid-cols-2` while there were only two projects (a 3-column
+grid would've left a large empty gap); bumped to `lg:grid-cols-3` session 15
+once PULSE became the third entry. Tile aspect started at
 `aspect-[4/5]` (portrait, matching the reference's phone-like proportions) but
 that read as too tall in practice; cut to `aspect-[8/5]` (exactly half the
 height-to-width ratio) at user request. Still visually distinct from the rest
 of the site's tiles, just landscape instead of portrait now.
+
+### PULSE project (session 15)
+Third Builds entry. Sourced from `D:\pulse`'s `README.md` and `CONVENTIONS.md`
+(a team project under Samsung Innovation Campus at Presidency University; per
+`CONVENTIONS.md` §1, "the dashboard work in this repo is being driven by
+Mohammed Huzaifa"). `demo` (`https://pulse-jet-two.vercel.app`) and `repo`
+found the same way as NetSim and Smart Home Hub, via `gh repo view --json`.
+
+**Copy honesty on team credit:** PULSE was built by a 4-person team (Kevin
+Immanuel, Mohammed Huzaifa, Harshit W., Sinan Ali), unlike Smart Home Hub and
+NetSim which are solo. The `scope` field names the other three teammates and
+states plainly that the dashboard and classification pipeline are the parts
+that are Huzaifa's, rather than letting the first-person portfolio voice
+imply solo authorship of the whole project.
+
+**Colors sourced from documented design tokens, not sampled pixels.** Unlike
+Smart Home Hub's fluid palette (extracted by histogramming a screenshot,
+session 14), PULSE's `CONVENTIONS.md` §11 ("Colour architecture") documents
+exact hex values for a "mood glow" token set: `--glow-calm: #4fd1c5`,
+`--glow-focused: #e8b04b`, `--glow-energized: #b48ce0`, confirmed present in
+`dashboard/src/styles/tokens.css`. These are described in the source project's
+own docs as "v1's luminous originals," kept vivid on purpose after the
+in-app accent colors were desaturated slightly for accessibility contrast
+(WCAG-driven, documented in the same section). Used the glow tokens, not the
+accent tokens, since they're the more saturated/vivid set and this site's
+Builds tiles are meant to be vivid. Added the app's dark surface color
+(`#0e1119`) as a fourth fluid color so the tile's gaps read as the same
+near-black void the real dashboard uses behind its glowing mood orb, rather
+than blending into a flat 3-color gradient. `buildFluidBackground` in
+`fluidArt.ts` already generalized to N colors, so a 4-color entry needed no
+code changes.
+
+**Hardware gallery, still pending.** The user wants three photos of the
+physical glove (wiring, a battery-pack annotation, a sensor-labeled overview)
+included on the detail page. They were pasted directly into chat rather than
+given as file paths — the harness has no accessible filesystem path for a
+pasted image in this environment (checked: the only matching files in `%TEMP%`
+were small recompressed thumbnails, not source quality), so they couldn't be
+copied into `public/assets/projects/` directly. Asked the user to save them to
+disk (e.g. under `D:\pulse\`) instead. The `gallery` field and its rendering
+in `[slug].astro` are fully built and waiting on real paths — see Open
+Placeholders.
 
 ### Local screenshot verification (session 14)
 `conventions.md` previously noted local dev + tooling as unreliable for
@@ -652,20 +706,26 @@ Commits push to `main`. Netlify auto-deploys.
 1. **Card face editing** — front face content is final; blank cream back face added
    and deployed successfully in session 10. Scale increase (2.25→2.85) still unresolved/
    untested since session 9 — likely culprit for that session's breakage, not the back face.
-2. **Builds section — add remaining projects** — Smart Home Hub and NetSim shipped session 14
-   as the first two `projects` entries (NetSim sourced from `D:\NetSim`'s README + its GitHub repo
-   description/homepage URL for the live demo link; Smart Home Hub's image and tile palette both
-   pulled from its own live Vercel deployment). NeuroSync and Posture Detection are next once their
-   repos/demos are ready; add each as a new object in the `projects` array in `site.ts` following
-   the same shape (`slug`, `name`, `tagline`, `stack`, `repo`, `demo`, `image`, `fluid`, `overview`,
-   `features[]`, `scope`) — no component changes needed, the tile grid and `[slug].astro` detail
-   page both iterate the array. Bump `ProjectsSection.astro`'s grid from `sm:grid-cols-2` to
-   `lg:grid-cols-3` once a third project lands (see "Builds tile design"). The smaller
-   minor-projects (Smart Attendance, Ocean Sensor, Temp/Humidity) stay in Field Work's `CardSwap`,
-   not Builds — Builds is for the larger, individually-documented projects.
+2. **PULSE hardware gallery photos** — user has three photos of the physical glove to add
+   (wiring close-up, battery pack annotated "3x AA Batteries", sensor overview annotated
+   "GSR Sensor / MAX30102 / 6 axis MPU6050 / ESP32; powered by 3x AA batteries"). Pasted into
+   chat, not yet on disk anywhere Claude can reach — user asked to save them under `D:\pulse\`
+   (see "PULSE project" above for why). Once paths are given: copy to
+   `public/assets/projects/pulse-hardware-{1,2,3}.jpg` (or similar), set PULSE's `gallery` in
+   `site.ts` to `[{ src, caption }, ...]` (the `[slug].astro` rendering is already built and
+   waiting), then rebuild/screenshot-verify before pushing.
+3. **Builds section — add remaining projects** — Smart Home Hub, NetSim (session 14), and PULSE
+   (session 15) are in; NeuroSync and Posture Detection are next once their repos/demos are
+   ready. Add each as a new object in the `projects` array in `site.ts` following the `Project`
+   interface (`slug`, `name`, `tagline`, `stack`, `repo`, `demo`, `image`, `fluid`, `overview`,
+   `features[]`, `scope`, `gallery`) — no component changes needed, the tile grid and
+   `[slug].astro` detail page both iterate the array. The smaller minor-projects (Smart
+   Attendance, Ocean Sensor, Temp/Humidity) stay in Field Work's `CardSwap`, not Builds — Builds
+   is for the larger, individually-documented projects.
 
-All session 14 work (Builds section, fluid-art tiles, base-path fixes, copy cleanup) is pushed
-to `main` and live on both Netlify and GitHub Pages.
+Session 14's Builds work (Smart Home Hub, NetSim, fluid-art tiles, base-path fixes, copy cleanup)
+is pushed to `main` and live. Session 15's PULSE addition is local-only so far — user wants to
+finish the hardware gallery and make a few more changes locally before pushing everything together.
 
 ---
 
@@ -673,6 +733,7 @@ to `main` and live on both Netlify and GitHub Pages.
 
 | Item | Status |
 |---|---|
+| PULSE hardware gallery photos | User has 3 photos (glove wiring, battery pack, labeled sensor overview) pasted into chat, not yet saved to disk anywhere accessible — waiting on a file path under `D:\pulse\` |
 | NeuroSync: component list, repo link, demo | Missing — add to `personal.md` and `site.ts` when ready |
 | Posture Detection: Edge Impulse project link | Missing — add when ready |
 | Smart Attendance: stack details, screenshots from teammates | Missing |
