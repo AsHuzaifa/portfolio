@@ -194,7 +194,20 @@ export const projects: Project[] = [
       },
     ],
     scope: "This is a wellness prototype, not a medical device: nothing it displays is a clinical reading, a diagnosis, or an alarm, and the accuracy figures it cites come from a 30-session Monte Carlo simulation, not a human-subject study. Built with a team of four (Kevin Immanuel, Harshit W., and Sinan Ali alongside me) under the Samsung Innovation Campus program; the dashboard and classification pipeline here are mine.",
-    gallery: null,
+    gallery: [
+      {
+        src: '/assets/projects/pulse-hardware-1.jpg',
+        caption: 'The glove, wired: GSR pads on the index and middle fingers, MAX30102 on the ring finger, MPU6050 and ESP32 on the back of the hand.',
+      },
+      {
+        src: '/assets/projects/pulse-hardware-2.jpg',
+        caption: 'Power: 3x AA batteries, taped to the wrist.',
+      },
+      {
+        src: '/assets/projects/pulse-hardware-3.jpg',
+        caption: 'Sensor layout: GSR sensor, MAX30102, 6-axis MPU6050, and the ESP32 powering it all.',
+      },
+    ],
   },
 ];
 

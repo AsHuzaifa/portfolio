@@ -13,7 +13,7 @@ Read this before doing anything. It restores full session context.
 | About (`#origin`) | Complete — React islands integrated, copy approved, committed, live |
 | Skills (`#skills`) | Complete — 4 groups, confident/learning distinction, scroll-triggered stagger, translucent bg, bolder border |
 | Field Work | Complete — CardSwap left, "Attended" seminars list right; flex layout, responsive. Green Bengaluru volunteering block now closes this section (moved from Origin, session 11) |
-| Builds (`#builds`) | In progress (session 15) — new major-projects section, inserted between Origin and Skills. Tile grid (fluid-art backgrounds + glass panel, `aspect-[8/5]`, now `lg:grid-cols-3`) links to standalone `/projects/[slug]/` detail pages. Three entries: Smart Home Hub, NetSim (both pushed live session 14), and PULSE (added session 15, working locally, hardware gallery photos pending, not yet pushed). NeuroSync and Posture Detection still to come |
+| Builds (`#builds`) | Complete for now (session 15) — new major-projects section, inserted between Origin and Skills. Tile grid (fluid-art backgrounds + glass panel, `aspect-[8/5]`, `lg:grid-cols-3`) links to standalone `/projects/[slug]/` detail pages. Three entries: Smart Home Hub, NetSim (both pushed live session 14), and PULSE (added session 15, including its 3-photo hardware gallery, working locally, not yet pushed). NeuroSync and Posture Detection still to come |
 | Contact (`#reach`) | Complete — 4 links (GitHub, Email, Instructables, ORCID — LinkedIn removed session 11), scroll-triggered stagger |
 | Navigation (StaggeredMenu) | Complete — `StaggeredMenu.tsx` mounted in `Layout.astro`; slides in from right, 4 nav items |
 | GitHub Pages deployment | Complete — `astro.config.mjs` configured, Actions workflow at `.github/workflows/deploy.yml` |
@@ -331,16 +331,20 @@ than blending into a flat 3-color gradient. `buildFluidBackground` in
 `fluidArt.ts` already generalized to N colors, so a 4-color entry needed no
 code changes.
 
-**Hardware gallery, still pending.** The user wants three photos of the
-physical glove (wiring, a battery-pack annotation, a sensor-labeled overview)
-included on the detail page. They were pasted directly into chat rather than
-given as file paths — the harness has no accessible filesystem path for a
-pasted image in this environment (checked: the only matching files in `%TEMP%`
-were small recompressed thumbnails, not source quality), so they couldn't be
-copied into `public/assets/projects/` directly. Asked the user to save them to
-disk (e.g. under `D:\pulse\`) instead. The `gallery` field and its rendering
-in `[slug].astro` are fully built and waiting on real paths — see Open
-Placeholders.
+**Hardware gallery.** Three photos of the physical glove (wiring close-up,
+battery-pack annotation, sensor-labeled overview) went into the detail page.
+They were first pasted directly into chat, which didn't work: the harness has
+no accessible filesystem path for a pasted image in this environment (checked
+`%TEMP%` — the only matching files were small recompressed thumbnails, not
+source quality). Asked the user to save them to disk instead; they landed at
+`D:\pulse\hardware\` (one `.jpg.jpeg` camera photo, two PenUp-annotated
+`.png`s). Resized and re-encoded with `ffmpeg` before copying into
+`public/assets/projects/` (`pulse-hardware-{1,2,3}.jpg`, `scale=1600:-1`/
+`1200:-1` + `-q:v 4`): the source camera photo was 4.8 MB, more than either
+existing project screenshot, not worth serving at full size for a detail-page
+photo. `PULSE.gallery` in `site.ts` is `{ src, caption }[]`; `[slug].astro`
+renders it as a `sm:grid-cols-2` photo grid with an `<figcaption>` per image,
+between Features and Scope.
 
 ### Local screenshot verification (session 14)
 `conventions.md` previously noted local dev + tooling as unreliable for
@@ -706,15 +710,7 @@ Commits push to `main`. Netlify auto-deploys.
 1. **Card face editing** — front face content is final; blank cream back face added
    and deployed successfully in session 10. Scale increase (2.25→2.85) still unresolved/
    untested since session 9 — likely culprit for that session's breakage, not the back face.
-2. **PULSE hardware gallery photos** — user has three photos of the physical glove to add
-   (wiring close-up, battery pack annotated "3x AA Batteries", sensor overview annotated
-   "GSR Sensor / MAX30102 / 6 axis MPU6050 / ESP32; powered by 3x AA batteries"). Pasted into
-   chat, not yet on disk anywhere Claude can reach — user asked to save them under `D:\pulse\`
-   (see "PULSE project" above for why). Once paths are given: copy to
-   `public/assets/projects/pulse-hardware-{1,2,3}.jpg` (or similar), set PULSE's `gallery` in
-   `site.ts` to `[{ src, caption }, ...]` (the `[slug].astro` rendering is already built and
-   waiting), then rebuild/screenshot-verify before pushing.
-3. **Builds section — add remaining projects** — Smart Home Hub, NetSim (session 14), and PULSE
+2. **Builds section — add remaining projects** — Smart Home Hub, NetSim (session 14), and PULSE
    (session 15) are in; NeuroSync and Posture Detection are next once their repos/demos are
    ready. Add each as a new object in the `projects` array in `site.ts` following the `Project`
    interface (`slug`, `name`, `tagline`, `stack`, `repo`, `demo`, `image`, `fluid`, `overview`,
@@ -724,8 +720,9 @@ Commits push to `main`. Netlify auto-deploys.
    is for the larger, individually-documented projects.
 
 Session 14's Builds work (Smart Home Hub, NetSim, fluid-art tiles, base-path fixes, copy cleanup)
-is pushed to `main` and live. Session 15's PULSE addition is local-only so far — user wants to
-finish the hardware gallery and make a few more changes locally before pushing everything together.
+is pushed to `main` and live. Session 15's PULSE addition, including its hardware gallery, is
+local-only so far — user wants to make a few more changes locally before pushing everything
+together.
 
 ---
 
@@ -733,7 +730,6 @@ finish the hardware gallery and make a few more changes locally before pushing e
 
 | Item | Status |
 |---|---|
-| PULSE hardware gallery photos | User has 3 photos (glove wiring, battery pack, labeled sensor overview) pasted into chat, not yet saved to disk anywhere accessible — waiting on a file path under `D:\pulse\` |
 | NeuroSync: component list, repo link, demo | Missing — add to `personal.md` and `site.ts` when ready |
 | Posture Detection: Edge Impulse project link | Missing — add when ready |
 | Smart Attendance: stack details, screenshots from teammates | Missing |
