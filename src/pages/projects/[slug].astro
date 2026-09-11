@@ -68,6 +68,67 @@ const base = getBaseUrl();
         />
       )}
 
+      <!-- Hardware gallery - click-through carousel, one photo visible at a time -->
+      {project.gallery && (
+        <div class="mb-14">
+          <p class="text-muted/50 text-[0.65rem] tracking-[0.2em] uppercase font-body mb-6">Hardware</p>
+          <div
+            class="project-gallery"
+            data-gallery={JSON.stringify(
+              project.gallery.map((photo) => ({
+                ...photo,
+                src: `${base}${photo.src.replace(/^\//, '')}`,
+              }))
+            )}
+          >
+            <div class="relative border border-muted/20">
+              <img
+                data-gallery-img
+                src={`${base}${project.gallery[0].src.replace(/^\//, '')}`}
+                alt={project.gallery[0].caption ?? `${project.name} hardware`}
+                class="w-full block transition-opacity duration-150"
+              />
+              {project.gallery.length > 1 && (
+                <>
+                  <button
+                    data-gallery-prev
+                    aria-label="Previous photo"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full
+                           bg-black/40 hover:bg-black/60 text-white flex items-center justify-center
+                           transition-colors duration-200"
+                  >
+                    <svg width="8" height="14" viewBox="0 0 8 14" fill="none">
+                      <path d="M7 1L1 7L7 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                  <button
+                    data-gallery-next
+                    aria-label="Next photo"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full
+                           bg-black/40 hover:bg-black/60 text-white flex items-center justify-center
+                           transition-colors duration-200"
+                  >
+                    <svg width="8" height="14" viewBox="0 0 8 14" fill="none">
+                      <path d="M1 1L7 7L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                  <span
+                    data-gallery-counter
+                    class="absolute bottom-3 right-3 text-white/90 text-[0.7rem] font-body px-2 py-0.5
+                           rounded-full bg-black/40"
+                  >
+                    1 / {project.gallery.length}
+                  </span>
+                </>
+              )}
+            </div>
+            <p data-gallery-caption class="text-muted/60 text-[0.75rem] font-body font-light mt-3">
+              {project.gallery[0].caption}
+            </p>
+          </div>
+        </div>
+      )}
+
       <!-- Overview -->
       <p class="text-text text-base md:text-lg leading-[1.8] font-body font-light mb-14">
         {project.overview}
@@ -96,29 +157,6 @@ const base = getBaseUrl();
         </div>
       </div>
 
-      <!-- Hardware gallery -->
-      {project.gallery && (
-        <div class="mb-14">
-          <p class="text-muted/50 text-[0.65rem] tracking-[0.2em] uppercase font-body mb-6">Hardware</p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {project.gallery.map((photo) => (
-              <figure>
-                <img
-                  src={`${base}${photo.src.replace(/^\//, '')}`}
-                  alt={photo.caption ?? `${project.name} hardware`}
-                  class="w-full border border-muted/20"
-                />
-                {photo.caption && (
-                  <figcaption class="text-muted/60 text-[0.75rem] font-body font-light mt-2">
-                    {photo.caption}
-                  </figcaption>
-                )}
-              </figure>
-            ))}
-          </div>
-        </div>
-      )}
-
       <!-- Scope -->
       <div class="bg-surface/50 border border-muted/20 px-7 py-7">
         <p class="text-muted/50 text-[0.65rem] tracking-[0.2em] uppercase font-body mb-3">Scope</p>
@@ -128,3 +166,8 @@ const base = getBaseUrl();
     </div>
   </main>
 </Layout>
+
+<script>
+  import { initGalleryCarousels } from '../../utils/gallery';
+  initGalleryCarousels();
+</script>
