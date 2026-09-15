@@ -9,7 +9,7 @@ Read this before doing anything. It restores full session context.
 
 | Section | Status |
 |---|---|
-| Hero (`#opening`) | Complete — copy approved, committed, live |
+| Hero (`#opening`) | Complete — copy approved, committed, live. Resume envelope (`ResumeEnvelope.astro`, wrapped in `LiquidMetalFrame.tsx` for an animated chrome border) sits in-flow under the bio paragraph (session 16) |
 | About (`#origin`) | Complete — React islands integrated, copy approved, committed, live |
 | Skills (`#skills`) | Complete — 4 groups, confident/learning distinction, scroll-triggered stagger, translucent bg, bolder border |
 | Field Work | Complete — CardSwap left, "Attended" seminars list right; flex layout, responsive. Green Bengaluru volunteering block now closes this section (moved from Origin, session 11) |
@@ -36,6 +36,7 @@ d:\portfolio\
 ├── public/
 │   └── assets/
 │       ├── marble-bg.jpg            ← marble background JPEG (user-provided)
+│       ├── Mohammed_Huzaifa_Resume.pdf ← resume, copied from D:\resume\ (session 16), linked from ResumeEnvelope
 │       └── projects/
 │           ├── smart-home-hub.png   ← screenshot of its live Vercel deployment (session 14)
 │           ├── netsim.png           ← its own public/og-image.png, copied over (session 14)
@@ -56,7 +57,8 @@ d:\portfolio\
     │   ├── AboutSection.astro       ← Origin section; narrative, education, human, Samsung, volunteering
     │   ├── ProjectsSection.astro    ← Builds section (id="builds"), tile grid driven by projects export, links to /projects/[slug]/
     │   ├── ResearchPaperPocket.astro ← fixed edge tab (session 16), used on PULSE's detail page only, links to its paper PDF
-    │   ├── ResumeEnvelope.astro     ← deep green SVG envelope (session 16), centered below Reach in index.astro, links to resume PDF
+    │   ├── ResumeEnvelope.astro     ← deep green SVG envelope (session 16), in-flow in the hero under the bio, links to resume PDF
+    │   ├── LiquidMetalFrame.tsx     ← React island (session 16) — animated chrome border via @paper-design/shaders, wraps ResumeEnvelope
     │   ├── SkillsSection.astro      ← Skills section (id="skills"), driven by skills export in site.ts
     │   ├── FieldWork.astro          ← Field Work section; wraps CardSwap, driven by about.minorProjects
     │   ├── ContactSection.astro     ← Reach section, driven by contact export in site.ts
@@ -911,10 +913,11 @@ Commits push to `main`. Netlify auto-deploys.
    Attendance, Ocean Sensor, Temp/Humidity) stay in Field Work's `CardSwap`, not Builds — Builds
    is for the larger, individually-documented projects.
 
-Session 14's Builds work (Smart Home Hub, NetSim, fluid-art tiles, base-path fixes, copy cleanup)
-is pushed to `main` and live. Session 15's PULSE addition, including its hardware gallery, is
-local-only so far — user wants to make a few more changes locally before pushing everything
-together.
+Session 14's Builds work (Smart Home Hub, NetSim, fluid-art tiles, base-path fixes, copy cleanup),
+session 15's PULSE addition (including its hardware gallery) and Minor Works, and session 16's
+work (PULSE research paper pocket, the resume envelope, and its liquid-metal border) are all
+pushed to `main` as of commit `186c3e1` ("Add PULSE paper pocket and hero resume envelope with
+liquid metal border") — nothing local-only remains.
 
 ---
 
@@ -937,16 +940,17 @@ together.
 ## Package Versions
 
 ```
-astro:               ^7.0.3
-@astrojs/react:      ^6.0.0
-react:               ^19.2.7
-tailwindcss:         ^4.3.1   (via @tailwindcss/vite, NOT the Astro integration)
-gsap:                ^3.15.0
-three:               ^0.185.0
-@react-three/fiber:  ^9.6.1
-@react-three/drei:   ^10.7.7
-@react-three/rapier: ^2.2.0
-meshline:            ^3.3.1
+astro:                  ^7.0.3
+@astrojs/react:         ^6.0.0
+react:                  ^19.2.7
+tailwindcss:            ^4.3.1   (via @tailwindcss/vite, NOT the Astro integration)
+gsap:                   ^3.15.0
+three:                  ^0.185.0
+@react-three/fiber:     ^9.6.1
+@react-three/drei:      ^10.7.7
+@react-three/rapier:    ^2.2.0
+meshline:               ^3.3.1
+@paper-design/shaders:  ^0.0.80  (added session 16, LiquidMetalFrame.tsx)
 ```
 
 ---
