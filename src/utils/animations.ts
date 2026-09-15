@@ -149,3 +149,26 @@ export function initAccordions() {
     });
   });
 }
+
+// [research paper pocket] same width:'auto' idea as initAccordions' height
+// animation above, but sideways: the tab stays pinned to the edge and the
+// panel slides out to its left, like pulling a paper streamer out. Border
+// glow intensity is driven by the aria-expanded Tailwind variant in the
+// component itself, not by GSAP.
+export function initResearchPaperPocket() {
+  const toggle = document.querySelector<HTMLButtonElement>('[data-paper-toggle]');
+  const panel = document.querySelector<HTMLElement>('[data-paper-panel]');
+  if (!toggle || !panel) return;
+
+  toggle.addEventListener('click', () => {
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+    if (isOpen) {
+      gsap.to(panel, { width: 0, duration: 0.6, ease: 'power2.inOut' });
+      toggle.setAttribute('aria-expanded', 'false');
+    } else {
+      gsap.to(panel, { width: 'auto', duration: 0.6, ease: 'power2.inOut' });
+      toggle.setAttribute('aria-expanded', 'true');
+    }
+  });
+}

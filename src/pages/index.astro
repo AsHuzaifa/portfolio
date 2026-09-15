@@ -6,7 +6,11 @@ import SkillsSection from '../components/SkillsSection.astro';
 import FieldWork from '../components/FieldWork.astro';
 import ContactSection from '../components/ContactSection.astro';
 import LanyardCard from '../components/LanyardCard';
+import ResumeEnvelope from '../components/ResumeEnvelope.astro';
 import { hero } from '../data/site';
+import { getBaseUrl } from '../utils/basePath';
+
+const base = getBaseUrl();
 ---
 
 <Layout>
@@ -32,6 +36,10 @@ import { hero } from '../data/site';
         <p class="hero-bio text-muted text-lg md:text-xl leading-[1.7] max-w-lg font-body font-light">
           {hero.bio}
         </p>
+
+        <div class="mt-14">
+          <ResumeEnvelope href={`${base}assets/Mohammed_Huzaifa_Resume.pdf`} />
+        </div>
 
       </div>
 

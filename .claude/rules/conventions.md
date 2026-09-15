@@ -1,5 +1,5 @@
 w# conventions.md — Portfolio Session Log
-Last updated: September 11, 2026 (session 15)
+Last updated: September 15, 2026 (session 16)
 
 Read this before doing anything. It restores full session context.
 
@@ -13,7 +13,7 @@ Read this before doing anything. It restores full session context.
 | About (`#origin`) | Complete — React islands integrated, copy approved, committed, live |
 | Skills (`#skills`) | Complete — 4 groups, confident/learning distinction, scroll-triggered stagger, translucent bg, bolder border |
 | Field Work | Complete — CardSwap left, "Attended" seminars list right; flex layout, responsive. Green Bengaluru volunteering block now closes this section (moved from Origin, session 11) |
-| Builds (`#builds`) | Complete for now (session 15) — new major-projects section, inserted between Origin and Skills. Tile grid (fluid-art backgrounds + glass panel, `aspect-[8/5]`, `lg:grid-cols-3`) links to standalone `/projects/[slug]/` detail pages. Three entries: Smart Home Hub, NetSim (both pushed live session 14), and PULSE (added session 15, including its 3-photo hardware gallery, working locally, not yet pushed). NeuroSync and Posture Detection still to come |
+| Builds (`#builds`) | Complete for now (session 16) — new major-projects section, inserted between Origin and Skills. Tile grid (fluid-art backgrounds + glass panel, `aspect-[8/5]`, `lg:grid-cols-3`) links to standalone `/projects/[slug]/` detail pages. Four entries: Smart Home Hub, NetSim, PULSE, and Minor Works. PULSE's detail page also carries a fixed edge "pocket" linking to its research paper PDF (session 16). NeuroSync and Posture Detection still to come |
 | Contact (`#reach`) | Complete — 4 links (GitHub, Email, Instructables, ORCID — LinkedIn removed session 11), scroll-triggered stagger |
 | Navigation (StaggeredMenu) | Complete — `StaggeredMenu.tsx` mounted in `Layout.astro`; slides in from right, 4 nav items |
 | GitHub Pages deployment | Complete — `astro.config.mjs` configured, Actions workflow at `.github/workflows/deploy.yml` |
@@ -40,7 +40,7 @@ d:\portfolio\
 │           ├── smart-home-hub.png   ← screenshot of its live Vercel deployment (session 14)
 │           ├── netsim.png           ← its own public/og-image.png, copied over (session 14)
 │           ├── pulse.png            ← screenshot of its live Vercel deployment (session 15)
-│           └── (pulse hardware photos pending — see Open Placeholders)
+│           └── pulse-paper.pdf      ← PULSE research paper, copied from D:\pulse\paper\pulse_paper_final.pdf (session 16)
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml               ← builds on push to main, deploys dist/ to gh-pages branch
@@ -55,6 +55,8 @@ d:\portfolio\
     ├── components/
     │   ├── AboutSection.astro       ← Origin section; narrative, education, human, Samsung, volunteering
     │   ├── ProjectsSection.astro    ← Builds section (id="builds"), tile grid driven by projects export, links to /projects/[slug]/
+    │   ├── ResearchPaperPocket.astro ← fixed edge tab (session 16), used on PULSE's detail page only, links to its paper PDF
+    │   ├── ResumeEnvelope.astro     ← deep green SVG envelope (session 16), centered below Reach in index.astro, links to resume PDF
     │   ├── SkillsSection.astro      ← Skills section (id="skills"), driven by skills export in site.ts
     │   ├── FieldWork.astro          ← Field Work section; wraps CardSwap, driven by about.minorProjects
     │   ├── ContactSection.astro     ← Reach section, driven by contact export in site.ts
@@ -76,7 +78,7 @@ d:\portfolio\
     ├── styles/
     │   └── global.css               ← @theme tokens, base layer, marble background on html
     └── utils/
-        ├── animations.ts            ← animateHero, animateAbout, animateProjects, animateSkills, animateContact, initAccordions
+        ├── animations.ts            ← animateHero, animateAbout, animateProjects, animateSkills, animateContact, initAccordions, initResearchPaperPocket
         ├── fluidArt.ts              ← buildFluidBackground(colors, seed), used by ProjectsSection.astro tiles
         └── basePath.ts              ← getBaseUrl(), normalizes import.meta.env.BASE_URL; used anywhere an absolute path needs the GitHub Pages base prefix
 ```
@@ -226,10 +228,11 @@ Current exports (in file order): `nav`, `about`, `projects`, `contact`, `skills`
   starting with `/`), `fluid: string[]` (2–4 hex colors driving the tile's fluid-art background,
   see "Builds tile design" below), `overview`, `features: { title, detail }[]`, `scope`,
   `gallery: { src: string; caption?: string }[] | null` (added session 15, see "PULSE project"
-  below). Consumed by `ProjectsSection.astro` (tile grid, fluid art + glass panel, ignores
-  `image`/`stack`/`gallery`) and `pages/projects/[slug].astro` (detail page, one per array entry
-  via `getStaticPaths`; renders `image` full-width above the overview, and `gallery` as a photo
-  grid between features and scope, both only when present).
+  below), `paper: { src: string; label: string } | null` (added session 16, see "Research paper
+  pocket" below). Consumed by `ProjectsSection.astro` (tile grid, fluid art + glass panel, ignores
+  `image`/`stack`/`gallery`/`paper`) and `pages/projects/[slug].astro` (detail page, one per array
+  entry via `getStaticPaths`; renders `image` full-width above the overview, `gallery` as a photo
+  grid between features and scope, and `paper` as a fixed `ResearchPaperPocket`, all only when present).
 
   **Why the explicit `Project` interface (session 15):** with every entry's `gallery` set to
   `null` (none had real gallery data yet), TypeScript inferred the array's `gallery` type as
@@ -345,6 +348,195 @@ existing project screenshot, not worth serving at full size for a detail-page
 photo. `PULSE.gallery` in `site.ts` is `{ src, caption }[]`; `[slug].astro`
 renders it as a `sm:grid-cols-2` photo grid with an `<figcaption>` per image,
 between Features and Scope.
+
+### Research paper pocket (session 16)
+PULSE has an accompanying research paper (`D:\pulse\paper\pulse_paper_final.pdf`,
+9 pages), copied into `public/assets/projects/pulse-paper.pdf`. Rather than a plain
+link in the body copy, it's surfaced as a fixed tab on the right edge of the
+viewport, `ResearchPaperPocket.astro`, mounted only on `[slug].astro` when
+`project.paper` is set (only PULSE has one; every other entry's `paper` is `null`).
+
+First pass used a native `<details>`/`<summary>` disclosure with the tab mostly
+translated off-screen at rest. User feedback after seeing it: too tiny/barely
+visible, the tab looked disconnected ("hanging in the air") from the panel once
+opened, the reveal was too abrupt, and it needed a more visible glow. Root
+cause of the disconnect: `<details>`'s children default to block layout, and
+the auto-sized fixed-position container shrinks-to-fit its *widest* child (the
+panel), leaving the narrower `<summary>` tab left-aligned inside that wider
+box instead of pinned to the shared right edge — so the tab floated away from
+where the panel actually sat.
+
+Second pass fixed the disconnect by stacking tab-above-panel in one
+`flex flex-col items-end` container (GSAP `height: 'auto'`, matching
+`initAccordions`) and sized the tab up. That resolved the floating-tab bug,
+but the user's next note reframed the whole interaction: it should look like
+*pulling a paper streamer out of a party popper*, not a dropdown unfurling
+downward — the tab stays clipped to the edge, and the paper itself elongates
+out sideways from behind it.
+
+Final layout: tab and panel are side by side (`flex flex-row-reverse` on the
+fixed container), DOM order `[button, panel-div]` so the tab visually lands on
+the right (pinned to the edge) while the panel appears to its left — a plain
+`flex-row` would've put the DOM-first tab on the left instead, which is why
+`row-reverse` is there. The GSAP animation in `initResearchPaperPocket()`
+(`animations.ts`) now tweens `width` (`0 → 'auto'`, 0.6s `power2.inOut`)
+instead of `height`, so opening it reads as the panel being pulled out
+horizontally from behind the tab rather than dropping down. The inner content
+div keeps a fixed `w-72` so text doesn't reflow while the outer
+`overflow-hidden` wrapper's width animates — same clip-not-reflow trick as the
+height version, just rotated 90°.
+
+The tab (`<button data-paper-toggle>`) is always fully visible at rest — no
+peek state — sized up (`w-16 py-12`, `text-[0.82rem]`, full "Research Paper"
+label instead of just "Paper") with a persistent glowing green ring
+(`shadow-[0_0_0_1px_...,0_0_28px_8px_rgba(42,74,62,0.45)]`, intensifying on
+`hover:`/`aria-expanded:`) so it reads clearly against the cream background
+without needing interaction first. Hover only nudges it `-translate-x-2` as a
+small "come out a bit" hint; the actual open/close does the heavy lifting.
+The panel (`data-paper-panel`) sits directly to the tab's left with
+`border-r-0` so its border continues the tab's outline with no seam; its
+border/glow are `peer-aria-expanded:` conditional (via `peer` on the button,
+which must precede the panel in DOM order for the sibling selector to reach
+it) so a collapsed (`w-0`) panel doesn't leave a stray colored line poking out
+from under the tab.
+
+Last tweak: the hover "pop" was originally `hover:-translate-x-2`, which
+translated the whole tab left and away from the viewport edge, leaving a
+visible gap between the tab's right edge and the scrollbar/edge — reads as
+the tab detaching and floating rather than popping. Fixed by swapping it for
+`origin-right hover:scale-x-110`: scaling from a right-anchored transform
+origin grows the tab leftward only, so its right edge stays glued to the
+viewport edge at every point in the hover transition, no gap.
+
+### Resume envelope (session 16)
+First pass put a small cream envelope in the hero's left gutter (`hidden
+lg:block`, pure CSS `group-hover` flap-lift + rising "paper" reveal, no GSAP
+needed since there's no click-to-toggle state — the `<a target="_blank">`
+just opens the PDF directly). Superseded once the user shared a reference
+image: a deep green stationery mockup with botanical line art, asking for
+that exact look, moved to the very end of the page below Reach, centered.
+
+Couldn't reuse the reference image's artwork directly — it's a branded stock
+mockup (visible "PLANIS SPHERE" wordmark, notebook/business-card props), not
+something either of us has rights to embed. Matched its deep green exactly
+(`#1B2E24`, a one-off hex local to this component, not added to the sitewide
+`@theme` palette since nothing else uses it) and hand-built original
+botanical line art in the same spirit instead of copying pixels: two
+six-petal blossoms (`<use>`-free — six `<path>` copies of one petal curve,
+`rotate(0/60/120/180/240/300)` around a shared center) plus two stem
+curves, all `stroke="#F5F0E8"` at low opacity, `fill="none"`, matching the
+reference's thin-cream-line-on-dark-green aesthetic without reproducing its
+specific flowers.
+
+Also asked, separately, whether this should be flat/front-facing (matching
+the rest of the site) or tilted like the reference photo's mockup angle —
+picked flat, so `ResumeEnvelope.astro` is a single SVG at `viewBox="0 0 480
+240"` with no 3D transforms: a rounded rect body, an X of thin fold-seam
+lines (flap triangle from the top corners + side folds from the bottom
+corners, all converging on one point — this is the *back* of a sealed
+envelope, which is the conventional envelope-icon view and matches what the
+reference itself shows), and a `text-bg/60` "resume" label absolutely
+positioned at the bottom-right corner. Sized `w-full max-w-[460px]
+aspect-[2/1]`, no `lg:`-only breakpoint gate, so it scales at any viewport
+without special-casing mobile. Hover is a simple `-translate-y-1` lift with a
+drop-shadow, not the old flap-opening peel — no longer asked for once the
+piece became a static signature rather than a small interactive hero accent.
+
+Placement moved twice more after that: first centered below `<ContactSection
+/>` at the very end of the page, then back into the hero at the user's
+request, in-flow directly under the bio paragraph (`<div class="mt-14">`
+inside the hero's existing text column, right after `.hero-bio` in
+`index.astro`) rather than absolutely positioned — so it's left-aligned with
+the rest of the hero text and pushes later hero content down instead of
+overlapping it, and (unlike the very first hero attempt, which was `hidden
+lg:block` in the gutter) it's visible at every viewport since it now lives in
+the same normal-flow column as the name and bio, which already reflow fine
+on mobile.
+
+### Liquid metal envelope border (session 16)
+User asked for an animated chrome/liquid-metal border around the resume
+envelope, referencing a `@paper-design/shaders` React button component
+(21st.dev) that renders `liquidMetalFragmentShader` via `ShaderMount` into a
+canvas, then overlays opaque content on top leaving a thin rim uncovered so
+the shader reads as a border rather than a fill. Explicitly framed as a
+trial ("if I don't like it we'll get rid of it").
+
+New package: `@paper-design/shaders@^0.0.80` (no peer deps, `ShaderMount` is
+plain WebGL/JS, not React-specific). Its actual API differs slightly from
+the reference snippet — `dispose()` not `destroy()` — checked against the
+installed package's own `.d.ts` rather than trusting the snippet. It also
+auto-injects a `[data-paper-shader]` stylesheet that gives the mounted div
+`position: relative` and its canvas `position: absolute; inset: 0;
+border-radius: inherit; z-index: -1` automatically, so none of the manual
+canvas-sizing CSS the reference component injected by hand was needed here.
+
+`LiquidMetalFrame.tsx` (new, generic wrapper, not PULSE/envelope-specific)
+implements the border-via-occlusion technique directly: outer relative div,
+a shader-mounted div at `inset-0` with the requested `borderRadius`, and a
+second div inset by `borderWidth` (radius reduced to match) stacked on top
+in normal DOM order — later sibling wins the stacking without needing
+explicit z-index. `ResumeEnvelope.astro` now imports it and wraps its
+existing `<a>` (unchanged) as the frame's slotted children, passing
+`client:load` since the envelope sits in the hero and is visible on first
+paint. Kept as a separate wrapper specifically so the effect can be dropped
+by deleting the `<LiquidMetalFrame>` tags around the `<a>` without touching
+the envelope's own markup, per the "trial" framing above.
+
+First-look feedback: kept the effect, but wanted it thinner and slower.
+`LiquidMetalFrame`'s defaults changed `borderWidth` 4→2 and added a `speed`
+prop defaulting to `0.3` (was hardcoded `0.6`) — `ResumeEnvelope.astro`'s call
+site updated its explicit `borderWidth={4}` to `{2}` to match. `speed` isn't
+wired to anything dynamic yet (single call site, static value), so it's a
+plain prop rather than a `useEffect` dependency for now.
+
+Second round: thinner again (`borderWidth` 2→1.5) plus a color request — keep
+the silver base, but recolor the shimmer, which defaulted to a neutral
+rainbow (visible as yellow/blue/purple fringing) since neither `u_colorTint`
+nor `u_colorBack` were being set at all (GLSL uniforms default to zero, so
+`u_colorTint.a = 0` and the color-burn tint mix in `getColorChanges` was a
+no-op — the base metal stripes are hardcoded near-white/near-black in the
+shader source, and the rainbow comes entirely from `u_shiftRed`/`u_shiftBlue`
+phase-shifting the R/B channels' stripe pattern relative to G). Added
+`u_colorTint: [0.788, 0.29, 0.165, 0.55]` (terracotta `#C94A2A`, the site's
+existing accent color, at 0.55 alpha) to color-burn-tint the metal warm
+instead of neutral, and dropped `u_shiftBlue` from `0.22` to `0.1` (kept
+`u_shiftRed` closer to its original `0.22`, now `0.24`) since the blue
+channel's dispersion was the main source of the cool blue/purple fringe
+fighting the new warm tint. Net look: silver base, warm copper/terracotta
+shimmer instead of a generic rainbow — ties the effect back into the site's
+own accent color rather than an arbitrary hue. Untried alternative if this
+still doesn't feel right: tint toward `accent-alt` (deep green `#2A4A3E`)
+instead, for a tone-on-tone match with the envelope itself rather than a
+warm contrast.
+
+Third round: user reported the border reading visibly thicker on the right
+side than top/left/bottom. First two hypotheses tried and ruled out: (1) a
+right-shifted `u_offsetX: 0.1` inherited unchanged from the reference
+button's tuning (set for a near-square 142x46 pill, not our 2:1 rectangle) —
+zeroed both offsets, no change; (2) missing explicit `u_originX`/`u_originY`
+(GLSL uniforms default to 0 when unset, not the JS-side library default of
+0.5) — set both to `0.5`, still no change. Traced it into
+`vertex-shader.js`: the circle shape's UV (`v_objectUV`) is computed with a
+hardcoded `boxRatio = 1.` (`getBoxSize(1., ...)`, always square), independent
+of `u_originX`/`u_originY`/`u_offsetX`/`u_offsetY` — so none of those explain
+directional bias, and confirmed the shape math itself is left-right
+symmetric once offsets are centered. The actual cause is the fragment
+shader's flow simulation: `direction`/`dispersionRed`/`dispersionBlue` are
+built from diagonal terms (`diagBLtoTR`, `diagTLtoBR`) that are not
+mirror-symmetric under a left-right flip by design — it's meant to look like
+liquid flowing in one diagonal direction, not a static symmetric pattern, so
+perfect left/right symmetry was never really on the table at the original
+`u_angle: 45`.
+
+Fix was empirical rather than derived: tried `u_angle` at a few values and
+screenshotted each (`0`, `45`, `90`) across multiple animation frames since
+the imbalance could itself shift over time. `u_angle: 90` came out
+noticeably more even left/right/bottom across all sampled frames, so that's
+what shipped. Verification method worth reusing: screenshot the same
+element 2-3 times a second or so apart (the shader is continuously
+animating) before judging left/right balance from a single frame, since a
+single snapshot can catch the pattern mid-cycle looking lopsided in a way
+that doesn't hold up over the full loop.
 
 ### Local screenshot verification (session 14)
 `conventions.md` previously noted local dev + tooling as unreliable for

@@ -88,6 +88,7 @@ interface Project {
   features: { title: string; detail: string }[];
   scope: string;
   gallery: { src: string; caption?: string }[] | null;
+  paper: { src: string; label: string } | null;
 }
 
 export const projects: Project[] = [
@@ -138,6 +139,10 @@ export const projects: Project[] = [
         caption: 'Sensor layout: GSR sensor, MAX30102, 6-axis MPU6050, and the ESP32 powering it all.',
       },
     ],
+    paper: {
+      src: '/assets/projects/pulse-paper.pdf',
+      label: 'PULSE: A Real-Time Wearable Multi-Sensor Telemetry and Affective Computing Framework via MQTT-WebSocket Bridging',
+    },
   },
   {
     slug: 'netsim',
@@ -177,6 +182,7 @@ export const projects: Project[] = [
     ],
     scope: "This is a physics simulation, not a live radio network: there's no real hardware and no actual RF transmission, and the retro desktop shell runs entirely client-side in the browser. The value is in modeling the real constraints of a LoRaWAN deployment (duty cycle, adaptive data rate, collisions, battery) accurately enough to be useful for understanding them.",
     gallery: null,
+    paper: null,
   },
   {
     slug: 'smart-home-hub',
@@ -208,6 +214,7 @@ export const projects: Project[] = [
     ],
     scope: "This is a portfolio piece demonstrating a rules-engine and 3D-simulation architecture, not a production IoT platform. There's no real backend, no real hardware or MQTT integration, no real authentication, and no real cryptography; the security layer teaches the concepts through simulation rather than pretending to be the real thing.",
     gallery: null,
+    paper: null,
   },
   {
     slug: 'minor-works',
@@ -239,6 +246,7 @@ export const projects: Project[] = [
     ],
     scope: "These are small, foundational projects, not production systems: proof that a sensor works, that a script runs, that an idea holds up outside a lab. The Smart Attendance demo runs its face matching against a simulated room, not a live camera.",
     gallery: null,
+    paper: null,
   },
 ];
 

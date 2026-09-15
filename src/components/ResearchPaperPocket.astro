@@ -1,0 +1,71 @@
+---
+// Fixed edge tab linking to a project's research paper. The tab stays pinned
+// to the right edge; clicking it slides the panel out sideways from behind it
+// (GSAP width animation, initResearchPaperPocket in animations.ts) like
+// pulling a paper streamer out, rather than dropping a panel down below it.
+interface Props {
+  href: string;
+  label: string;
+}
+
+const { href, label } = Astro.props;
+---
+
+<div class="fixed right-0 top-1/2 -translate-y-1/2 z-40 flex flex-row-reverse">
+  <button
+    type="button"
+    data-paper-toggle
+    aria-expanded="false"
+    aria-controls="paper-panel"
+    class="peer flex items-center justify-center shrink-0
+           origin-right
+           w-16 py-12
+           bg-accent-alt text-bg
+           border-2 border-accent-alt
+           shadow-[0_0_0_1px_rgba(42,74,62,0.5),0_0_28px_8px_rgba(42,74,62,0.45)]
+           hover:scale-x-110
+           hover:shadow-[0_0_0_1px_rgba(42,74,62,0.65),0_0_38px_11px_rgba(42,74,62,0.6)]
+           aria-expanded:shadow-[0_0_0_1px_rgba(42,74,62,0.65),0_0_38px_11px_rgba(42,74,62,0.6)]
+           transition-[transform,box-shadow] duration-500 ease-out
+           cursor-pointer"
+  >
+    <span class="[writing-mode:vertical-rl] rotate-180 text-[0.82rem] tracking-[0.22em] uppercase font-body font-semibold whitespace-nowrap">
+      Research Paper
+    </span>
+  </button>
+
+  <div
+    id="paper-panel"
+    data-paper-panel
+    class="w-0 overflow-hidden
+           border-2 border-r-0 border-transparent rounded-l-2xl
+           bg-surface shadow-none
+           transition-[border-color,box-shadow] duration-300 ease-out
+           peer-aria-expanded:border-accent-alt
+           peer-aria-expanded:shadow-[0_0_0_1px_rgba(42,74,62,0.5),0_0_28px_8px_rgba(42,74,62,0.45)]"
+  >
+    <div class="w-72 h-full px-7 py-7 flex flex-col justify-center gap-4">
+      <p class="text-muted/50 text-[0.65rem] tracking-[0.2em] uppercase font-body">Research paper</p>
+      <p class="text-text text-[0.9rem] leading-snug font-body font-medium">{label}</p>
+      <div class="flex items-center gap-6 mt-1">
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-accent-alt text-xs font-body font-medium border-b border-accent-alt/40
+                 hover:border-accent-alt transition-colors duration-300"
+        >
+          Open &#8599;
+        </a>
+        <a
+          href={href}
+          download
+          class="text-muted text-xs font-body font-medium border-b border-muted/30
+                 hover:text-text hover:border-text/40 transition-colors duration-300"
+        >
+          Download
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
