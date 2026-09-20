@@ -1,0 +1,61 @@
+---
+interface StudyLevel {
+  label: string;
+  focus: string;
+  topics: string[];
+}
+
+interface Props {
+  id: string;
+  name: string;
+  tagline: string;
+  levels: StudyLevel[];
+}
+
+const { id, name, tagline, levels } = Astro.props;
+---
+
+<div class="border border-muted/25 bg-surface/30 transition-shadow duration-500
+            hover:shadow-[0_0_28px_rgba(42,74,62,0.09)]">
+
+  <button
+    class="w-full flex items-center justify-between gap-6 px-7 py-6 lg:px-8 lg:py-7 text-left group"
+    aria-expanded="false"
+    data-accordion-trigger={id}
+  >
+    <div>
+      <p class="text-text text-[0.98rem] font-body font-medium mb-1.5">{name}</p>
+      <p class="text-muted text-[0.78rem] font-body font-light leading-relaxed">{tagline}</p>
+    </div>
+    <svg
+      class="shrink-0 text-muted/50 group-hover:text-text transition-all duration-300"
+      width="12" height="12" viewBox="0 0 12 12" fill="none"
+    >
+      <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <div class="overflow-hidden" style="height: 0;" data-accordion-content={id}>
+    <div class="px-7 pb-7 lg:px-8 lg:pb-8 space-y-6">
+      {levels.map((level, i) => (
+        <div class={i > 0 ? 'pt-5 border-t border-muted/20' : ''}>
+          <div class="flex items-baseline gap-3 mb-2">
+            <span class="text-muted/70 text-[0.65rem] tracking-[0.2em] font-body">0{i + 1}</span>
+            <p class="text-[0.66rem] tracking-[0.2em] uppercase text-text/70 font-body font-medium">{level.label}</p>
+          </div>
+          <p class="text-text/75 text-[0.78rem] font-body font-light leading-relaxed mb-3 max-w-md">
+            {level.focus}
+          </p>
+          <div class="flex flex-wrap gap-1.5">
+            {level.topics.map((topic) => (
+              <span class="text-[0.68rem] text-text/80 font-body font-light bg-bg/60 border border-muted/35 px-2 py-1 leading-none">
+                {topic}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+</div>

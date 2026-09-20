@@ -1,6 +1,7 @@
 ---
 import { about } from '../data/site';
 import SamsungCard from './SamsungCard';
+import SelfStudy from './SelfStudy.astro';
 ---
 
 <section id="origin" class="px-8 md:px-20 lg:px-32 pt-24 pb-24 md:pb-28">
@@ -48,6 +49,10 @@ import SamsungCard from './SamsungCard';
       </div>
 
     </div>
+
+    <!-- Full-width: breaks out of the narrative/Samsung split so the course grid
+         below can use the whole section width instead of just the 7-col half. -->
+    <SelfStudy />
 
   </div>
 

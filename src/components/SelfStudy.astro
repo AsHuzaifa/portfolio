@@ -1,0 +1,23 @@
+---
+import { about } from '../data/site';
+import CourseDropdown from './CourseDropdown.astro';
+---
+
+<div class="about-selfstudy mt-16 md:mt-20 pt-10 border-t border-muted/15">
+  <p class="text-muted text-xs tracking-[0.2em] uppercase font-body mb-6">Self-study</p>
+
+  <p class="text-text text-xl md:text-2xl leading-[1.72] font-body font-light mb-10">
+    {about.selfStudy.intro}
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-6 items-start">
+    {about.selfStudy.courses.map((course) => (
+      <CourseDropdown
+        id={`study-${course.slug}`}
+        name={course.name}
+        tagline={course.tagline}
+        levels={course.levels}
+      />
+    ))}
+  </div>
+</div>

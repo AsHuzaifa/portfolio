@@ -42,6 +42,12 @@ export function animateAbout() {
       scrollTrigger: { trigger: '.about-narrative', start: 'top 82%' } }
   );
 
+  gsap.fromTo('.about-selfstudy',
+    { opacity: 0, y: 24 },
+    { opacity: 1, y: 0, duration: 0.7, ...defaults,
+      scrollTrigger: { trigger: '.about-selfstudy', start: 'top 85%' } }
+  );
+
   // Samsung credential card reveal
   gsap.fromTo('.about-samsung',
     { opacity: 0, y: 20 },

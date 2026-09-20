@@ -14,10 +14,116 @@ export const nav = {
   ],
 };
 
+interface StudyLevel {
+  label: string;
+  focus: string;
+  topics: string[];
+}
+
+interface StudyCourse {
+  slug: string;
+  name: string;
+  tagline: string;
+  levels: StudyLevel[];
+}
+
 export const about = {
   narrative: [
     "My trajectory into the Internet of Things was not self-initiated; however, the field proved captivating due to its equilibrium between the abstract digital and tangible physical worlds. IoT functions as a multidisciplinary sweet spot, contrasting with the hardware-centric nature of electrical engineering and the software-confined paradigm of machine learning. It affords a unique operational autonomy, allowing one to manifest complex devices entirely within the purview of a single, integrated domain.",
   ],
+  selfStudy: {
+    intro: "IoT alone doesn't cover it anymore. The device is the easy part compared to everything downstream of it: getting a fleet's data somewhere useful, running intelligence at the edge instead of shipping every reading to a server, and provisioning it all without doing it by hand. So I'm teaching myself the layers most IoT engineers leave to someone else, starting from the fundamentals of each and narrowing toward the problems specific to devices: fleets, OTA updates, constrained hardware, and edge compute.",
+    courses: [
+      {
+        slug: 'cloud-devops',
+        name: 'Cloud & DevOps for IoT',
+        tagline: "Where a device's data actually goes, and what keeps it running once ten thousand of them are talking at once.",
+        levels: [
+          {
+            label: 'Beginner',
+            focus: 'The vocabulary and tools, from a cold start.',
+            topics: ['Cloud Fundamentals', 'MQTT Deep Dive', 'IAM & Access Control', 'AWS IoT Core / Azure IoT Hub', 'Containers', 'CI/CD Basics', 'Infrastructure as Code Intro'],
+          },
+          {
+            label: 'Intermediate',
+            focus: 'Applied to a real fleet: provisioning, OTA, firmware pipelines.',
+            topics: ['Fleet Architecture Patterns', 'Device Provisioning at Scale', 'Docker for Constrained Devices', 'Kubernetes / K3s at the Edge', 'Firmware CI/CD', 'OTA Update Systems', 'Edge-to-Cloud Pipelines'],
+          },
+          {
+            label: 'Advanced',
+            focus: 'Operating a fleet at production scale: reliability, security, cost.',
+            topics: ['Multi-Region Fleet Architecture', 'Secure Firmware Supply Chain', 'Advanced OTA Strategies', 'Observability & SRE', 'Zero Trust Architecture', 'FinOps & Cost Governance'],
+          },
+        ],
+      },
+      {
+        slug: 'data-pipelines',
+        name: 'Time-Series Data & Streaming Pipelines',
+        tagline: 'Sensor data breaks relational databases. This is what replaces them.',
+        levels: [
+          {
+            label: 'Beginner',
+            focus: 'Why sensor data breaks the tools built for everything else.',
+            topics: ['Time-Series Databases', 'Edge-to-Cloud Pipeline Anatomy', 'MQTT & Message Brokers', 'Streaming vs. Batch Processing', 'Windowing & Aggregation', 'Delivery Guarantees', 'Dashboards'],
+          },
+          {
+            label: 'Intermediate',
+            focus: 'Building pipelines that survive a real device fleet.',
+            topics: ['InfluxDB & TimescaleDB', 'Ingestion Pipeline Design', 'Stream Processing Frameworks', 'Backpressure & Dead-Letter Queues', 'Idempotency & Deduplication', 'Continuous Aggregation', 'Grafana Dashboards'],
+          },
+          {
+            label: 'Advanced',
+            focus: 'Reliability across regions, tenants, and years of retention.',
+            topics: ['High-Cardinality Time-Series', 'Exactly-Once Semantics', 'Autoscaling Ingestion', 'Multi-Tenant & Multi-Region Design', 'Storage Economics at Scale', 'Pipeline Observability'],
+          },
+        ],
+      },
+      {
+        slug: 'edge-ai-tinyml',
+        name: 'Edge AI & TinyML',
+        tagline: 'Running inference on the device itself, in kilobytes, without a round trip to the cloud.',
+        levels: [
+          {
+            label: 'Beginner',
+            focus: 'Why inference moves onto the device, and what has to shrink to fit.',
+            topics: ['On-Device Inference', 'Neural Network Fundamentals', 'Quantization', 'Pruning & Distillation', 'Embedded ML Frameworks', 'Keyword Spotting', 'Anomaly Detection'],
+          },
+          {
+            label: 'Intermediate',
+            focus: 'Turning the theory into a model that actually ships.',
+            topics: ['Feature Extraction & Signal Processing', 'Model Sizing for KB-Scale Budgets', 'TensorFlow Lite Micro', 'CMSIS-NN & Vendor SDKs', 'Edge Impulse Workflow', 'Evaluating On-Device Models'],
+          },
+          {
+            label: 'Advanced',
+            focus: 'Operating fleets of models, not just one.',
+            topics: ['Hardware Accelerators (NPU / DSP)', 'Multi-Model & Cascade Architectures', 'MLOps for Fleets', 'OTA Model Updates & Rollback', 'Drift Monitoring', 'Power & Thermal Budgeting'],
+          },
+        ],
+      },
+      {
+        slug: 'infrastructure-as-code',
+        name: 'Infrastructure as Code',
+        tagline: 'Describing a fleet’s infrastructure instead of clicking it together by hand.',
+        levels: [
+          {
+            label: 'Beginner',
+            focus: 'Describing infrastructure instead of clicking it together.',
+            topics: ['Declarative Thinking & Drift', 'Terraform Providers & Resources', 'Terraform State', 'Provisioning a Cloud IoT Backend', 'Least-Privilege Access as Code', 'Ansible Basics'],
+          },
+          {
+            label: 'Intermediate',
+            focus: 'Applied to a real, multi-environment IoT backend.',
+            topics: ['Remote State & Locking', 'Reusable Modules', 'Multi-Environment Patterns', 'Secrets Management', 'Ansible Roles & Fleet Inventory', 'GitOps for Infrastructure', 'Drift Detection'],
+          },
+          {
+            label: 'Advanced',
+            focus: 'Running infrastructure for a fleet across regions.',
+            topics: ['IaC Architecture at Scale', 'Module Registries & Platform Engineering', 'Secrets & Identity Architecture', 'Policy as Code & Compliance', 'Disaster Recovery & Failover', 'Cost Governance'],
+          },
+        ],
+      },
+    ] as StudyCourse[],
+  },
   samsung: {
     context: 'Selected for Samsung Innovation Campus, 27 of 350 shortlisted',
     stat: '27 / 350',
