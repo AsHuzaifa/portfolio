@@ -1025,8 +1025,9 @@ self-study section: courses in cloud/DevOps, data pipelines, edge AI, and IaC") 
 what actually changed in those, since this file's design-decision write-ups above weren't updated
 for either at the time. Session 17 (this session) added the Certificates section, sourced its two
 brand logos directly from the certificate PDFs, swapped the Samsung Innovation Campus header from
-plain text to the Samsung oval logo, and is pushed to `main` as of commit `<pending — see git log>`
-— nothing local-only remains as of this write-up.
+plain text to the Samsung oval logo, and is pushed to `main` as of commit `82bdec5` ("Add
+Certificates section and swap Samsung header to its oval logo") — nothing local-only remains as of
+this write-up.
 
 ---
 
