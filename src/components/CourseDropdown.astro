@@ -23,7 +23,7 @@ const { id, name, tagline, levels } = Astro.props;
     aria-expanded="false"
     data-accordion-trigger={id}
   >
-    <div>
+    <div class="min-h-[5.6rem] flex flex-col justify-center">
       <p class="text-text text-[0.98rem] font-body font-medium mb-1.5">{name}</p>
       <p class="text-muted text-[0.78rem] font-body font-light leading-relaxed">{tagline}</p>
     </div>
