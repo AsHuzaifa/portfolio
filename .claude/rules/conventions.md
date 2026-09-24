@@ -1,5 +1,5 @@
 w# conventions.md — Portfolio Session Log
-Last updated: September 15, 2026 (session 16)
+Last updated: September 24, 2026 (session 17)
 
 Read this before doing anything. It restores full session context.
 
@@ -10,8 +10,9 @@ Read this before doing anything. It restores full session context.
 | Section | Status |
 |---|---|
 | Hero (`#opening`) | Complete — copy approved, committed, live. Resume envelope (`ResumeEnvelope.astro`, wrapped in `LiquidMetalFrame.tsx` for an animated chrome border) sits in-flow under the bio paragraph (session 16) |
-| About (`#origin`) | Complete — React islands integrated, copy approved, committed, live |
+| About (`#origin`) | Complete — React islands integrated, copy approved, committed, live. Samsung Innovation Campus credential card header now shows the actual Samsung oval logo (blue badge, white "SAMSUNG" lettering) instead of the plain text "Samsung Innovation Campus" (session 17) |
 | Skills (`#skills`) | Complete — 4 groups, confident/learning distinction, scroll-triggered stagger, translucent bg, bolder border |
+| Certificates (`#certificates`) | Complete (session 17) — two Forage certificates (BCG Data Science, Mastercard Cybersecurity), each card showing the issuing brand's own logo (extracted directly from the certificate PDF, not sourced externally) followed by highlight bullets pulled verbatim from Forage's own certificate description snippet, and a "View Certificate" link to the PDF. Sits between Skills and Field Work |
 | Field Work | Complete — CardSwap left, "Attended" seminars list right; flex layout, responsive. Green Bengaluru volunteering block now closes this section (moved from Origin, session 11) |
 | Builds (`#builds`) | Complete for now (session 16) — new major-projects section, inserted between Origin and Skills. Tile grid (fluid-art backgrounds + glass panel, `aspect-[8/5]`, `lg:grid-cols-3`) links to standalone `/projects/[slug]/` detail pages. Four entries: Smart Home Hub, NetSim, PULSE, and Minor Works. PULSE's detail page also carries a fixed edge "pocket" linking to its research paper PDF (session 16). NeuroSync and Posture Detection still to come |
 | Contact (`#reach`) | Complete — 4 links (GitHub, Email, Instructables, ORCID — LinkedIn removed session 11), scroll-triggered stagger |
@@ -37,11 +38,17 @@ d:\portfolio\
 │   └── assets/
 │       ├── marble-bg.jpg            ← marble background JPEG (user-provided)
 │       ├── Mohammed_Huzaifa_Resume.pdf ← resume, copied from D:\resume\ (session 16), linked from ResumeEnvelope
-│       └── projects/
-│           ├── smart-home-hub.png   ← screenshot of its live Vercel deployment (session 14)
-│           ├── netsim.png           ← its own public/og-image.png, copied over (session 14)
-│           ├── pulse.png            ← screenshot of its live Vercel deployment (session 15)
-│           └── pulse-paper.pdf      ← PULSE research paper, copied from D:\pulse\paper\pulse_paper_final.pdf (session 16)
+│       ├── samsung-logo.svg         ← Samsung oval badge mark, sourced from Wikimedia Commons (session 17)
+│       ├── projects/
+│       │   ├── smart-home-hub.png   ← screenshot of its live Vercel deployment (session 14)
+│       │   ├── netsim.png           ← its own public/og-image.png, copied over (session 14)
+│       │   ├── pulse.png            ← screenshot of its live Vercel deployment (session 15)
+│       │   └── pulse-paper.pdf      ← PULSE research paper, copied from D:\pulse\paper\pulse_paper_final.pdf (session 16)
+│       └── certificates/            ← Forage certificate PDFs + brand logos extracted from those same PDFs (session 17)
+│           ├── bcg-data-science.pdf
+│           ├── mastercard-cybersecurity-phishing.pdf
+│           ├── bcgx-logo.png        ← extracted from bcg-data-science.pdf's embedded image + soft mask
+│           └── mastercard-logo.png  ← extracted from mastercard-cybersecurity-phishing.pdf's embedded image + soft mask
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml               ← builds on push to main, deploys dist/ to gh-pages branch
@@ -60,6 +67,7 @@ d:\portfolio\
     │   ├── ResumeEnvelope.astro     ← deep green SVG envelope (session 16), in-flow in the hero under the bio, links to resume PDF
     │   ├── LiquidMetalFrame.tsx     ← React island (session 16) — animated chrome border via @paper-design/shaders, wraps ResumeEnvelope
     │   ├── SkillsSection.astro      ← Skills section (id="skills"), driven by skills export in site.ts
+    │   ├── CertificatesSection.astro ← Certificates section (id="certificates", session 17), driven by certificates export in site.ts
     │   ├── FieldWork.astro          ← Field Work section; wraps CardSwap, driven by about.minorProjects
     │   ├── ContactSection.astro     ← Reach section, driven by contact export in site.ts
     │   ├── StaggeredMenu.tsx        ← React island — slide-in nav, mounted fixed in Layout.astro
@@ -104,11 +112,44 @@ Two interactive About components, both React with `client:load`:
   cards `335 × 224px`, cursor-proximity sage green glow. Wrapper has
   `padding: 40px; margin: -40px; display: inline-block` (GLOW_PAD pattern) so
   box-shadow glow isn't clipped by parent overflow.
-- **SamsungCard** — "Samsung Innovation Campus" header is the visual anchor.
-  "27 / 350" at `1.15rem` supports rather than dominates. Per-course accordion
-  via React `useState`, CSS `max-height` transition (`0.28s ease`). Component
-  itself unchanged since session 10 — only its placement moved (see session 11
-  note below).
+- **SamsungCard** — header is the visual anchor: the Samsung oval logo
+  (session 17, see "Samsung Innovation Campus header logo" below) followed by
+  "Innovation Campus" text. "27 / 350" at `1.15rem` supports rather than
+  dominates. Per-course accordion via React `useState`, CSS `max-height`
+  transition (`0.28s ease`). Component was otherwise unchanged from session 10
+  through session 16 — only its placement moved (see session 11 note below) —
+  until session 17's header logo swap.
+
+### Samsung Innovation Campus header logo (session 17)
+The card header originally read the plain text "Samsung Innovation Campus".
+Replaced with the actual brand mark, imported as `getBaseUrl()`-prefixed
+`<img>` + a `<span>` for "Innovation Campus", both in one `flex items-center`
+row (mirrors the base-path pattern every other React-rendered asset in this
+project already uses, since `import.meta.env.BASE_URL` is available in any
+Vite-processed module, not just `.astro` files).
+
+First pass used the flat Samsung wordmark (`Samsung_wordmark.svg` from
+Wikimedia Commons) at `h-3`, confirmed genuine via its embedded
+`style="fill:#1428a0"` (the official Samsung blue) rather than assuming from
+the filename alone — a plain grep for `fill="..."` attributes missed it
+because the color is set via a `style` attribute, not a `fill` attribute.
+User asked for the classic oval/badge mark instead (the blue oval with white
+"SAMSUNG" lettering inside it, familiar from product packaging), swapped to
+`Samsung_old_logo_before_year_2015.svg` (also Wikimedia Commons, fill
+`#034ea2`, native aspect ~3:1 vs the wordmark's ~6.5:1) — same file path
+(`public/assets/samsung-logo.svg`), just replaced. Unlike the certificate
+logos below, there was no PDF/asset of the user's own to extract this from,
+so it was sourced from Wikimedia Commons (public-domain-status filing, with
+the standard trademark caveat noted on the file page itself).
+
+The oval reads badly at very small sizes (thin white lettering on a small
+blue field disappears below ~20px tall), so the logo was sized up to `h-6`
+(24px, versus the flat wordmark's `h-3`/12px) rather than kept small to match
+the original text size. Per user's explicit direction ("if the size of the
+logo can't be squished and made tinier, np, just increase the text size of
+'innovation campus' to match it"), the adjacent text was bumped instead of
+the logo shrunk: `text-[0.62rem] tracking-[0.22em]` → `text-[0.8rem]
+tracking-[0.14em]`, so the two read as comparable visual weight side by side.
 
 ### Samsung card relocation (session 11, revised session 12)
 Session 11 pulled `SamsungCard` out of Origin's 12-col grid into a standalone
@@ -197,15 +238,19 @@ request for clarity.
 - `#origin`  — About section
 - `#builds`  — Projects section (added session 14)
 - `#skills`  — Skills section (renamed from `#signal` in session 6)
+- `#certificates` — Certificates section (added session 17)
 - `#reach`   — Contact section
 
-Field Work has no `id` — it is a visual block, not a nav target. Builds does have
-an `id` and a nav entry — unlike Field Work's minor/attended items, it's a primary
-content section with its own dedicated sub-pages.
+Field Work has no `id` — it is a visual block, not a nav target. Builds and
+Certificates do have an `id` and a nav entry — unlike Field Work's minor/attended
+items, they're primary content sections (Builds has its own dedicated sub-pages;
+Certificates is a real, individually-meaningful section rather than a supporting
+block).
 
 Section number badges (top-right of each section header) reflect page order and
-were bumped when Builds was inserted: Origin `01`, Builds `02`, Skills `03`,
-Reach `04`.
+were bumped when Builds was inserted (session 14) and again when Certificates was
+inserted between Skills and Field Work (session 17): Origin `01`, Builds `02`,
+Skills `03`, Certificates `04`, Reach `05`.
 
 Convention: section `id` is thematic where possible, functional if clearer.
 Visible label in the section header matches the ID.
@@ -248,7 +293,63 @@ Current exports (in file order): `nav`, `about`, `projects`, `contact`, `skills`
   pending hardware photos). `demo`/`image`/`gallery` use `null` rather than being omitted so
   every entry stays structurally identical.
 - `skills` — `groups[]`, each with `label`, `number`, `rows[]`. Each row: `category?`, `items: string[]`, `learning?: boolean`, `note?: string`
+- `certificates: Certificate[]` — array of Forage certificate entries (added session 17).
+  `Certificate` interface (in `site.ts` above the array): `slug`, `name`, `logo: { src: string; alt:
+  string }`, `date`, `pdf` (path under `public/`), `highlights: string[]`. Consumed by
+  `CertificatesSection.astro`. See "Certificates section" below for how the content and logos were
+  sourced.
 - `contact` — `links[]`, each with `label`, `handle`, `url`
+
+### Certificates section (session 17)
+Added between Skills and Field Work, `id="certificates"`, styled to match Skills'
+card treatment (`bg-surface/30 border border-muted/25`, sage hover glow). Two
+entries so far: BCG Data Science Job Simulation and Mastercard Cybersecurity
+Virtual Experience, both via Forage, sourced from `D:\Forage\Certificates\`
+(two subfolders, each holding the certificate PDF plus a `Snippet.txt`; a
+third `Course Material` subfolder in each was explicitly out of scope and
+ignored). `highlights` in `site.ts` are the `Snippet.txt` bullet lines verbatim
+(first two lines of each snippet, the program title and date, aren't reused —
+`name` and `date` are set separately, and the date is the exact date string
+from the snippet).
+
+**Brand logos, not "Forage x Brand" text.** First pass rendered a plain
+`"Forage x BCG X"` / `"Forage x Mastercard"` text line at the top of each
+card; user asked for the actual brand logos instead. Rather than sourcing
+external brand-page assets (ambiguous rights, inconsistent crops/versions),
+extracted the logos directly from the certificate PDFs themselves via
+PyMuPDF (`doc.extract_image(xref)`, not `Pixmap.save()` — the latter drops
+the image's separate SMask/alpha object, which is how the logos actually sit
+on a transparent background over the certificate's own white field; composited
+the RGB image with its SMask as a PIL alpha channel by hand). This is the
+exact logo Forage/BCG/Mastercard put on the user's own certificate, not a
+scraped or reconstructed brand asset. Saved as `bcgx-logo.png` (593×157) and
+`mastercard-logo.png` (322×250) under `public/assets/certificates/`.
+PyMuPDF was used ad hoc (the installed environment happened to have it), not
+added as a project dependency — same "verify locally without adding a
+permanent dependency" pattern as the Playwright scratch-install convention
+below.
+
+**Sizing — fixed box, not fixed height.** The two logos have very different
+native aspect ratios: BCG's is a wide landscape wordmark+icon lockup (~3.78:1),
+Mastercard's is a taller icon-over-wordmark stack (~1.29:1). An initial
+`h-9 w-auto` (fixed height, natural width) let each logo's own aspect ratio
+drive its rendered width, so BCG came out ~136px wide against Mastercard's
+~46px, wildly mismatched. Fixed by giving both a shared fixed bounding box
+(`h-10 w-24`, i.e. 96×40px) with `object-contain object-left`: BCG becomes
+width-constrained (full 96px wide, letterboxed to ~25px tall) and Mastercard
+becomes height-constrained (full 40px tall, pillarboxed to ~52px wide) — same
+footprint, aspect ratio preserved in both, no distortion.
+
+Mastercard's card `name` copy briefly included a `(Phishing)` suffix
+("Mastercard Cybersecurity Virtual Experience (Phishing)") since that's the
+specific Forage sub-track completed; dropped per user request (session 17) —
+now just "Mastercard Cybersecurity Virtual Experience".
+
+Nav gained a "Certificates" entry (between Skills and Reach) since, like
+Builds, this is a primary section worth a direct nav target, unlike Field
+Work's supporting minor-projects block. `animateCertificates()` was added to
+`animations.ts`, mirroring `animateSkills()` exactly (label fade-in, then
+`.certificate-card` stagger against `.certificates-grid`).
 
 ### Builds tile design — fluid art + glass panel (session 14)
 User-directed departure from the site's normal flat/bordered tile treatment
@@ -630,7 +731,9 @@ transitions. Email uses `mailto:`, all others open `_blank`.
 - Text toggle "Menu ↔ Close": two static spans always in DOM (`TEXT_ITEMS = ['Menu', 'Close'] as const`);
   `animateText(true)` tweens `yPercent: -50` (shows Close), `animateText(false)` tweens back to 0 (shows Menu).
   No React state updates — avoids DOM/GSAP race condition where `setTextLines()` re-render conflicted with in-flight tweens.
-- Items driven by `nav` export in `site.ts`; 4 items: Opening, Origin, Skills, Reach
+- Items driven by `nav` export in `site.ts`; 6 items: Opening, Origin, Builds, Skills,
+  Certificates, Reach (this list had drifted out of date — Builds was added session 14,
+  Certificates session 17 — corrected here session 17)
 
 ### Lanyard / ID Card — hero right column
 `src/components/LanyardCard.tsx` + `src/components/Lanyard.tsx` — React island pair mounted `client:load` in `index.astro`.
@@ -915,9 +1018,15 @@ Commits push to `main`. Netlify auto-deploys.
 
 Session 14's Builds work (Smart Home Hub, NetSim, fluid-art tiles, base-path fixes, copy cleanup),
 session 15's PULSE addition (including its hardware gallery) and Minor Works, and session 16's
-work (PULSE research paper pocket, the resume envelope, and its liquid-metal border) are all
-pushed to `main` as of commit `186c3e1` ("Add PULSE paper pocket and hero resume envelope with
-liquid metal border") — nothing local-only remains.
+work (PULSE research paper pocket, the resume envelope, and its liquid-metal border) landed as of
+commit `186c3e1`. Two further commits followed outside a documented session close-out: `65f42dd`
+("Redesign resume envelope: lotus photo panel, drop liquid metal border") and `1e24fc8` ("Add
+self-study section: courses in cloud/DevOps, data pipelines, edge AI, and IaC") — see git log for
+what actually changed in those, since this file's design-decision write-ups above weren't updated
+for either at the time. Session 17 (this session) added the Certificates section, sourced its two
+brand logos directly from the certificate PDFs, swapped the Samsung Innovation Campus header from
+plain text to the Samsung oval logo, and is pushed to `main` as of commit `<pending — see git log>`
+— nothing local-only remains as of this write-up.
 
 ---
 

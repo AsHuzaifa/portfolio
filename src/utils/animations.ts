@@ -127,6 +127,24 @@ export function animateSkills() {
   );
 }
 
+// [certificates] scroll-triggered stagger - section label arrives first, then each
+// certificate card fades up in sequence as the grid enters the viewport.
+export function animateCertificates() {
+  const defaults = { ease: 'power3.out' };
+
+  gsap.fromTo('.certificates-label',
+    { opacity: 0, y: 12 },
+    { opacity: 1, y: 0, duration: 0.6, ...defaults,
+      scrollTrigger: { trigger: '.certificates-label', start: 'top 88%' } }
+  );
+
+  gsap.fromTo('.certificate-card',
+    { opacity: 0, y: 32 },
+    { opacity: 1, y: 0, duration: 0.7, stagger: 0.11, ...defaults,
+      scrollTrigger: { trigger: '.certificates-grid', start: 'top 80%' } }
+  );
+}
+
 // [accordions] smooth height animation on any [data-accordion-trigger] button.
 // GSAP height:'auto' measures and animates to the content's natural height.
 // Chevron inside the button rotates 180deg open, returns to 0 closed.

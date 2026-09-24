@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import AboutSection from '../components/AboutSection.astro';
 import ProjectsSection from '../components/ProjectsSection.astro';
 import SkillsSection from '../components/SkillsSection.astro';
+import CertificatesSection from '../components/CertificatesSection.astro';
 import FieldWork from '../components/FieldWork.astro';
 import ContactSection from '../components/ContactSection.astro';
 import LanyardCard from '../components/LanyardCard';
@@ -59,6 +60,9 @@ const base = getBaseUrl();
     <!-- Signal / Skills -->
     <SkillsSection />
 
+    <!-- Certificates -->
+    <CertificatesSection />
+
     <!-- Field work -->
     <FieldWork />
 
@@ -69,11 +73,12 @@ const base = getBaseUrl();
 </Layout>
 
 <script>
-  import { animateHero, animateAbout, animateProjects, animateSkills, animateContact, initAccordions } from '../utils/animations';
+  import { animateHero, animateAbout, animateProjects, animateSkills, animateCertificates, animateContact, initAccordions } from '../utils/animations';
   animateHero();
   animateAbout();
   animateProjects();
   animateSkills();
+  animateCertificates();
   animateContact();
   initAccordions();
 </script>

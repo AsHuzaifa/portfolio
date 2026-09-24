@@ -10,6 +10,7 @@ export const nav = {
     { label: 'Origin',  link: `${base}#origin`,  ariaLabel: 'Go to about section' },
     { label: 'Builds',  link: `${base}#builds`,  ariaLabel: 'Go to projects section' },
     { label: 'Skills',  link: `${base}#skills`,  ariaLabel: 'Go to skills section' },
+    { label: 'Certificates', link: `${base}#certificates`, ariaLabel: 'Go to certificates section' },
     { label: 'Reach',   link: `${base}#reach`,   ariaLabel: 'Go to contact section' },
   ],
 };
@@ -404,6 +405,43 @@ export const skills = {
     },
   ],
 };
+
+interface Certificate {
+  slug: string;
+  name: string;
+  logo: { src: string; alt: string };
+  date: string;
+  pdf: string;
+  highlights: string[];
+}
+
+export const certificates: Certificate[] = [
+  {
+    slug: 'bcg-data-science',
+    name: 'BCG Data Science Job Simulation',
+    logo: { src: '/assets/certificates/bcgx-logo.png', alt: 'BCG X' },
+    date: 'September 22, 2026',
+    pdf: '/assets/certificates/bcg-data-science.pdf',
+    highlights: [
+      'Completed a customer churn analysis simulation for XYZ Analytics, demonstrating advanced data analytics skills, identifying essential client data and outlining a strategic investigation approach.',
+      'Conducted efficient data analysis using Python, including Pandas and NumPy. Employed data visualization techniques for insightful trend interpretation.',
+      'Completed the engineering and optimization of a random forest model, achieving an 50% recall rate in predicting customer churn.',
+      'Completed a concise executive summary for the team, delivering actionable insights for informed decision-making based on the analysis.',
+    ],
+  },
+  {
+    slug: 'mastercard-cybersecurity-phishing',
+    name: 'Mastercard Cybersecurity Virtual Experience',
+    logo: { src: '/assets/certificates/mastercard-logo.png', alt: 'Mastercard' },
+    date: 'September 21, 2026',
+    pdf: '/assets/certificates/mastercard-cybersecurity-phishing.pdf',
+    highlights: [
+      "Completed a job simulation where I served as an analyst on Mastercard's Security Awareness Team.",
+      'Helped identify and report security threats such as phishing.',
+      'Analyzed and identified which areas of the business needed more robust security training and implemented training courses and procedures for those teams.',
+    ],
+  },
+];
 
 export const hero = {
   label: 'IoT Engineer',

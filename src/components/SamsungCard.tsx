@@ -4,6 +4,9 @@
 // Cursor-proximity glow on the card border (sage green).
 
 import { useState, useEffect, useRef } from 'react';
+import { getBaseUrl } from '../utils/basePath';
+
+const base = getBaseUrl();
 
 interface Course {
   title: string;
@@ -79,9 +82,12 @@ export default function SamsungCard({
       className="bg-bg border-l-2 border-accent border border-accent-alt/10 rounded-sm px-6 py-6"
     >
       {/* Header - dominant anchor of the card */}
-      <p className="text-text/80 text-[0.62rem] font-body tracking-[0.22em] uppercase mb-1 leading-tight font-medium">
-        Samsung Innovation Campus
-      </p>
+      <div className="flex items-center gap-2.5 mb-1">
+        <img src={`${base}assets/samsung-logo.svg`} alt="Samsung" className="h-6 w-auto" />
+        <span className="text-text/80 text-[0.8rem] font-body tracking-[0.14em] uppercase leading-tight font-medium">
+          Innovation Campus
+        </span>
+      </div>
 
       {/* Stat - supporting, not dominant */}
       <p
