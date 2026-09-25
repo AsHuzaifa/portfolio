@@ -20,7 +20,7 @@ const base = getBaseUrl();
     <!-- Certificate cards -->
     <div class="certificates-grid grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
       {certificates.map((cert) => (
-        <div class="certificate-card bg-surface/30 border border-muted/25 px-7 py-8 lg:px-9 lg:py-10
+        <div class="certificate-card flex flex-col h-full bg-surface/30 border border-muted/25 px-7 py-8 lg:px-9 lg:py-10
                     hover:shadow-[0_0_28px_rgba(42,74,62,0.09)] transition-shadow duration-500">
 
           <!-- Brand logo + date -->
@@ -44,12 +44,12 @@ const base = getBaseUrl();
             ))}
           </ul>
 
-          <!-- View certificate -->
+          <!-- View certificate: pinned bottom-left regardless of description length -->
           <a
             href={`${base}${cert.pdf.slice(1)}`}
             target="_blank"
             rel="noopener noreferrer"
-            class="group inline-flex items-baseline gap-2 text-[0.68rem] tracking-[0.15em] uppercase
+            class="group mt-auto inline-flex items-baseline gap-2 self-start text-[0.68rem] tracking-[0.15em] uppercase
                    text-muted/50 hover:text-accent-alt transition-colors duration-300"
           >
             View Certificate

@@ -46,6 +46,8 @@ export default function CardSwap({
 }: CardSwapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const orderRef = useRef<HTMLDivElement[]>([]);
+  const prevArrowRef = useRef<HTMLButtonElement>(null);
+  const nextArrowRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -96,6 +98,20 @@ export default function CardSwap({
       clickHandlers.set(card, handler);
     });
 
+    // Arrows: cycle the whole stack one step forward/backward
+    const cycleNext = () => {
+      const [front, ...rest] = orderRef.current;
+      orderRef.current = [...rest, front];
+      placeCards(orderRef.current);
+    };
+    const cyclePrev = () => {
+      const back = orderRef.current[orderRef.current.length - 1];
+      orderRef.current = [back, ...orderRef.current.slice(0, -1)];
+      placeCards(orderRef.current);
+    };
+    nextArrowRef.current?.addEventListener('click', cycleNext);
+    prevArrowRef.current?.addEventListener('click', cyclePrev);
+
     // Cursor-proximity glow
     const glowHandlers = new Map<HTMLDivElement, { move: (e: MouseEvent) => void; leave: () => void }>();
     cardEls.forEach((card) => {
@@ -121,6 +137,8 @@ export default function CardSwap({
         card.removeEventListener('mousemove', move);
         card.removeEventListener('mouseleave', leave);
       });
+      nextArrowRef.current?.removeEventListener('click', cycleNext);
+      prevArrowRef.current?.removeEventListener('click', cyclePrev);
     };
   }, []);
 
@@ -164,6 +182,30 @@ export default function CardSwap({
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Cycle hint: the offset back cards are clickable, not decorative */}
+      <div className="flex items-center justify-center gap-4 mt-4">
+        <button
+          ref={prevArrowRef}
+          type="button"
+          aria-label="Show previous card"
+          className="p-1.5 text-muted/40 hover:text-accent-alt transition-colors duration-300"
+        >
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M8 2L3 6L8 10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
+        <button
+          ref={nextArrowRef}
+          type="button"
+          aria-label="Show next card"
+          className="p-1.5 text-muted/40 hover:text-accent-alt transition-colors duration-300"
+        >
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M4 2L9 6L4 10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
       </div>
     </div>
   );
