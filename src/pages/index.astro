@@ -10,8 +10,11 @@ import LanyardCard from '../components/LanyardCard';
 import ResumeEnvelope from '../components/ResumeEnvelope.astro';
 import { hero } from '../data/site';
 import { getBaseUrl } from '../utils/basePath';
+import { getAssetVersion } from '../utils/assetVersion';
 
 const base = getBaseUrl();
+const resumePath = 'assets/Mohammed_Huzaifa_Resume.pdf';
+const resumeHref = `${base}${resumePath}?v=${getAssetVersion(resumePath)}`;
 ---
 
 <Layout>
@@ -39,7 +42,7 @@ const base = getBaseUrl();
         </p>
 
         <div class="mt-14">
-          <ResumeEnvelope href={`${base}assets/Mohammed_Huzaifa_Resume.pdf`} />
+          <ResumeEnvelope href={resumeHref} />
         </div>
 
       </div>
