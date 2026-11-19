@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ResearchPaperPocket from '../../components/ResearchPaperPocket.astro';
+import ProjectVideos from '../../components/ProjectVideos.astro';
 import { projects } from '../../data/site';
 import { getBaseUrl } from '../../utils/basePath';
 
@@ -138,17 +139,22 @@ const base = getBaseUrl();
         </div>
       )}
 
+      {project.videos && <ProjectVideos videos={project.videos} />}
+
       <!-- Overview -->
-      <p class="text-text text-base md:text-lg leading-[1.8] font-body font-light mb-14">
-        {project.overview}
-      </p>
+      <div class="space-y-6 mb-14">
+        {project.overview.split('\n\n').map((paragraph) => (
+          <p class="text-text text-base md:text-lg leading-[1.8] font-body font-light">{paragraph}</p>
+        ))}
+      </div>
 
       <!-- Stack -->
       <div class="mb-14">
         <p class="text-muted/50 text-[0.65rem] tracking-[0.2em] uppercase font-body mb-4">Stack</p>
-        <div class="flex flex-wrap gap-x-4 gap-y-2">
+        <div class="flex flex-wrap gap-2.5">
           {project.stack.map((tech) => (
-            <span class="text-text/75 text-sm font-body font-light">{tech}</span>
+            <span class="text-text/80 text-sm font-body font-light px-3.5 py-1 rounded-full
+                         bg-surface/60 border border-muted/25">{tech}</span>
           ))}
         </div>
       </div>

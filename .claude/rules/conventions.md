@@ -1,5 +1,5 @@
 w# conventions.md — Portfolio Session Log
-Last updated: September 24, 2026 (session 17)
+Last updated: November 19, 2026 (session 18)
 
 Read this before doing anything. It restores full session context.
 
@@ -14,7 +14,7 @@ Read this before doing anything. It restores full session context.
 | Skills (`#skills`) | Complete — 4 groups, confident/learning distinction, scroll-triggered stagger, translucent bg, bolder border |
 | Certificates (`#certificates`) | Complete (session 17) — two Forage certificates (BCG Data Science, Mastercard Cybersecurity), each card showing the issuing brand's own logo (extracted directly from the certificate PDF, not sourced externally) followed by highlight bullets pulled verbatim from Forage's own certificate description snippet, and a "View Certificate" link to the PDF. Sits between Skills and Field Work |
 | Field Work | Complete — CardSwap left, "Attended" seminars list right; flex layout, responsive. Green Bengaluru volunteering block now closes this section (moved from Origin, session 11) |
-| Builds (`#builds`) | Complete for now (session 16) — new major-projects section, inserted between Origin and Skills. Tile grid (fluid-art backgrounds + glass panel, `aspect-[8/5]`, `lg:grid-cols-3`) links to standalone `/projects/[slug]/` detail pages. Four entries: Smart Home Hub, NetSim, PULSE, and Minor Works. PULSE's detail page also carries a fixed edge "pocket" linking to its research paper PDF (session 16). NeuroSync and Posture Detection still to come |
+| Builds (`#builds`) | Complete for now (session 16) — new major-projects section, inserted between Origin and Skills. Tile grid (fluid-art backgrounds + glass panel, `aspect-[8/5]`, `lg:grid-cols-3`) links to standalone `/projects/[slug]/` detail pages. Five entries, in order: PULSE, CargoTwin (session 18), NetSim, Smart Home Hub, and Minor Works. PULSE's detail page also carries a fixed edge "pocket" linking to its research paper PDF (session 16). NeuroSync and Posture Detection still to come |
 | Contact (`#reach`) | Complete — 4 links (GitHub, Email, Instructables, ORCID — LinkedIn removed session 11), scroll-triggered stagger |
 | Navigation (StaggeredMenu) | Complete — `StaggeredMenu.tsx` mounted in `Layout.astro`; slides in from right, 4 nav items |
 | GitHub Pages deployment | Complete — `astro.config.mjs` configured, Actions workflow at `.github/workflows/deploy.yml` |
@@ -43,6 +43,8 @@ d:\portfolio\
 │       │   ├── smart-home-hub.png   ← screenshot of its live Vercel deployment (session 14)
 │       │   ├── netsim.png           ← its own public/og-image.png, copied over (session 14)
 │       │   ├── pulse.png            ← screenshot of its live Vercel deployment (session 15)
+│       │   ├── cargo-tracker.png    ← screenshot of CargoTwin's live Vercel dashboard in demo mode (session 18)
+│       │   ├── cargo-tracker-{tilt,gps}.mp4/.jpg ← cropped/compressed demo clips + poster frames (session 18)
 │       │   └── pulse-paper.pdf      ← PULSE research paper, copied from D:\pulse\paper\pulse_paper_final.pdf (session 16)
 │       └── certificates/            ← Forage certificate PDFs + brand logos extracted from those same PDFs (session 17)
 │           ├── bcg-data-science.pdf
@@ -64,6 +66,7 @@ d:\portfolio\
     │   ├── AboutSection.astro       ← Origin section; narrative, education, human, Samsung, volunteering
     │   ├── ProjectsSection.astro    ← Builds section (id="builds"), tile grid driven by projects export, links to /projects/[slug]/
     │   ├── ResearchPaperPocket.astro ← fixed edge tab (session 16), used on PULSE's detail page only, links to its paper PDF
+    │   ├── ProjectVideos.astro      ← portrait demo-clip grid on project detail pages (session 18), rendered when project.videos is set
     │   ├── ResumeEnvelope.astro     ← deep green SVG envelope (session 16), in-flow in the hero under the bio, links to resume PDF
     │   ├── LiquidMetalFrame.tsx     ← React island (session 16) — animated chrome border via @paper-design/shaders, wraps ResumeEnvelope
     │   ├── SkillsSection.astro      ← Skills section (id="skills"), driven by skills export in site.ts
@@ -276,7 +279,8 @@ Current exports (in file order): `nav`, `about`, `projects`, `contact`, `skills`
   see "Builds tile design" below), `overview`, `features: { title, detail }[]`, `scope`,
   `gallery: { src: string; caption?: string }[] | null` (added session 15, see "PULSE project"
   below), `paper: { src: string; label: string } | null` (added session 16, see "Research paper
-  pocket" below). Consumed by `ProjectsSection.astro` (tile grid, fluid art + glass panel, ignores
+  pocket" below), `videos: { src, poster, caption }[] | null` (added session 18, see "CargoTwin
+  project" below). Consumed by `ProjectsSection.astro` (tile grid, fluid art + glass panel, ignores
   `image`/`stack`/`gallery`/`paper`) and `pages/projects/[slug].astro` (detail page, one per array
   entry via `getStaticPaths`; renders `image` full-width above the overview, `gallery` as a photo
   grid between features and scope, and `paper` as a fixed `ResearchPaperPocket`, all only when present).
@@ -451,6 +455,42 @@ existing project screenshot, not worth serving at full size for a detail-page
 photo. `PULSE.gallery` in `site.ts` is `{ src, caption }[]`; `[slug].astro`
 renders it as a `sm:grid-cols-2` photo grid with an `<figcaption>` per image,
 between Features and Scope.
+
+### CargoTwin project (session 18)
+Second Builds entry (inserted directly after PULSE in the `projects` array). Repo is
+`KevinImmauel/cargo_tracker` (Kevin's repo; Huzaifa's commits there are the README,
+Mosquitto config, and requirements.txt), live dashboard `https://cargotracker-client.vercel.app`.
+Copy sourced from the repo README and source at `D:\Shipment Tracker\cargo_tracker`; the
+local copy predates some live-only features (impact force in N, g-force bands, cargo-weight
+slider), so those aren't described. Scope credits "Built with Kevin Immanuel, whose repository
+it lives in", and describes the hardware as "a small box standing in for a container" (user
+correction: not shoebox-sized). The hosted dashboard's simulated route is deliberately not
+mentioned (v1 simulated a voyage out of Singapore; current one differs, user said leave it out).
+
+**Fluid colors:** first pass used the dashboard's own palette (sky blue, container rust,
+amber, navy); user asked for blue and white. A white-heavy combo washed out the white tile
+text, so it's `['#1B4F86', '#FFFFFF', '#3AA0FF', '#2A6FB8']` (mostly blue, white as a soft
+center glow).
+
+**Demo videos:** user's phone clips (`D:\Shipment Tracker\Video demos`) were portrait footage
+pillarboxed in 1920x1080. Cropped (`crop=600:1080:660:0`), scaled to 960 tall, x264 CRF 28,
+audio stripped, `+faststart`: 53 MB to 1.7 MB. Rendered by `ProjectVideos.astro` as a
+`sm:grid-cols-2` grid of `autoplay muted loop playsinline` videos (`aspect-[5/9]`), between
+the gallery and the overview. Split into its own component because `[slug].astro` was already
+past the 150-line limit.
+
+### Two-paragraph overviews (session 18)
+`[slug].astro` splits `project.overview` on `
+
+` into separate `<p>`s. PULSE and CargoTwin
+now open with a plain-language paragraph (what it is, who it's for), followed by the technical
+paragraph. The second paragraph must continue from the first rather than re-introduce the
+project by name (user caught "CargoTwin is a small tracker..." followed by "CargoTwin is an
+ESP32 tracker..."). Other entries are still single-paragraph.
+
+### Stack pills (session 18)
+Stack items on project detail pages are rounded-full pills (`px-3.5 py-1 bg-surface/60 border
+border-muted/25`, `gap-2.5`) instead of bare spaced text, which read as floating.
 
 ### Research paper pocket (session 16)
 PULSE has an accompanying research paper (`D:\pulse\paper\pulse_paper_final.pdf`,
@@ -1007,11 +1047,11 @@ Commits push to `main`. Netlify auto-deploys.
 1. **Card face editing** — front face content is final; blank cream back face added
    and deployed successfully in session 10. Scale increase (2.25→2.85) still unresolved/
    untested since session 9 — likely culprit for that session's breakage, not the back face.
-2. **Builds section — add remaining projects** — Smart Home Hub, NetSim (session 14), and PULSE
-   (session 15) are in; NeuroSync and Posture Detection are next once their repos/demos are
+2. **Builds section — add remaining projects** — Smart Home Hub, NetSim (session 14), PULSE
+   (session 15), and CargoTwin (session 18) are in; NeuroSync and Posture Detection are next once their repos/demos are
    ready. Add each as a new object in the `projects` array in `site.ts` following the `Project`
    interface (`slug`, `name`, `tagline`, `stack`, `repo`, `demo`, `image`, `fluid`, `overview`,
-   `features[]`, `scope`, `gallery`) — no component changes needed, the tile grid and
+   `features[]`, `scope`, `gallery`, `paper`, `videos`) — no component changes needed, the tile grid and
    `[slug].astro` detail page both iterate the array. The smaller minor-projects (Smart
    Attendance, Ocean Sensor, Temp/Humidity) stay in Field Work's `CardSwap`, not Builds — Builds
    is for the larger, individually-documented projects.
@@ -1027,7 +1067,8 @@ for either at the time. Session 17 (this session) added the Certificates section
 brand logos directly from the certificate PDFs, swapped the Samsung Innovation Campus header from
 plain text to the Samsung oval logo, and is pushed to `main` as of commit `82bdec5` ("Add
 Certificates section and swap Samsung header to its oval logo") — nothing local-only remains as of
-this write-up.
+this write-up. Session 18 added CargoTwin to Builds (with demo videos via `ProjectVideos.astro`),
+two-paragraph overviews for PULSE and CargoTwin, and pill-styled stack items on detail pages.
 
 ---
 

@@ -196,6 +196,7 @@ interface Project {
   scope: string;
   gallery: { src: string; caption?: string }[] | null;
   paper: { src: string; label: string } | null;
+  videos: { src: string; poster: string; caption: string }[] | null;
 }
 
 export const projects: Project[] = [
@@ -208,7 +209,7 @@ export const projects: Project[] = [
     demo: 'https://pulse-jet-two.vercel.app',
     image: '/assets/projects/pulse.png',
     fluid: ['#e8b04b', '#b48ce0', '#4fd1c5', '#0e1119'],
-    overview: "PULSE is a wearable glove built under the Samsung Innovation Campus program at Presidency University. It reads skin conductance, heart rate, blood oxygen, and motion, works out what state you're in, and adjusts the room around you: lighting colour and brightness, music and volume, and the AC. The pipeline behind it runs in four stages: a rolling mean to smooth the raw sensor noise, a 60-second calibration window so thresholds sit relative to your own baseline instead of a fixed number, a weighted Z-score into a 0-100 Arousal Index, and a hysteresis layer that keeps the mood label from flickering across a boundary. That last stage trades a little point-for-point accuracy (86% versus 79% with raw thresholding) for something more useful in practice: in a 20-run test with a signal parked right on a decision boundary, raw thresholding produced 65 spurious band changes a minute, the hysteresis layer produced zero.",
+    overview: "Most people don't notice their own stress until it has already built up. PULSE is a glove that notices for you. It reads small signals from your body, like how much your skin sweats and how fast your heart beats, works out whether you're calm, focused, energized, stressed, or tired, and quietly changes the room to suit: the lights shift colour, the music changes, and the AC adjusts. If you want to wind down on purpose, the dashboard can also walk you through a breathing exercise.\n\nIt was built under the Samsung Innovation Campus program at Presidency University. The glove reads skin conductance, heart rate, blood oxygen, and motion, and the pipeline that turns those readings into a mood runs in four stages: a rolling mean to smooth the raw sensor noise, a 60-second calibration window so thresholds sit relative to your own baseline instead of a fixed number, a weighted Z-score into a 0-100 Arousal Index, and a hysteresis layer that keeps the mood label from flickering across a boundary. That last stage trades a little point-for-point accuracy (86% versus 79% with raw thresholding) for something more useful in practice: in a 20-run test with a signal parked right on a decision boundary, raw thresholding produced 65 spurious band changes a minute, the hysteresis layer produced zero.",
     features: [
       {
         title: 'Sensors',
@@ -250,6 +251,59 @@ export const projects: Project[] = [
       src: '/assets/projects/pulse-paper.pdf',
       label: 'PULSE: A Real-Time Wearable Multi-Sensor Telemetry and Affective Computing Framework via MQTT-WebSocket Bridging',
     },
+    videos: null,
+  },
+  {
+    slug: 'cargotwin',
+    name: 'CargoTwin',
+    tagline: 'A shipment tracker that logs every tilt and shock, with a 3D digital twin that moves exactly like the real box.',
+    stack: ['ESP32', 'MPU6050', 'NEO-6M GPS', 'MQTT (Mosquitto)', 'Flask', 'SQLite', 'Three.js', 'Leaflet'],
+    repo: 'https://github.com/KevinImmauel/cargo_tracker',
+    demo: 'https://cargotracker-client.vercel.app',
+    image: '/assets/projects/cargo-tracker.png',
+    fluid: ['#1B4F86', '#FFFFFF', '#3AA0FF', '#2A6FB8'],
+    overview: "Once goods are sealed in a shipping container, nobody sees what happens to them until the doors open at the other end. If the cargo arrives damaged, there's usually no record of when it happened, where, or how hard the container was knocked around. CargoTwin is a small tracker that goes inside the container and keeps that record: it notices when the box is tipped too far or dropped, notes the time and place, and mirrors the container's movement live on a 3D model in the browser. When the shipment arrives, whoever receives it can check the log and decide whether the cargo needs inspecting before they sign for it.\n\nThe tracker itself is an ESP32. An MPU6050 reads tilt and acceleration, a NEO-6M module reads position, and every time the box tips past a threshold or takes a hard knock the device logs the event with a UTC timestamp and GPS fix. Telemetry goes out over MQTT at 20 Hz to a Mosquitto broker, which feeds two consumers: a browser dashboard over WebSocket, where a 3D twin of a 20 ft container rotates live with the real box, and a Flask backend that writes every packet to SQLite for the history view. Events are detected on the device itself and saved to its flash, so a shipment that loses power or signal mid-route still has its incident log when it arrives.",
+    features: [
+      {
+        title: 'Digital twin',
+        detail: 'A 3D 20 ft container at real dimensions, rotated live from the MPU. A ghost outline marks level, a cone marks the tilt limit, and the container flashes red the moment its up-vector leaves that cone.',
+      },
+      {
+        title: 'On-device event detection',
+        detail: 'Debounced TILT events (start and end, with duration and peak angle) and instant SHOCK events, written to LittleFS on the ESP32 so they survive a power loss.',
+      },
+      {
+        title: 'Timestamps without GPS',
+        detail: "GPS UTC time when there's a fix. Indoors, the device falls back to a synced clock and keeps counting from it, and every event records which time source it used.",
+      },
+      {
+        title: 'Incident replay',
+        detail: 'Click any logged incident and a red ghost container appears on the twin in the exact orientation the box was in at that moment, while the map jumps to where it happened.',
+      },
+      {
+        title: 'Integrity summary',
+        detail: 'Each shipment is graded Intact, Inspect cargo, or Likely damaged (a tilt of 60 degrees or more, or a shock of 4 g or more), with max tilt and max shock alongside, exportable as CSV for a report.',
+      },
+      {
+        title: 'Persistent history',
+        detail: 'The Flask backend subscribes to the same MQTT topics, batches packets into SQLite in WAL mode, and serves tilt and g-force charts plus the GPS route.',
+      },
+    ],
+    scope: "This is a working prototype built on a small box standing in for a container, not a deployed logistics product: the broker runs on a laptop on the same network as the ESP32, and in the MQTT setup the dashboard is receive-only (threshold changes don't reach the device yet). Built with Kevin Immanuel, whose repository it lives in.",
+    gallery: null,
+    paper: null,
+    videos: [
+      {
+        src: '/assets/projects/cargo-tracker-tilt.mp4',
+        poster: '/assets/projects/cargo-tracker-tilt.jpg',
+        caption: 'Tilting the hardware by hand: the twin on screen follows the real box.',
+      },
+      {
+        src: '/assets/projects/cargo-tracker-gps.mp4',
+        poster: '/assets/projects/cargo-tracker-gps.jpg',
+        caption: 'The dashboard with a live GPS fix on the map.',
+      },
+    ],
   },
   {
     slug: 'netsim',
@@ -290,6 +344,7 @@ export const projects: Project[] = [
     scope: "This is a physics simulation, not a live radio network: there's no real hardware and no actual RF transmission, and the retro desktop shell runs entirely client-side in the browser. The value is in modeling the real constraints of a LoRaWAN deployment (duty cycle, adaptive data rate, collisions, battery) accurately enough to be useful for understanding them.",
     gallery: null,
     paper: null,
+    videos: null,
   },
   {
     slug: 'smart-home-hub',
@@ -322,6 +377,7 @@ export const projects: Project[] = [
     scope: "This is a portfolio piece demonstrating a rules-engine and 3D-simulation architecture, not a production IoT platform. There's no real backend, no real hardware or MQTT integration, no real authentication, and no real cryptography; the security layer teaches the concepts through simulation rather than pretending to be the real thing.",
     gallery: null,
     paper: null,
+    videos: null,
   },
   {
     slug: 'minor-works',
@@ -354,6 +410,7 @@ export const projects: Project[] = [
     scope: "These are small, foundational projects, not production systems: proof that a sensor works, that a script runs, that an idea holds up outside a lab. The Smart Attendance demo runs its face matching against a simulated room, not a live camera.",
     gallery: null,
     paper: null,
+    videos: null,
   },
 ];
 
